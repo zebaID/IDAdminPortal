@@ -1,0 +1,71 @@
+<h3>Payment Cycle Booking Details
+</h3>
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+<div class="panel panel-default" style="overflow-x: auto" ng-init="getPaymentCycleBookings()">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="col-sm-2">
+                    <button class="pull-left btn btn-labeled btn-primary" style="padding-top: -2px;
+                    padding-bottom: -2px;" ng-click="backTopayment()">
+                        <span class="btn-label"><i class="fa fa-chevron-left"></i>
+                     </span> Back
+                    </button>
+                </div>
+                <div class="col-sm-8">
+                </div>
+                <div class="col-sm-2">
+                    <button class="pull-right btn btn-labeled btn-primary" ng-disabled="count==0" ng-click="generatePaymentdriverPopup()">
+                        <span class="btn-label"><i class="fa fa-plus"></i>
+                           </span> Generate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="col-sm-4">
+                <input type="checkbox" ng-model="selectedAll" style="cursor: pointer;" ng-click="selectAllCustomer2();checkAll2(payment)" | unique: 'payment.bookingId'> Select All </input>
+            </div>
+            <div class="col-sm-8">
+            </div>
+        </div>
+    </div>
+    <table ng-table="tableParams3" class="table table-striped table-bordered ng-table-rowselected" show-filter="true">
+        <tr ng-repeat="payment in $data track by $index" ng-show="$data .length > 0">
+            <!-- | filter:searchName -->
+            <td>
+                <input type="checkbox" ng-model="payment.Selected" name="send" value="" ng-checked="selectedAll" ng-click="selectCustomer2(payment.bookingId,payment.driverShare)" style="margin-left:auto; margin-right:auto;" />
+                <!--| ng-change="sendMsg(user.conuserId)" -->
+            </td>
+            <td title="'Booking ID'" filter="{ id: 'text'}" sortable="'bookingId'" style="text-transform: capitalize;text-align: left;width: 3%" ng-click="paymentCycleDetailsPage(payment.id,payment.paymentCycleName)">{{payment.bookingId}}</td>
+            <td title="'Customer Name'" filter="{ custName: 'text'}" sortable="'custName'" style="text-transform: capitalize;text-align:left" ng-click="bookingReportFunction(user)">{{payment.custName}}</td>
+            <td title="'Customer Mobile'" filter="{ mobileNumber: 'text'}" sortable="'mobileNumber'" style="text-transform: capitalize;text-align:left" ng-click="bookingReportFunction(user)">{{payment.mobileNumber}}</td>
+            <td title="'Driver Batch'" filter="{ driverBatch: 'text'}" sortable="'driverBatch'" style="text-transform: capitalize;text-align:left" ng-click="bookingReportFunction(user)">{{payment.driverBatch}}</td>
+            <td title="'Car Type'" filter="{ carType: 'text'}" sortable="'carType'" style="text-transform: capitalize;text-align:left" ng-click="bookingReportFunction(user)">{{payment.carType}}</td>
+            <td title="'Duty Type'" filter="{ dutyType: 'text'}" sortable="'dutyType'" style="text-transform: capitalize;text-align:left" ng-click="bookingReportFunction(user)">{{payment.dutyType}}</td>
+            <td title="'Reporting Location'" filter="{ reportingLocation: 'text'}" sortable="'reportingLocation'" style="text-transform: capitalize;text-align:left" ng-click="bookingReportFunction(user)">{{payment.reportingLocation}}</td>
+            <td title="'Status'" filter="{ status: 'text'}" sortable="'status'" style="text-transform: capitalize;text-align:left" ng-click="bookingReportFunction(user)">{{payment.status}}</td>
+            <td title="'Driver Payment Status'" filter="{ driverPaymentStatus: 'text'}" sortable="'driverPaymentStatus'" style="text-align: left;" ng-click="bookingReportFunction(user)">{{payment.driverPaymentStatus}}
+            </td>
+            <td title="'Driver Name'" filter="{ drvName: 'text'}" sortable="'drvName'" style="text-transform: capitalize;text-align:left" ng-click="bookingReportFunction(user)">{{payment.drvName}}</td>
+            <td title="'Reporting Date/Time'" filter="{ reportingDate: 'date'}" sortable="'reportingDate'" style="text-align:left" ng-click="bookingReportFunction(user)">{{payment.reportingDate | date:'dd/MM/yyyy'}} {{payment.reportingTime}}</td>
+            <td title="'Relieving Date/Time'" filter="{ releavingDate: 'date'}" sortable="'releavingDate'" style="text-align:left" ng-click="bookingReportFunction(user)">{{payment.releavingDate | date:'dd/MM/yyyy'}} {{payment.releavingTime}}</td>
+            <td title="'Driver Share'" filter="{ driverShare: 'number'}" sortable="'driverShare'" style="text-align: right;" ng-click="bookingReportFunction(user)">{{payment.driverShare}}</td>
+            <td title="'ID Share'" filter="{ idShare: 'number'}" sortable="'idShare'" style="text-align: right;" ng-click="bookingReportFunction(user)">{{payment.idShare}}</td>
+            <td title="'Total Amount'" filter="{ actualAmt: 'number'}" sortable="'actualAmt'" style="text-align: right;" ng-click="bookingReportFunction(user)">{{payment.actualAmt}}</td>
+            <td title="'PM'" sortable="'paymentMethod'" style="text-align: left;" ng-click="bookingReportFunction(user)">{{payment.paymentMethod}}</td>
+        </tr>
+        <tr ng-show="$data.length == 0">
+            <td>No record found</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,75 @@
+
+<div ng-controller="LoginFormController" ng-init = "callback()" style="margin-top: 100px !important;" class="block-center wd-xl">
+    <!-- START panel-->
+    <div class="panel panel-flat">
+        <div class="panel-heading text-center" style="margin-bottom: -10px;">
+            <a href="#">
+                <img style="width: 30%" src="app/img/Indian-Drivers-logo.png"/>
+            </a>
+            <!-- class="block-center img-rounded" -->
+        </div>
+        <div class="panel-body" ng-init="autoLogin()">
+            <p class="text-center">SIGN IN TO CONTINUE</p>
+            <form role="form" validate-form="" novalidate="">
+                <div class="form-group has-feedback">
+                    <input id="exampleInputEmail1" type="email" placeholder="Enter email" autocomplete="off" ng-model="account.email" class="form-control" />
+                    <span class="fa fa-envelope form-control-feedback text-muted"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <input id="exampleInputPassword1" type="password" placeholder="Password" ng-model="account.password"  class="form-control" />
+                    <span class="fa fa-lock form-control-feedback text-muted"></span>
+                </div>
+                <div class="clearfix">
+                    <div class="checkbox c-checkbox pull-left mt0">
+                        <label>
+                            <input type="checkbox" value="" name="remember" ng-model="account.remember" />
+                            <span class="fa fa-check"></span>Remember Me</label>
+                    </div>
+                    <div class="pull-right"><a ui-sref="page.forgetPassword" class="text-muted">Forgot your password?</a>
+                    </div>
+                </div>
+
+                <!-- Captcha display and input -->
+                <div id="captcha">
+                </div>
+                <input type="text" placeholder="Captcha" id="cpatchaTextBox" class="form-control"/>
+                <div id="cError">
+                </div>
+
+            </div>
+
+                <!-- Local Login -->
+                <button type="submit" style="font-size:17px;height: 40px;" ng-click="signIn(account)" class="btn btn-block btn-primary btn-lg">Login</button>
+            </form>
+  
+            <!-- Error Message -->
+            <div ng-show="authMsg" style="margin-top: 2%;" style="margin-bottom:0px;" class="alert alert-danger text-center">{{authMsg}}</div>
+            <!-- Success Message -->
+            <div ng-show="success" style="margin-top: 2%;" class="btn btn-block btn-primary text-center">{{success}}</div>
+            
+        </div>
+    </div>
+    <!-- END panel-->
+    <div class="p-lg text-center">
+        <span>&copy;</span>
+        <span ng-bind="app.year"></span>
+        <span>-</span>
+        <span ng-bind="app.name"></span>
+        <br/>
+        <span ng-bind="app.description"></span>
+    </div>
+</div>
+<!-- <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+async defer></script> -->
+
+<!-- <script>
+    var onloadCallback = function() {
+        widgetId1 = grecaptcha.render('example1', {
+            'sitekey' : 'Site-Key-',
+            'theme' : 'light'
+        });
+    };
+</script>
+ 
+<div id="example1"></div> 
+<p style="color:red;">{{ captcha_status }}</p> -->

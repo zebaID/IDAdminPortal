@@ -1,0 +1,261 @@
+<h3>Bill Print Page</h3>
+<!-- Row Select Example-->
+<style type="text/css">
+table th {
+    text-align: center;
+}
+</style>
+<div class="panel panel-default" style="overflow-x: auto" ng-init="getPrintBillDetails()">
+    <div class="panel-heading">
+        <div class="row">
+        <div class="col-xs-12">
+                <div class="col-xs-2">
+                <button class="btn btn-labeled btn-primary" style="padding-top: -2px;
+                    padding-bottom: -2px;" ng-click="backFromPrintPage()">
+                        <span class="btn-label"><i class="fa fa-chevron-left"></i>
+                     </span> Back
+                    </button>
+                </div>
+                <div class="col-xs-8">
+                </div>
+                <div class="col-xs-2">
+                    <button class="pull-center btn btn-labeled btn-primary" ng-print print-element-id="printThisElement" ng-click="printBill()">
+                        <span class="btn-label"><i class="fa fa-print"></i></span> Print</button>
+                </div>
+            </div>
+            <br>
+            <br>
+           <div id="printThis">
+                <div class="col-xs-12">
+                    <table class="table" border="2" width="100%">
+                        <tr>
+                            <td colspan="2" align="center">
+                                <div class="col-xs-12" style="width: 22%;">
+                                    
+                                    <img src="app/img/logo2.png" width="145" align="left" />
+                                    </div>
+                                    
+                                <div class="col-xs-12" style="width: 67%;">
+                                    <div class="col-xs-2">
+                                    
+                                    </div>
+                                    <div class="col-xs-8" style="width: 100%;">
+                                        
+                                        <h2 style="color: red;">{{printBillDetails[0].companyName}}</h2>
+                                        <b style="font-size: 20px">1st Floor, Sukrut Apt, Opp Bharat Natya Mandir, Sadashiv Peth, Pune-411030, Tel: 020 67 64 1000, Website: <u>www.indian-drivers.com</u>.</b>
+                                        <h2>Tax Invoice</h2>&nbsp;<b style="font-size: 20px">GSTIN: {{printBillDetails[0].companyGstn}}, SAC Code: 998513, PAN: {{printBillDetails[0].panNumber}}</b>
+                                    </div>
+                                    <div class="col-xs-2">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="20%"><font size="4"><b>Invoice No:</b></font></td>
+                            <td width="80%"><font size="4">{{printBillDetails[0].id}}</font></td>
+                        </tr>
+                        <tr>
+                            <td width="20%"><font size="4"><b>Invoice Date:</b></font></td>
+                            <td width="80%"><font size="4">{{printBillDetails[0].customerBillDate | date:'dd/MM/yyyy'}}</font></td>
+                        </tr>
+                        <tr>
+                            <td width="20%"><font size="4"><b>Invoice Period:</b></font></td>
+                            <td width="80%"><font size="4">{{printBillDetails[0].billFromDate | date:'dd/MM/yyyy'}} to {{printBillDetails[0].billToDate | date:'dd/MM/yyyy'}}</font></td>
+                        </tr>
+                        <tr>
+                            <td width="20%"><font size="4"><b>Reverse Charge(Y/N):</b></font></td>
+                            <td width="80%"><font size="4">{{printBillDetails[0].reverseCharge}}</font></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <font size="5"><b><u>Customer Details:</u></b></font>
+                                <br>
+                                <br>
+                                <div class="col-xs-12">
+                                    <div class="col-xs-02">
+                                    </div>
+                                    <div class="col-xs-08">
+                                        <div class="table-responsive">
+                                            <table border="2" width="100%">
+                                                <tr>
+                                                    <td width="15%"><font size="4"><b>Name:</b></font></td>
+                                                    <td width="85%"><font size="4">{{printBillDetails[0].customerName}}</font></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="15%"><font size="4"><b>Contact Person:</b></font></td>
+                                                    <td width="85%"><font size="4">{{printBillDetails[0].contactPersonName}}</font></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="15%"><font size="4"><b>Address:</b></font></td>
+                                                    <td width="85%"><font size="4">{{printBillDetails[0].address}}</font></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="15%"><font size="4"><b>GSTIN:</b></font></td>
+                                                    <td width="85%"><font size="4">{{printBillDetails[0].gstnNumber}}</font></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-02">
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td colspan="2">
+                            <font size="5"><b><u>Invoice Details:</u></b></font>
+                                <br>
+                                <br>
+                                <div class="col-xs-12">
+                                <div class="col-xs-02">
+                                </div>
+                                    <div class="col-xs-08">
+                                        <div class="table-responsive">
+                                            <table border="2" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th><font size="4">Monthly Salary</font></th>
+                                                        <th><font size="4">Salary Charged - {{printBillDetails[0].salaryChargedQty}} Days </font></th>
+                                                        <th><font size="4">OT - {{printBillDetails[0].overTimeQty}} Hrs @{{printBillDetails[0].overTimeRate}}/Hr</font></th>
+                                                        <th><font size="4">OSA - {{printBillDetails[0].outstationQty}} Days @{{printBillDetails[0].outstationRate}}/Day</font></th>
+                                                        <th><font size="4">NS - {{printBillDetails[0].nightStayQty}} Night @{{printBillDetails[0].nightStayRate}}/Night</font></th>
+                                                        <th><font size="4">ED - {{printBillDetails[0].extraDayQty}} Days @{{printBillDetails[0].extraDayRate}}/Day</font></th>
+                                                        <th><font size="4">Total</font></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody >
+                                                    <tr>
+                                                        <td align="center"><font size="4">Rs.{{printBillDetails[0].monthlySalary}}/-</font></td>
+                                                        <td align="center"><font size="4">Rs.{{printBillDetails[0].salaryChargedAmt}}/-</font></td>
+                                                        <td align="center"><font size="4">Rs.{{printBillDetails[0].overTimeAmt}}/-</font></td>
+                                                        <td align="center"><font size="4">Rs.{{printBillDetails[0].outstationAmt}}/-</font></td>
+                                                        <td align="center"><font size="4">Rs.{{printBillDetails[0].nightStayAmt}}/-</font></td>
+                                                        <td align="center"><font size="4">Rs.{{printBillDetails[0].extraDayAmt}}/-</font></td>
+                                                        <td align="center"><font size="4">Rs.{{printBillDetails[0].total}}/-</font></td>
+                                                        
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="6" align="center"><font size="4">Admin charge {{printBillDetails[0].adminChargeTxt}} on total billed amount</font></td>
+                                                        <td align="center"><font size="4">Rs.{{printBillDetails[0].adminChargeAmt}}/-</font></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="6" align="center"><font size="4">Total Amount before Tax</font></td>
+                                                        <td align="center"><font size="4">Rs.{{printBillDetails[0].subTotal}}/-</font></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="6" align="center"><font size="4">CGST 9%</font></td>
+                                                        <td align="center"><font size="4">Rs.{{printBillDetails[0].cgst}}/-</font></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="6" align="center"><font size="4">SGST 9%</font></td>
+                                                        <td align="center"><font size="4">Rs.{{printBillDetails[0].sgst}}/-</font></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="6" align="center"><font size="4">Total Amount after Tax</font></td>
+                                                        <td align="center"><font size="4">Rs.{{printBillDetails[0].grandTotal}}/-</font></td>
+                                                    </tr>
+                                                    <tr
+                                                    ng-if = "printBillDetails[0].advanceAmount>0">
+                                                        <td colspan="6" align="center"><font size="4">Advance Amount</font></td>
+                                                        <td align="center"><font size="4">Rs.-{{printBillDetails[0].advanceAmount}}/-</font></td>
+                                                    </tr>
+                                                    <tr ng-if = "printBillDetails[0].advanceAmount>0">
+                                                        <td colspan="6" align="center"><font size="4">Amount Payable</font></td>
+                                                        <td align="center"><font size="4">Rs.{{printBillDetails[0].netAmount}}/-</font></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-02">
+                                </div>
+                                </div>
+                                <br>
+                                <br>
+                            </td>
+                        </tr>
+                        
+                        <tr ng-show="printBillDetails[0].driverName!='undefined'">
+                            <td width="10%"><font size="4"><b>Driver Name:</b></font></td>
+                            <td width="90%"><font size="4">{{printBillDetails[0].driverName}}</font></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="col-xs-12">
+                                    <div class="col-xs-7">
+                                    <table    width="100%" border="2" >
+                                                <tr  >
+                                                    <td  width="10%"> <font size="4"><b>Remark:</b></font> </td><td width="50%"  ><font size="4">{{printBillDetails[0].remark}} </td>
+                                                     
+                                                 
+                                                 
+                                                
+                                                </tr>
+                                            </table> <font size="5"><b><u>Bank Details:</u></b></font>
+                                             
+                                            <table    width="100%" border="2">
+                                                <tr>
+                                                    <td  width="23%"> <font size="4"><b>Bank Name & Branch:</b></font> </td><td width="47%"><font size="4">Kotak Mahindra Bank, Kumthekar road Pune </td>
+                                                     
+                                                 
+                                                 
+                                                
+                                                </tr><tr>
+                                                    <td  width="20%"> <font size="4"><b>Company Name:</b></font> </td><td width="50%"><font size="4">ID Car Drivers Private Limited </td>
+                                                     
+                                                 
+                                                 
+                                                
+                                                </tr>
+                                                <tr>
+                                                    <td  width="20%"> <font size="4"><b>Account Number:</b></font> </td><td width="50%"><font size="4">1612052326</td>
+                                                     
+                                                 
+                                                 
+                                                
+                                                </tr>
+                                                <tr>
+                                                    <td  width="20%"> <font size="4"><b> IFSC Code:</b></font> </td><td width="50%"><font size="4">KKBK0000732</td>
+                                                     
+                                                 
+                                                 
+                                                
+                                                </tr>
+                                            </table>
+                             
+                              
+                        
+                                    </div>
+                                    <div class="col-xs-5">
+
+                                         <div class="table-responsive">
+                                            <br> <br>
+                                            <table class="table" border="2" width="100%">
+                                                <tr>
+                                                    <td height="150" rowspan="2"></td>
+                                                    <td height="40"><font size="4">For {{printBillDetails[0].companyName}}</font></td>
+                                                </tr>
+                                                <tr>
+                                                    <td height="50"><center><img src="app/img/sign_kb-removebg-preview.png" width="250" height="170"/>
+                                                    </center></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><font size="4"> </font></td>
+                                                    <td><font size="4">Authorized Signatory</font></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+</div>

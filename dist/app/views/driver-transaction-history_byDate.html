@@ -1,0 +1,46 @@
+<h3>Driver Transaction History</h3>
+<!-- Row Select Example-->
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+<div class="panel panel-default" style="overflow-x: auto" ng-init ="searchTransactionHistory()">
+    <div class="panel-heading">
+        <div class="row">
+            
+<div class="col-xs-12">
+<div class="col-sm-4"></div><div class="col-sm-4"></div>
+                <div class="col-sm-4">
+                    <button class="pull-right btn btn-labeled btn-primary" style="padding-top: -2px;
+                    padding-bottom: -2px;" ng-click="backToSearch()">
+                        <span class="btn-label"><i class="fa fa-chevron-left"></i>
+                     </span> Back
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <table ng-table="tableParams3" class="table table-striped table-bordered ng-table-rowselected" show-filter="true">
+        <tr ng-repeat="account in $data | orderBy:'-createdDate'" ng-show="$data.length > 0">
+            <td title="'Acc ID'" filter="{ accountID: 'text'}" sortable="'accountID'" style="text-transform: capitalize;text-align: left;">{{account.accountID}}</td>
+            <td title="'Driver ID'" filter="{ driverId: 'text'}" sortable="'driverId'" style="text-transform: capitalize;text-align: left;">{{account.driverId}}</td>
+            <td title="'Driver Name'" filter="{ name: 'text'}" sortable="'name'" style="text-transform: capitalize;text-align: left;">{{account.name}}</td>
+            <td title="'Description'" filter="{ description: 'text'}" sortable="'description'" style="text-transform: capitalize;text-align: left;">{{account.description}}</td>
+            <td title="'Amount'" filter="{ amount: 'text'}" sortable="'amount'" style="text-transform: capitalize;text-align: right;">{{account.amount}}</td>
+           
+            <td title="'Created Date'" filter="{ createdDate: 'text'}" sortable="'createdDate'" style="text-transform: capitalize;text-align: left;">{{account.createdDate}}</td>
+            <td title="'Transaction Status'" filter="{ status: 'text'}" sortable="'status'" style="text-transform: capitalize;text-align:left">{{account.status}}</td>
+        </tr>
+        <tr ng-show="$data.length == 0">
+            <td>No record found</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+</div>

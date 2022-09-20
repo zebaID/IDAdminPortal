@@ -1,0 +1,1820 @@
+<div ng-controller="GMapController" class="col-xs-12">
+    <div class="col-xs-8">
+        <h3 style="margin-top: 0px;"> Manage Booking </h3>
+    </div>
+    <div class="col-xs-2" align="right">
+        <button class="pull-right btn btn-labeled btn-primary" ng-click="newBooking()"><span class="btn-label"><i class="fa fa-plus"></i></span>New Booking</button>
+    </div>
+    <div class="col-xs-2">
+        <button class="pull-right btn btn-labeled btn-primary" style="width: 152px;" ng-click="refreshMap()"><span class="btn-label"><i class="fa fa-refresh"></i></span> Refresh </button>
+    </div>
+</div>
+<div ng-controller="GMapController" class="col-xs-12">
+    <div class="col-xs-8">
+    </div>
+    <div class="col-xs-4">
+        <h4><input type="text" id="newLocation" class="input-hover" style="width: 100%; height: 30px;float: right;" ng-model="search" ng-change="changeLocation(search)" placeholder="Search by location" ng-autocomplete googleplace=""></h4>
+    </div>
+</div>
+<div ng-controller="GMapController" class="row" style="margin: -25px;">
+    <div class="row">
+        <div class="col-sm-6"></div>
+        <div class="col-sm-6">
+            <div class="col-sm-8">
+            </div>
+            <div class="col-sm-4">
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="panel-body">
+            <div id="map-canvas" style="height:600px">
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/ng-template" id="/lineUpBookingPopup.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Booking Details
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak ng-init="getLineUpData()">
+        <div class="row">
+            <div class="col-md-4">
+                <legend>Customer Details</legend>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0"><strong>Booking ID: {{booking.bookingId}}</strong></label>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0"><strong>Customer Name:</strong></label>
+                        <input type="text" id="bookingFirstName" class=" input-hover" ng-model="booking.bookingFirstName" placeholder="First Name" readonly>
+                        <span id="bookingFirstName1" style="color:red"></span>
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>&nbsp;</strong>
+                        </label>
+                        <input type="text" id="bookingLastName" class=" input-hover" ng-model="booking.bookingLastName" placeholder="Last Name" readonly>
+                        <span id="bookingLastName1" style="color:red"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Contact Number:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="bookingCellNumber" class=" input-hover" ng-model="booking.bookingCellNumber" placeholder="Contact Number" readonly>
+                        <span id="bookingCellNumber1" style="color:red"></span></div>
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Email:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="email" class=" input-hover" ng-model="booking.email" readonly>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Duty Type:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="dutyType" class=" input-hover" ng-model="booking.dutyType" readonly>
+                        <span id="dutyType1" style="color:red"></span>
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Payment Method:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="paymentMethod" class=" input-hover" ng-model="booking.paymentMethod" readonly>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Car Type:</strong> </label>
+                        <br/>
+                        <input type="text" id="carType" class=" input-hover" ng-model="booking.carType" readonly>
+                        <span id="carType1" style="color:red"></span>
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Journey Type:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="journeyType" class=" input-hover" ng-model="booking.journeyType" readonly>
+                        <span id="journeyType1" style="color:red"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Reporting Date:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="bookingReportingDate" datepicker-popup="dd-MM-yyyy" ng-model="booking.bookingReportingDate" is-open="openedStart" min-date="minDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" style="height: 28px;" readonly/>
+                        <br/>
+                        <span id="bookingReportingDate1" style="color:red"></span>
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Reporting Time:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="reportingTime" class=" input-hover" ng-model="booking.reportingTime" readonly />
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-6">
+                        <strong>Relieving Date:</strong>
+                        <br/>
+                        <input type="text" id="bookingToDate" datepicker-popup="dd-MM-yyyy" ng-model="booking.releivingDate" is-open="openToDate" min-date="minDate" datepicker-options="dateOptions" close-text="Close" class="input-hover " style="height: 28px;" readonly/>
+                        <br/>
+                        <span id="bookingToDate1" style="color:red"></span>
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Relieving Time:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="releivingTime" class=" input-hover" ng-model="booking.releivingTime" readonly />
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-0">
+                    <div class="col-xs-6" ng-show="booking.dutyType == 'Outstation'">
+                        <label class="margin-bottom-0">
+                            <strong>Outstation City:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="outstationCity" class=" input-hover" ng-model="booking.outstationCity" placeholder="City Name" readonly/>
+                        <span id="outstationCity1" style="color:red"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12">
+                        <label class="margin-bottom-0">
+                            <strong>Pickup Landmark:</strong></label>
+                        <br/>
+                        <input type="text" id="landmark" class=" input-hover" ng-model="booking.landmark" placeholder="Flat No,building No,Society Name" readonly>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12">
+                        <label class="margin-bottom-0">
+                            <strong>Pickup Location:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="bookingFrmLocation" class="input-hover" ng-model="booking.bookingFrmLocation" readonly>
+                        <span id="bookingFrmLocation1" style="color:red"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12" ng-show="booking.journeyType == 'One Way'">
+                        <label class="margin-bottom-0">
+                            <strong>Drop Location:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="bookingToLocation" class="input-hover" ng-model="booking.bookingToLocation" readonly>
+                        <span id="bookingToLocation1" style="color:red"></span>
+                    </div>
+                </div>
+                 <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12">
+                        <label class="margin-bottom-0">
+                            <strong>Remark:</strong>
+                        </label>
+                        <br/>
+                        <textarea type="text" id="remark" class="input-hover" ng-model="booking.remark" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="col-xs-12">
+                    <legend>Invoice Details</legend>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover" style="border: 1px solid #eeeeee;">
+                            <thead>
+                                <tr>
+                                    <th>Head</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="fare in lineupFare.invoices[0].invoiceDetails">
+                                    <td>{{fare.invoiceSubHeads.invoiceSubHeadName}}</td>
+                                    <td>{{fare.amount.toFixed(2)}}</td>
+                                </tr>
+                                <tr ng-repeat="fare in lineupFare.invoices" style="background-color: grey; color: white">
+                                    <td>Total</td>
+                                    <td>{{fare.netAmount.toFixed(2)}}</td>
+                                </tr>
+                                <tr ng-show="bookingData.invoices[0].invoiceDetails.length == 0">
+                                    <td colspan="2">No record found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12" ng-if="booking.journeyType == 'One Way' && booking.dutyType == 'Outstation'">
+                        <label class="margin-bottom-0"><strong>Travel Back Time: {{booking.returnTime}}</strong></label>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12" ng-if="booking.returnFareAmount != 0">
+                        <label class="margin-bottom-0"><strong>Return Fare: {{booking.returnFareAmount}} Rs.</strong></label>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-0">
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Driver Share:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="driverShare" class=" input-hover" ng-model="booking.driverShare" readonly/>
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>ID Share:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="idShare" class=" input-hover" ng-model="booking.idShare" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div ng-show="searchDriver">
+                    <fieldset>
+                        <legend>Change Driver</legend>
+                        <div class="col-xs-12">
+                            <legend><a ng-click="deallocateDriver()">Click to remove this driver</a>
+                            </legend>
+                        </div>
+                        <div class="col-xs-12">
+                            <strong>Name/Mobile No:</strong>
+                            <h4><angucomplete-alt id="mobileNumber" style="width: 135px;" placeholder="Search by name or mobile number" pause="500" initial-value="" input-changed="lineUpmobileSelect()" selected-object="search.mobileNumber" local-data="driverList" search-fields="mobileNumber,driverName" title-field="drvSearchData" minlength=1 maxlength=10 input-class=" input-hover" match-class="highlight"></h4>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="col-xs-12">
+                            <div class="col-xs-12" style="text-align:center">
+                                <button class="mb-sm btn btn-success" ng-click="allocateNewDrv()">Allocate Driver</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <div ng-hide="searchDriver">
+                    <legend>Driver Details</legend>
+                    <div class="col-xs-12 margin-bottom-10">
+                        <div class="col-xs-6">
+                            <label class="margin-bottom-0">
+                                <strong>Driver Name:</strong>
+                            </label>
+                            <br/>
+                            <input type="text" id="driverFirstName" class=" input-hover" style="width: 130px;font-weight: bolder;font-size: 15px;" ng-model="booking.driverFirstName" placeholder="First Name" readonly>
+                            <span id="driverFirstName1" style="color:red"></span>
+                        </div>
+                        <div class="col-xs-6">
+                            <label class="margin-bottom-0">
+                                <strong>&nbsp;</strong>
+                            </label>
+                            <br/>
+                            <input type="text" id="driverMiddleName" class=" input-hover" style="width: 130px;font-weight: bolder;font-size: 15px;" ng-model="booking.driverMiddleName" placeholder="Middle Name" readonly>
+                            <span id="driverMiddleName1" style="color:red"></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 margin-bottom-10">
+                        <div class="col-xs-6">
+                            <label class="margin-bottom-0">
+                                <strong>&nbsp;</strong>
+                            </label>
+                            <br/>
+                            <input type="text" id="driverLastName" class=" input-hover" style="width: 130px;font-weight: bolder;font-size: 15px;" ng-model="booking.driverLastName" placeholder="Last Name" readonly>
+                            <span id="driverLastName1" style="color:red"></span>
+                        </div>
+                        <div class="col-xs-6">
+                            <label class="margin-bottom-0">
+                                <strong>Driver Contact:</strong>
+                            </label>
+                            <br/>
+                            <input type="text" id="driverContact" class="input-hover" style="width: 130px;font-weight: bolder;font-size: 15px;" ng-model="booking.driverContact" placeholder=" Driver Contact Number" readonly>
+                            <span id="driverContact1" style="color:red"></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 margin-bottom-10">
+                        <div class="col-xs-12">
+                            <label class="margin-bottom-0">
+                                <strong>Driver Residence Address:</strong>
+                            </label>
+                            <br/>
+                            <input type="text" id="driverAddress" class="input-hover" style="font-weight: bolder;font-size: 15px;" ng-model="booking.driverAddress" readonly>
+                            <span id="driverAddress1" style="color:red"></span>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <div class="col-xs-12" ng-show="allocateDriver">
+                    <div class="col-xs-12">
+                        <legend><a ng-click="allocate();">Change/remove Driver</a>
+                        </legend>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="col-xs-4" style="text-align: right">
+                </div>
+                <div class="col-xs-4" style="text-align: center">
+                    <button class="mb-sm btn" style="background-color: white; color: black; border: 2px solid red;" ng-click="CancelBookingPopUp()">Cancel Booking</button>
+                    <button class="mb-sm btn" style="background-color:#4CAF50; color: white; width:120px;  " ng-click="monitorStartDutyDate()"> Start Duty
+                    </button>
+                </div>
+                <div class="col-xs-4" style="text-align: right">
+                    <label class="margin-bottom-0">
+                        <strong>{{booking.bookingDate}}</strong>
+                         <br>
+                            <strong>{{booking.bookBy}}</strong>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/StartDutyDatePopup.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Select Date And Time To Start Duty
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak ng-init="getLineUpData()">
+        <br> <strong><h4> Select Start Duty Date And Time:</h4></strong>
+        <br>
+        <label class="margin-bottom-0">
+            <strong><h4>Start Duty Date:</h4></strong>
+        </label>
+        <br/>
+        <input type="text" id="bookingReportingDate" datepicker-popup="dd-MM-yyyy" ng-model="booking.bookingReportingDate" is-open="openedStart" max-date="maxDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openStart($event)" style="width: 135px;height: 28px;" />
+        <br/>
+        <span id="bookingReportingDate1" style="color:red"></span>
+        <br>
+        <label class="margin-bottom-0">
+            <strong><h4>Start Duty Time:</h4></strong>
+        </label>
+        <br/>
+        <select ng-model="booking.hours" id="hours" class="select-hover" style="    margin-top: 5px;">
+            <option selected value="00">00</option>
+            <option value="01">01</option>
+            <option value="02">02</option>
+            <option value="03">03</option>
+            <option value="04">04</option>
+            <option value="05">05</option>
+            <option value="06">06</option>
+            <option value="07">07</option>
+            <option value="08">08</option>
+            <option value="09">09</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+        </select>
+        <select ng-model="booking.minutes" id="minutes" class="select-hover" style="    margin-top: 5px;">
+            <option selected value="00">00</option>
+            <option value="15">15</option>
+            <option value="30">30</option>
+            <option value="45">45</option>
+        </select>
+        <br/>
+        <span id="reportingTime1" style="color:red"></span>
+        <br>
+        <br/>
+        <button class="mb-sm btn" style="background-color:#4CAF50; color: white; width:120px;  " ng-click="startDuty(booking)"> Start Duty
+        </button>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/OffDutyDatePopup.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Select Date And Time To Off Duty
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak ng-init="getOnDutyData()">
+        <div class="row">
+            <div class="col-xs-12 margin-bottom-10" ng-show="booking.dutyType == 'Outstation'">
+                <div class="col-xs-6">
+                    <label class="margin-bottom-0">
+                        <strong>Off Duty Date:</strong>
+                    </label>
+                    <br/>
+                    <input type="text" id="bookingToDate" datepicker-popup="dd-MM-yyyy" ng-model="booking.bookingToDate" is-open="openToDate" max-date="maxDate" datepicker-options="dateOptions" close-text="Close" class="input-hover " ng-click="openedToDate($event)" style="width: 135px;height: 28px;" />
+                    <br/>
+                    <span id="bookingToDate1" style="color:red"></span>
+                </div>
+                <div class="col-xs-6">
+                    <label class="margin-bottom-0">
+                        <strong>Off Duty Time:</strong>
+                    </label>
+                    <br/>
+                    <select ng-model="booking.tohours" id="bookingReleivingTime" class="select-hover" style="    margin-top: 5px;">
+                        <option selected value="00">00</option>
+                        <option value="01">01</option>
+                        <option value="02">02</option>
+                        <option value="03">03</option>
+                        <option value="04">04</option>
+                        <option value="05">05</option>
+                        <option value="06">06</option>
+                        <option value="07">07</option>
+                        <option value="08">08</option>
+                        <option value="09">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                    </select>
+                    <select ng-model="booking.tominutes" id="bookingReleivingTime" class="select-hover" style="margin-top: 5px;">
+                        <option selected value="00">00</option>
+                        <option value="15">15</option>
+                        <option value="30">30</option>
+                        <option value="45">45</option>
+                    </select>
+                    <span id="bookingReleivingTime1" style="color:red"></span>
+                </div>
+            </div>
+            <div class="col-xs-12" ng-show="booking.dutyType != 'Outstation'">
+                <div class="col-xs-6">
+                    <label class="margin-bottom-0">
+                        <strong>Off Duty Date:</strong>
+                    </label>
+                    <br/>
+                    <input type="text" id="bookingToDatelocal" datepicker-popup="dd-MM-yyyy" ng-model="booking.toDate" is-open="openToDate" max-date="maxDate" datepicker-options="dateOptions" close-text="Close" class="input-hover " ng-click="openedToDate($event)" style="width: 135px;height: 28px;" />
+                    <br/>
+                    <span id="bookingToDate1local" style="color:red"></span>
+                </div>
+                <div class="col-xs-6">
+                    <label class="margin-bottom-0">
+                        <strong>Off Duty Time:</strong>
+                    </label>
+                    <br/>
+                    <select ng-model="booking.tohour1" id="bookingReleivingTimelocal" class="select-hover" style="    margin-top: 5px;">
+                        <option selected value="00">00</option>
+                        <option value="01">01</option>
+                        <option value="02">02</option>
+                        <option value="03">03</option>
+                        <option value="04">04</option>
+                        <option value="05">05</option>
+                        <option value="06">06</option>
+                        <option value="07">07</option>
+                        <option value="08">08</option>
+                        <option value="09">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                    </select>
+                    <select ng-model="booking.tomin1" id="bookingReleivingTimelocal" class="select-hover" style="margin-top: 5px;">
+                        <option selected value="00">00</option>
+                        <option value="15">15</option>
+                        <option value="30">30</option>
+                        <option value="45">45</option>
+                    </select>
+                    <span id="bookingReleivingTime1local" style="color:red"></span>
+                </div>
+            </div>
+            <div class="col-xs-12 margin-bottom-10" style="margin-bottom: 10px; margin-top: 10px;">
+                <div class="col-xs-6">
+                    <label class="margin-bottom-0">
+                        <strong>Drop Location:</strong>
+                    </label>
+                    <br/>
+                    <input type="text" id="bookingToLocation" class="input-hover" ng-model="booking.bookingToLocation" ng-autocomplete googleplace="">
+                    <span id="bookingToLocation1" style="color:red"></span>
+                </div>
+            </div>
+            <div class="col-xs-12" style="margin-bottom: 10px; margin-top: 10px;">
+                <div class="col-xs-12" style="text-align: center">
+                    <button class="mb-sm btn" style="background-color: #4CAF50; color: white; width:120px; " ng-click="offDuty(booking)" ng-disabled="isDisabled">Off Duty
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/onDutyBookingPopup.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Booking Details
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak ng-init="getOnDutyData()">
+        <div class="row">
+            <div class="col-md-6">
+                <legend>Customer Details</legend>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0"><strong>Booking ID: {{booking.bookingId}}</strong></label>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0"><strong>Customer Name:</strong></label>
+                        <input type="text" id="bookingFirstName" class=" input-hover" style="width: 130px;" ng-model="booking.bookingFirstName" placeholder="First Name" readonly />
+                        <span id="bookingFirstName1" style="color:red"></span>
+                    </div>
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>&nbsp;</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="bookingLastName" class=" input-hover" style="width: 130px;" ng-model="booking.bookingLastName" placeholder="Last Name" readonly />
+                        <span id="bookingLastName1" style="color:red"></span>
+                    </div>
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Contact Number:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="bookingCellNumber" class=" input-hover" style="width: 130px;" ng-model="booking.bookingCellNumber" placeholder="Contact Number" readonly>
+                        <span id="bookingCellNumber1" style="color:red"></span></div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Email:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="email" class=" input-hover" ng-model="booking.email" readonly>
+                    </div>
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Duty Type:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="dutyType" class=" input-hover" style="width: 130px;" ng-model="booking.dutyType" readonly />
+                    </div>
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Car Type:</strong> </label>
+                        <br/>
+                        <input type="text" id="carType" class=" input-hover" style="width: 130px;" ng-model="booking.carType" readonly />
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Journey Type:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="journeyType" class=" input-hover" style="width: 130px;" ng-model="booking.journeyType" readonly />
+                    </div>
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Reporting Date:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="bookingReportingDate" datepicker-popup="dd-MM-yyyy" ng-model="booking.bookingReportingDate" is-open="openedStart" min-date="minDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" style="width: 130px;height: 28px;" readonly />
+                    </div>
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Reporting Time:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="bookingReportingTime" class=" input-hover" style="width: 130px;" ng-model="booking.bookingReportingTime" readonly />
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Payment Method:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="paymentMethod" class=" input-hover" style="width: 130px;" ng-model="booking.paymentMethod" readonly>
+                    </div>
+                    <div class="col-xs-4">
+                        <strong>Relieving Date:</strong>
+                        <br/>
+                        <input type="text" id="bookingToDate" datepicker-popup="dd-MM-yyyy" ng-model="booking.bookingToDate" is-open="openToDate" min-date="minDate" datepicker-options="dateOptions" close-text="Close" class="input-hover " style="width: 130px;height: 28px;" readonly/>
+                    </div>
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Relieving Time:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="releivingTime" class="input-hover" style="width: 130px;" ng-model="booking.releivingTime" readonly/>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-0">
+                    <div class="col-xs-6" ng-show="booking.dutyType == 'Outstation'">
+                        <label class="margin-bottom-0">
+                            <strong>Outstation City:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="outstationCity" class=" input-hover" ng-model="booking.outstationCity" placeholder="City Name" readonly/>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-0">
+                    <div class="col-xs-12">
+                        <label class="margin-bottom-0">
+                            <strong>Pickup Landmark:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="landmark" class=" input-hover" ng-model="booking.landmark" placeholder="Flat No,building No,Society Name" readonly />
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12">
+                        <label class="margin-bottom-0">
+                            <strong>Pickup Location:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="bookingFrmLocation" class="input-hover" ng-model="booking.bookingFrmLocation" readonly />
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12" ng-show="booking.journeyType == 'One Way'">
+                        <label class="margin-bottom-0">
+                            <strong>Drop Location:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="bookingToLocation" class="input-hover" ng-model="booking.bookingToLocation" readonly />
+                    </div>
+                </div>
+                 <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12">
+                        <label class="margin-bottom-0">
+                            <strong>Remark:</strong>
+                        </label>
+                        <br/>
+                        <textarea type="text" id="remark" class="input-hover" ng-model="booking.remark" readonly></textarea>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Driver Name:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="driverFirstName" class=" input-hover" style="width: 130px;font-weight: bolder;font-size: 15px;" ng-model="booking.driverFirstName" placeholder="First Name" readonly>
+                    </div>
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>&nbsp;</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="driverMiddleName" class=" input-hover" style="width: 130px;font-weight: bolder;font-size: 15px;" ng-model="booking.driverMiddleName" placeholder="Middle Name" readonly />
+                    </div>
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>&nbsp;</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="driverLastName" class=" input-hover" style="width: 130px;font-weight: bolder;font-size: 15px;" ng-model="booking.driverLastName" placeholder="Last Name" readonly />
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Driver Contact:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="driverContact" class="input-hover" style="width: 130px;font-weight: bolder;font-size: 15px;" ng-model="booking.driverContact" placeholder=" Driver Contact Number" readonly />
+                    </div>
+                    <div class="col-xs-8">
+                        <label class="margin-bottom-0">
+                            <strong>Driver Residence Address:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="driverAddress" class="input-hover" style="font-weight: bolder;font-size: 15px;" ng-model="booking.driverAddress" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="col-xs-12">
+                    <legend>Invoice Details</legend>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover" style="border: 1px solid #eeeeee;">
+                            <thead>
+                                <tr>
+                                    <th>Head</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="fare in onDutyFare.invoices[0].invoiceDetails">
+                                    <td>{{fare.invoiceSubHeads.invoiceSubHeadName}}</td>
+                                    <td>{{fare.amount.toFixed(2)}}</td>
+                                </tr>
+                                <tr ng-repeat="fare in onDutyFare.invoices" style="background-color: grey; color: white">
+                                    <td>Total</td>
+                                    <td>{{fare.netAmount.toFixed(2)}}</td>
+                                </tr>
+                                <tr ng-show="bookingData.invoices[0].invoiceDetails.length == 0">
+                                    <td colspan="2">No record found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12" ng-if="booking.journeyType == 'One Way' && booking.dutyType == 'Outstation'">
+                        <label class="margin-bottom-0"><strong>Travel Back Time: {{booking.returnTime}}</strong></label>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12" ng-if="booking.returnFareAmount != 0">
+                        <label class="margin-bottom-0"><strong>Return Fare: {{booking.returnFareAmount}} Rs.</strong></label>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-0">
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Driver Share:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="driverShare" class=" input-hover" ng-model="booking.driverShare" readonly/>
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>ID Share:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="idShare" class=" input-hover" ng-model="booking.idShare" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12" style="margin-bottom: 20px; margin-top: 10px;">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4" style="text-align: center">
+                    <button class="mb-sm btn btn-green" ng-click="monitorOffDutyDate()">Off Duty
+                    </button>
+                </div>
+                <div class="col-xs-4" style="text-align: right">
+                    <label class="margin-bottom-0">
+                        <strong>{{booking.bookingDate}}</strong>
+                         <br>
+                            <strong>{{booking.bookBy}}</strong>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+        </div>
+</script>
+<script type="text/ng-template" id="/doneBookingPopup.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Booking Details
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak ng-init="getDoneData()">
+        <div class="row">
+            <div class="col-md-6">
+                <legend>Customer Details</legend>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0"><strong>Booking ID: {{booking.bookingId}}</strong></label>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0"><strong>Customer Name:</strong></label>
+                        <br/>
+                        <input type="text" id="bookingFirstName" class=" input-hover" style="width: 130px;" ng-model="booking.bookingFirstName" placeholder="First Name" readonly />
+                        <span id="bookingFirstName1" style="color:red"></span>
+                    </div>
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>&nbsp;</strong>
+                        </label>
+                        <input type="text" id="bookingLastName" class=" input-hover" style="width: 130px;" ng-model="booking.bookingLastName" placeholder="Last Name" readonly />
+                        <span id="bookingLastName1" style="color:red"></span>
+                    </div>
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Contact Number:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="bookingCellNumber" class=" input-hover" style="width: 130px;" ng-model="booking.bookingCellNumber" placeholder="Contact Number" readonly />
+                        <span id="bookingCellNumber1" style="color:red"></span></div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Email:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="email" class=" input-hover" ng-model="booking.email" readonly>
+                    </div>
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Duty Type:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="dutyType" class=" input-hover" style="width: 130px;" ng-model="booking.dutyType" readonly />
+                    </div>
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Car Type:</strong> </label>
+                        <br/>
+                        <input type="text" id="carType" class=" input-hover" style="width: 130px;" ng-model="booking.carType" readonly />
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Journey Type:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="journeyType" class=" input-hover" style="width: 130px;" ng-model="booking.journeyType" readonly />
+                    </div>
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Reporting Date:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="bookingReportingDate" datepicker-popup="dd-MM-yyyy" ng-model="booking.bookingReportingDate" is-open="openedStart" min-date="minDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" style="width: 130px;height: 28px;" readonly />
+                    </div>
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Reporting Time:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="bookingReportingTime" class=" input-hover" style="width: 130px;height: 28px;" ng-model="booking.bookingReportingTime" readonly />
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Payment Method:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="paymentMethod" class=" input-hover" style="width: 130px;" ng-model="booking.paymentMethod" readonly>
+                    </div>
+                    <div class="col-xs-4">
+                        <strong>Relieving Date:</strong>
+                        <br/>
+                        <input type="text" id="bookingToDate" datepicker-popup="dd-MM-yyyy" ng-model="booking.bookingToDate" is-open="openToDate" max-date="maxDate" datepicker-options="dateOptions" close-text="Close" class="input-hover " ng-click="openedToDate($event)" style="width: 130px;height: 28px;"/>
+                        <span id="bookingToDate1" style="color:red"></span>
+                        
+                    </div>
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Relieving Time:</strong>
+                        </label>
+                        <br/>
+                        <select ng-model="booking.tohours" class="select-hover" id="tohours" style=" margin-top: 5px; width: 42px">
+                                         <option selected value="">HH</option>
+                                        <option value="00">00</option>
+                                        <option value="01">01</option>
+                                        <option value="02">02</option>
+                                        <option value="03">03</option>
+                                        <option value="04">04</option>
+                                        <option value="05">05</option>
+                                        <option value="06">06</option>
+                                        <option value="07">07</option>
+                                        <option value="08">08</option>
+                                        <option value="09">09</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                        <option value="21">21</option>
+                                        <option value="22">22</option>
+                                        <option value="23">23</option>
+                                    </select>
+                                    <select ng-model="booking.tominutes" id="tominutes" class="select-hover" style=" margin-top: 5px; width: 42px">
+                                        <option selected value="">MM</option>
+                                        <option value="00">00</option>
+                                        <option value="15">15</option>
+                                        <option value="30">30</option>
+                                        <option value="45">45</option>
+                                    </select>
+                                    <span id="tohours1" style="color:red"></span>
+                                <span id="tominutes1" style="color:red"></span>
+                                 <span id="releavingTime1" style="color:red"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-0">
+                    <div class="col-xs-6" ng-show="booking.dutyType == 'Outstation'">
+                        <label class="margin-bottom-0">
+                            <strong>Outstation City:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="outstationCity" class=" input-hover" ng-model="booking.outstationCity" placeholder="City Name" readonly/>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-0">
+                    <div class="col-xs-12">
+                        <label class="margin-bottom-0"><strong>Pickup Landmark:</strong></label>
+                        <br/>
+                        <input type="text" id="landmark" class=" input-hover" ng-model="booking.landmark" placeholder="Flat No,building No,Society Name" readonly />
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12">
+                        <label class="margin-bottom-0">
+                            <strong>Pickup Location:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="bookingFrmLocation" class="input-hover" ng-model="booking.bookingFrmLocation" readonly />
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12" ng-show="booking.journeyType == 'One Way'">
+                        <label class="margin-bottom-0">
+                            <strong>Drop Location:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="bookingToLocation" class="input-hover" ng-model="booking.bookingToLocation" readonly />
+                    </div>
+                </div>
+                 <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12">
+                        <label class="margin-bottom-0">
+                            <strong>Remark:</strong>
+                        </label>
+                        <br/>
+                        <textarea type="text" id="remark" class="input-hover" ng-model="booking.remark" readonly></textarea>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Driver Name:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="driverFirstName" class=" input-hover" style="width: 130px;font-weight: bolder;font-size: 15px;" ng-model="booking.driverFirstName" placeholder="First Name" readonly />
+                    </div>
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>&nbsp;</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="driverMiddleName" class=" input-hover" style="width: 130px;font-weight: bolder;font-size: 15px;" ng-model="booking.driverMiddleName" placeholder="Middle Name" readonly />
+                    </div>
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>&nbsp;</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="driverLastName" class=" input-hover" style="width: 130px;font-weight: bolder;font-size: 15px;" ng-model="booking.driverLastName" placeholder="Last Name" readonly />
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-4">
+                        <label class="margin-bottom-0">
+                            <strong>Driver Contact:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="driverContact" class="input-hover" style="width: 130px;font-weight: bolder;font-size: 15px;" ng-model="booking.driverContact" placeholder=" Driver Contact Number" readonly />
+                    </div>
+                    <div class="col-xs-8">
+                        <label class="margin-bottom-0">
+                            <strong>Driver Residence Address:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="driverAddress" class="input-hover" style="font-weight: bolder;font-size: 15px;" ng-model="booking.driverAddress" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="col-xs-12">
+                    <legend>Invoice Details</legend>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover" style="border: 1px solid #eeeeee;">
+                            <thead>
+                                <tr>
+                                    <th>Head</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="fare in doneFare.invoices[0].invoiceDetails">
+                                    <td>{{fare.invoiceSubHeads.invoiceSubHeadName}}</td>
+                                    <td>{{fare.amount.toFixed(2)}}</td>
+                                </tr>
+                                <tr ng-repeat="fare in doneFare.invoices" style="background-color: grey; color: white">
+                                    <td>Total</td>
+                                    <td>{{fare.netAmount.toFixed(2)}}</td>
+                                </tr>
+                                <tr ng-show="bookingData.invoices[0].invoiceDetails.length == 0">
+                                    <td colspan="2">No record found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12" ng-if="booking.journeyType == 'One Way' && booking.dutyType == 'Outstation'">
+                        <label class="margin-bottom-0"><strong>Travel Back Time: {{booking.returnTime}}</strong></label>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12" ng-if="booking.returnFareAmount != 0">
+                        <label class="margin-bottom-0"><strong>Return Fare: {{booking.returnFareAmount}} Rs.</strong></label>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-0">
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Driver Share:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="driverShare" class=" input-hover" ng-model="booking.driverShare" readonly/>
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>ID Share:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="idShare" class=" input-hover" ng-model="booking.idShare" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12" style="margin-bottom: 20px; margin-top: 10px;">
+                <div class="col-xs-3" style="text-align: center">
+                </div>
+                <div class="col-xs-6" style="text-align: center">
+                    <button class="mb-sm btn" style="background-color: #5d9cec; color: white; width:120px;" ng-click="savePaymentMethod1()"> Paid Online
+                    </button>
+                    <button class="mb-sm btn" style="background-color: #FF902B; color: white; width:120px;" ng-click="savePaymentMethod2()"> Cash By Office
+                    </button>
+                    <button class="mb-sm btn" style="background-color:#4CAF50; color: white; width:120px;  " ng-click="updateDateAndTime(booking)"> Update
+                </button>
+                </div>
+                <div class="col-xs-3" style="text-align: right">
+                    <label class="margin-bottom-0">
+                        <strong>{{booking.bookingDate}}</strong>
+                         <br>
+                            <strong>{{booking.bookBy}}</strong>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+        </div>
+</script>
+<script type="text/ng-template" id="/newBookingPopup.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;">Booking Details
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak ng-init="getNewBooking()">
+        <div class="row">
+            <div class="col-md-5">
+                <legend>Customer Details</legend>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0"><strong>Booking ID: {{booking.bookingId}}</strong></label>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0"><strong>Customer Name:</strong></label>
+                        <input type="text" id="bookingFirstName" class=" input-hover" ng-model="booking.bookingFirstName" placeholder="First Name" readonly>
+                        <span id="bookingCustomerName1" style="color:red"></span>
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>&nbsp;</strong>
+                        </label>
+                        <input type="text" id="bookingLastName" class=" input-hover" ng-model="booking.bookingLastName" placeholder="Last Name" readonly>
+                        <span id="bookingCustomerName1" style="color:red"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Contact Number:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="bookingCellNumber" class=" input-hover" ng-model="booking.bookingCellNumber" placeholder="Contact Number" readonly>
+                        <span id="bookingCellNumber1" style="color:red"></span>
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Email:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="email" class=" input-hover" ng-model="booking.email" readonly>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Duty Type:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="dutyType" class=" input-hover" ng-model="booking.dutyType" readonly>
+                        <span id="dutyType1" style="color:red"></span>
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Payment Method:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="paymentMethod" class=" input-hover" ng-model="booking.paymentMethod" readonly>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Car Type:</strong> </label>
+                        <br/>
+                        <input type="text" id="carType" class=" input-hover" ng-model="booking.carType" readonly>
+                        <span id="carType1" style="color:red"></span>
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Journey Type:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="journeyType" class=" input-hover" ng-model="booking.journeyType" readonly>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Reporting Date:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="bookingReportingDate" datepicker-popup="dd-MM-yyyy" ng-model="booking.bookingReportingDate" is-open="openedStart" max-date="maxDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openStart($event)" style="height: 28px;"/>
+                        <span id="bookingReportingDate1" style="color:red"></span>
+
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Reporting Time:</strong>
+                        </label>
+                        <br/>
+                        <select ng-model="booking.hours" class="select-hover" id="hours" style=" margin-top: 5px;width: 42px">
+                                         <option selected value="">HH</option>
+                                        <option value="00">00</option>
+                                        <option value="01">01</option>
+                                        <option value="02">02</option>
+                                        <option value="03">03</option>
+                                        <option value="04">04</option>
+                                        <option value="05">05</option>
+                                        <option value="06">06</option>
+                                        <option value="07">07</option>
+                                        <option value="08">08</option>
+                                        <option value="09">09</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                        <option value="21">21</option>
+                                        <option value="22">22</option>
+                                        <option value="23">23</option>
+                                    </select>
+                                    <select ng-model="booking.minutes" class="select-hover" id="minutes" style="margin-top: 5px; width: 42px">
+                                       <option selected value="">MM</option>
+                                        <option value="00">00</option>
+                                        <option value="15">15</option>
+                                        <option value="30">30</option>
+                                        <option value="45">45</option>
+                                    </select>
+
+                        
+                         <span id="hours1" style="color:red"></span>
+                                <span id="minutes1" style="color:red"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-6">
+                        <strong>Relieving Date:</strong>
+                        <br/>
+                        <input type="text" id="bookingToDate" datepicker-popup="dd-MM-yyyy" ng-model="booking.bookingToDate" is-open="openToDate" min-date="minDate" datepicker-options="dateOptions" close-text="Close" class="input-hover " style="height: 28px;" readonly/>
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Releaving Time:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="releivingTime" class=" input-hover" style="height: 28px;" ng-model="booking.releivingTime" readonly>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-0">
+                    <div class="col-xs-6" ng-show="booking.dutyType == 'Outstation'">
+                        <label class="margin-bottom-0">
+                            <strong>Outstation City:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="outstationCity" class=" input-hover" ng-model="booking.outstationCity" placeholder="City Name" readonly/>
+                        <span id="outstationCity1" style="color:red"></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12">
+                        <label class="margin-bottom-0">
+                            <strong>Pickup Landmark:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="landmark" class=" input-hover" ng-model="booking.landmark" placeholder="Flat No,building No,Society Name" readonly>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12">
+                        <label class="margin-bottom-0">
+                            <strong>Pickup Location:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="bookingFrmLocation" class="input-hover" ng-model="booking.bookingFrmLocation" readonly>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12" ng-show="booking.journeyType == 'One Way'">
+                        <label class="margin-bottom-0">
+                            <strong>Drop Location:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="bookingToLocation" class="input-hover" ng-model="booking.bookingToLocation" readonly>
+                    </div>
+                </div>
+                 <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12">
+                        <label class="margin-bottom-0">
+                            <strong>Remark:</strong>
+                        </label>
+                        <br/>
+                        <textarea type="text" id="remark" class="input-hover" ng-model="booking.remark" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="col-xs-12">
+                    <legend>Invoice Details</legend>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover" style="border: 1px solid #eeeeee;">
+                            <thead>
+                                <tr>
+                                    <th>Head</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="fare in bookingData.invoices[0].invoiceDetails">
+                                    <td>{{fare.invoiceSubHeads.invoiceSubHeadName}}</td>
+                                    <td>{{fare.amount.toFixed(2)}}</td>
+                                </tr>
+                                <tr ng-repeat="fare in bookingData.invoices" style="background-color: grey; color: white">
+                                    <td>Total</td>
+                                    <td>{{fare.netAmount.toFixed(2)}}</td>
+                                </tr>
+                                <tr ng-show="bookingData.invoices[0].invoiceDetails.length == 0">
+                                    <td colspan="2">No record found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12" ng-if="booking.journeyType == 'One Way' && booking.dutyType == 'Outstation'">
+                        <label class="margin-bottom-0"><strong>Travel Back Time: {{booking.returnTime}}</strong></label>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-10">
+                    <div class="col-xs-12" ng-if="booking.returnFareAmount != 0">
+                        <label class="margin-bottom-0"><strong>Return Fare: {{booking.returnFareAmount}} Rs.</strong></label>
+                    </div>
+                </div>
+                <div class="col-xs-12 margin-bottom-0">
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Driver Share:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="driverShare" class=" input-hover" ng-model="booking.driverShare" readonly/>
+                    </div>
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>ID Share:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="idShare" class=" input-hover" ng-model="booking.idShare" readonly>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="col-xs-12" ng-show="allocateDriver">
+                    <legend><a ng-click="allocate()">Allocate Driver</a>
+                    </legend>
+                </div>
+                <div ng-show="searchDriver">
+                    <fieldset>
+                        <legend>Search Driver</legend>
+                        <div class="col-xs-12">
+                            <strong>Name/Mobile No:</strong>
+                            <h4><angucomplete-alt id="mobileNumber" style="width: 135px;" placeholder="Search driver" pause="500" initial-value="" input-changed="newBookingMobileSelect()" selected-object="search.mobileNumber" local-data="driverMobileList" search-fields="mobileNumber,driverName" title-field="driverSearchData" minlength=1 maxlength=10 input-class=" input-hover" match-class="highlight"></h4>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="col-xs-12">
+                            <div class="col-xs-12" style="text-align:center">
+                                <button class="mb-sm btn btn-success" ng-click="allocateDrv()">Allocate Driver</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4" style="text-align: center">
+                    <button class="mb-sm btn" style="background-color: white; color: black; border: 2px solid red;" ng-click="CancelBookingPopUp()">Cancel Booking</button>
+                    <button class="mb-sm btn" style="background-color:#4CAF50; color: white; width:120px;  " ng-click="updateDateAndTime(booking)"> Update
+                </button>
+                </div>
+                <div class="col-xs-4" style="text-align: right">
+                    <label class="margin-bottom-0">
+                        <strong>{{booking.bookingDate}}</strong>
+                         <br>
+                            <strong>{{booking.bookBy}}</strong>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/cancelBookingPopup.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Select Cancellation Reason
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak ng-init="fetchCancelReason()">
+        <h4> Select Cancellation Reason: </h4>
+        <select style="width: 100%;padding: 5px" name="Select" ng-init="cancelationReason = cancelationReasons[0]" ng-model="cancelationReason.id" ng-options="cancelationReason.desc for cancelationReason in cancelationReasons">
+            <option value="">
+                <h5>Select</h5> </option>
+        </select>
+        <br>
+        <h4>Comments:</h4>
+        <textarea style="width: 100%;padding: 5px;" ng-model="cancelationReasons.comment">
+        </textarea>
+        <br>
+        <center>
+            <button style="text-align: center; margin-bottom: 20px; margin-top: 10px" class="mb-sm btn btn-danger" ng-click="submitCancellationReason(cancelationReason.id,comment.desc)">Submit
+            </button>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/moniterDriver.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Driver Details
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <h4>Driver Details</h4>
+        <hr class="margin-bottom-10" />
+        <div class="row">
+            <div class="col-xs-12 margin-bottom-10">
+                <div class="col-xs-5">
+                    <label class="margin-bottom-0">
+                        <strong>Driver Name:</strong>
+                    </label>
+                    <br/>
+                    <input type="text" id="bookingDriverName" class=" input-hover" style="width: 135px;" ng-model="booking.driverName" placeholder="Driver Name" readonly>
+                </div>
+                <div class="col-xs-5">
+                    <label class="margin-bottom-0">
+                        <strong>Contact Number:</strong>
+                    </label>
+                    <br/>
+                    <input type="text" id="bookingDriverCellNumber" class=" input-hover" style="width: 123px;" ng-model="booking.driverCellNumber" placeholder="Contact Number" readonly>
+                </div>
+                <div class="col-xs-2">
+                </div>
+            </div>
+            <br/>
+            <br/>
+            <div class="col-xs-12 margin-bottom-10">
+                <div class="col-xs-10">
+                    <label class="margin-bottom-0"><strong>Driver Residence Address:</strong> </label>
+                    <br/>
+                    <input type="text" id="bookingDriverAddress" class=" input-hover" style="" ng-model="booking.driverAddress" placeholder="Driver Address" readonly>
+                </div>
+                <div class="col-xs-2">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/lineupDriverPopup.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Driver Details
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <h4>Driver Details</h4>
+        <hr class="margin-bottom-10" />
+        <div class="row">
+            <div class="col-xs-12 margin-bottom-10">
+                <div class="col-xs-5">
+                    <label class="margin-bottom-0">
+                        <strong>Driver Name:</strong>
+                    </label>
+                    <br/>
+                    <input type="text" id="bookingDriverName" class=" input-hover" style="width: 135px;" ng-model="booking.driverName" placeholder="Driver Name" readonly>
+                </div>
+                <div class="col-xs-5">
+                    <label class="margin-bottom-0">
+                        <strong>Contact Number:</strong>
+                    </label>
+                    <br/>
+                    <input type="text" id="bookingDriverCellNumber" class=" input-hover" style="width: 123px;" ng-model="booking.driverCellNumber" placeholder="Contact Number" readonly>
+                </div>
+                <div class="col-xs-2">
+                </div>
+            </div>
+            <br/>
+            <br/>
+            <div class="col-xs-12 margin-bottom-10">
+                <div class="col-xs-10">
+                    <label class="margin-bottom-0"><strong>Driver Residence Address:</strong> </label>
+                    <br/>
+                    <input type="text" id="bookingDriverAddress" class=" input-hover" style="" ng-model="booking.driverAddress" placeholder="Driver Address" readonly>
+                </div>
+                <div class="col-xs-2">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/addBooking.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Booking Details
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div>
+            <form class="form-horizontal ng-pristine ng-valid">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-12 margin-bottom-10" ng-init="getCustomerMobile(custMobileNumber)">
+                                <div class="col-xs-3"></div>
+                                <div class="col-xs-6">
+                                    <h4><angucomplete-alt id="mobileNo" style="width: 135px;" placeholder="Search Mobile Number" pause="500" initial-value="" input-changed="customerMobileSelect()" selected-object="search.mobileNumber" local-data="customerList" search-fields="mobileNumber,customerName" title-field="custDetails" minlength=1 input-class=" input-hover" match-class="highlight" /></h4>
+                                    <span id="mobileNo1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-3"></div>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="col-xs-12" style="text-align: center">
+                            <button class="btn btn-labeled btn-primary" ng-click="verifyMobile()">
+                                <h4>Add Booking</h4></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/addBookingNew.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Booking Details
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div class="col-xs-12">
+            <legend> Booking Details </legend>
+        </div>
+        <form class="form-horizontal ng-pristine ng-valid">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="col-xs-12 margin-bottom-10">
+                            <div class="col-xs-3">
+                                <label class="margin-bottom-0">
+                                    <strong>Contact Number:</strong>
+                                </label>
+                                <br/>
+                                <input type="text" id="mobileNumber" class=" input-hover" style="width: 150px;" ng-model="customerDetails1.mobileNumber" minlength="10" maxlength="10" placeholder="Mobile Number" numbers-only="numbers-only" ng-disabled="mobDisable">
+                                <span id="mobileNumber1" style="color:red"></span>
+                            </div>
+                            <div class="col-xs-3">
+                                <label class="margin-bottom-0"><strong>Customer Name:</strong></label>
+                                <input type="text" id="firstName" class=" input-hover" style="width: 150px;" ng-model="customerDetails1.firstName" placeholder="First Name" ng-disabled="exist" allow-pattern="[a-z\s]">
+                                <span id="firstName1" style="color:red"></span>
+                            </div>
+                            <div class="col-xs-3">
+                                <label class="margin-bottom-0">
+                                    <strong>&nbsp;</strong>
+                                </label>
+                                <input type="text" id="lastName" class=" input-hover" style="width: 150px;" ng-model="customerDetails1.lastName" placeholder="Last Name" ng-disabled="exist" allow-pattern="[a-z\s]">
+                                <span id="lastName1" style="color:red"></span>
+                            </div>
+                            <div class="col-xs-3">
+                                <label class="margin-bottom-0">
+                                    <strong>Email:</strong>
+                                </label>
+                                <input type="text" class="input-hover" id="email" ng-model="customerDetails1.email" placeholder="Email Id"/>
+                                <span id="email1" style="color:red"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 margin-bottom-10">
+                            <div class="col-xs-3">
+                                <label class="margin-bottom-0">
+                                    <strong>Duty Type:</strong>
+                                </label>
+                                <br/>
+                                <select id="dutyType" ng-model="customerDetails1.dutyType" style="height: 25px;width: 150px" class="select-hover">
+                                    <option selected value="">--select--</option>
+                                    <option value="1">Local</option>
+                                    <option value="2">Outstation</option>
+                                </select>
+                                <span id="dutyType1" style="color:red"></span>
+                            </div>
+                            <div class="col-xs-3" ng-show="customerDetails1.dutyType == '2'">
+                                <label class="margin-bottom-0">
+                                    <strong>Outstation City:</strong>
+                                </label>
+                                <br/>
+                                <input type="text" id="outstationCity" class=" input-hover" style="width: 150px;" ng-model="customerDetails1.outstationCity" placeholder="City Name" allow-pattern="[a-z\s]" ng-autocomplete googleplace="" />
+                                <span id="outstationCity1" style="color:red"></span>
+                            </div>
+                            <div class="col-xs-3">
+                                <label class="margin-bottom-0">
+                                    <strong>Car Type:</strong> </label>
+                                <br/>
+                                <select ng-model="customerDetails1.carType" id="carType" style="height: 25px;width: 150px" class="select-hover">
+                                    <option selected value="">--select--</option>
+                                    <option value="1">Manual</option>
+                                    <option value="2">Automatic</option>
+                                    <option value="3">Luxury</option>
+                                </select>
+                                <span id="carType1" style="color:red"></span>
+                            </div>
+                            <div class="col-xs-3">
+                                <label class="margin-bottom-0">
+                                    <strong>Journey Type:</strong>
+                                </label>
+                                <br/>
+                                <select ng-model="customerDetails1.journeyType" id="journeyType" style="height: 25px;width: 145px" class="select-hover">
+                                    <option selected value="">--select--</option>
+                                    <option value="1">One Way</option>
+                                    <option value="2">Round Trip</option>
+                                </select>
+                                <span id="journeyType1" style="color:red"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 margin-bottom-10">
+                            <div class="col-xs-3">
+                                <label class="margin-bottom-0">
+                                    <strong>Reporting Date:</strong>
+                                </label>
+                                <br/>
+                                <input type="text" id="reportingDate" datepicker-popup="yyyy-MM-dd" ng-model="customerDetails1.reportingDate" is-open="openedStart" max-date="maxDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openStart($event)" style="width: 150px;height: 25px;" />
+                                <br/>
+                                <span id="reportingDate1" style="color:red"></span>
+                            </div>
+                            <div class="col-xs-3">
+                                <label class="margin-bottom-0">
+                                    <strong>Reporting Time:</strong>
+                                </label>
+                                <br/>
+                                <select ng-model="customerDetails1.hours" class="select-hover" id="hours" style=" margin-top: 5px;width: 42px">
+                                    <option selected value="">HH</option>
+                                    <option value="00">00</option>
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                </select>
+                                <select ng-model="customerDetails1.minutes" class="select-hover" id="minutes" style="margin-top: 5px;width: 42px">
+                                    <option selected value="">MM</option>
+                                    <option value="00">00</option>
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="45">45</option>
+                                </select>
+                                <span id="hours1" style="color:red"></span>
+                                <span id="minutes1" style="color:red"></span>
+                            </div>
+                            <div class="col-xs-3" ng-show="customerDetails1.dutyType == '2'">
+                                <strong>Relieving Date:</strong>
+                                <br/>
+                                <input type="text" id="bookingToDate" datepicker-popup="yyyy-MM-dd" ng-model="customerDetails1.bookingToDate" is-open="openToDate" max-date="maxDate" datepicker-options="dateOptions" close-text="Close" class="input-hover " ng-click="openedToDate($event)" style="width: 150px;height: 25px;" />
+                                <br/>
+                                <span id="bookingToDate1" style="color:red"></span>
+                            </div>
+                            <div class="col-xs-3" ng-show="customerDetails1.dutyType == '2'">
+                                <label class="margin-bottom-0">
+                                    <strong>Relieving Time:</strong>
+                                </label>
+                                <br/>
+                                <select ng-model="customerDetails1.tohours" class="select-hover" id="tohours" style=" margin-top: 5px; width: 42px">
+                                    <option selected value="">HH</option>
+                                    <option value="00">00</option>
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                </select>
+                                <select ng-model="customerDetails1.tominutes" class="select-hover" id="tominutes" style=" margin-top: 5px; width: 42px">
+                                    <option selected value="">MM</option>
+                                    <option value="00">00</option>
+                                    <option value="15">15</option>
+                                    <option value="30">30</option>
+                                    <option value="45">45</option>
+                                </select>
+                                <span id="tohours1" style="color:red"></span>
+                                <span id="tohours2" style="color:red"></span>
+                                <span id="tominutes1" style="color:red"></span>
+                            </div>
+                            <div class="col-xs-3" ng-show="customerDetails1.dutyType != '2'">
+                                <label class="margin-bottom-0">
+                                    <strong>Releaving Hours:</strong>
+                                </label>
+                                <br/>
+                                <input type="text" id="releavingHours" class="input-hover" style="width: 150px;" ng-model="customerDetails1.releavingHours" placeholder="Releaving Hours" numbers-only="numbers-only" />
+                                <br/>
+                                <span id="releavingHours1" style="color:red"></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 margin-bottom-10">
+                            <div class="col-xs-3">
+                                <label class="margin-bottom-0">Payment Method</label>
+                                <br/>
+                                <select class="form-control input-hover" id="paymentMethod" ng-model="customerDetails1.paymentMethod" ng-options="sa.desc as sa.desc for sa in paymentArray" style="padding: 0px 16px;height:25px;width: 150px">
+                                    <option value="">--Select--</option>
+                                </select>
+                                <span id="paymentMethod1" style="color:red"></span>
+                            </div>
+                            <div class="col-xs-3">
+                                <label class="margin-bottom-0"><strong>Pickup Landmark:</strong></label>
+                                <input type="text" id="landmark" class=" input-hover" style="width: 150px;" ng-model="customerDetails1.landmark" placeholder="Flat No,Society Name">
+                            </div>
+                            <div class="col-xs-6">
+                                <label class="margin-bottom-0"><strong>Remark</strong></label>
+                                <textarea rows="1" cols="30" class="input-hover" id="remark" ng-model="customerDetails1.remark" placeholder="Remark" allow-pattern="[a-z\s0-9]"></textarea>
+                            </div>
+                            
+                        </div>
+                        <div class="col-xs-12 margin-bottom-10">
+                            <div class="col-xs-12">
+                                <label class="margin-bottom-0">
+                                    <strong>Pickup Location:</strong>
+                                </label>
+                                <br/>
+                                <input type="text" id="bookingFrmLocation" class="input-hover" ng-model="customerDetails1.address" ng-autocomplete googleplace="">
+                                <span id="bookingFrmLocation1" style="color:red"></span>
+                            </div>
+                            
+                        </div>
+                        <div class="col-xs-12 margin-bottom-10">
+                        <div class="col-xs-12" ng-show="customerDetails1.journeyType == '1'">
+                                <label class="margin-bottom-0">
+                                    <strong>Drop Location:</strong>
+                                </label>
+                                <br/>
+                                <input type="text" id="bookingToLocation" class="input-hover" ng-model="customerDetails1.bookingToLocation" ng-autocomplete googleplace="">
+                                <span id="bookingToLocation1" style="color:red"></span>
+                            </div>
+                            </div>
+                        <br>
+                        <br>
+                        <div class="col-xs-12" style="margin-bottom: 20px; margin-top: 10px;">
+                            <div class="col-xs-4"></div>
+                            <div class="col-xs-4" style="text-align:center">
+                                <button class="mb-sm btn btn-success" ng-disabled="isDisabled" ng-click="verifyEmailFunction(customerDetails1)">Add Booking</button>
+                            </div>
+                            <div class="col-xs-4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>

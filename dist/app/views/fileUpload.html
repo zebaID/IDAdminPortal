@@ -1,0 +1,16 @@
+ 
+ 
+ <!--  SINGLE FILE -->
+ <body ng-controller="driverfileUploadCtrl">
+<form> 
+   <input type="file" ng-model="files" multiple />
+    
+   
+   <button ng-click="uploadFile()">Submit</button>
+<li ng-repeat="file in files">{{file.name}}</li>
+   
+</form>
+</body>
+ 
+ 
+ 

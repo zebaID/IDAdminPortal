@@ -1,0 +1,954 @@
+    <h3>Manage Driver</h3>
+<!-- Row Select Example-->
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+<div class="panel panel-default" style="overflow-x: auto" ng-init="fetchDriverDataFunction();getCities()">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="col-sm-3">
+                    <button class="pull-right btn btn-labeled btn-primary" style="padding-top: -2px;
+                    padding-bottom: -2px;" ng-click="backToSearchCriteria()">
+                        <span class="btn-label"><i class="fa fa-chevron-left"></i>
+                     </span> Back
+                    </button>
+                </div>
+                <div class="col-sm-6"  >
+                 
+            </div>
+            <div class="col-sm-3">
+                </div>
+
+            </div>
+          
+        </div>
+         <div class="row">  <div class="col-sm-4"></div>
+         <div class="col-sm-2">
+                 
+                <div class="col-sm-4">
+                    <button  class="pull-right btn btn-labeled btn-primary" ng-click="pushNotification()" ng-disabled="count==0"><span class="btn-label"><i class="glyphicon glyphicon-envelope" ></i></span>Push Notification</button>
+                </div>
+                </div>
+
+             
+             
+                  <div class="col-sm-1">
+                
+                <div class="col-sm-4">
+                    <button ng-click="Message()" class="pull-right btn btn-labeled btn-primary" ng-disabled="count==0"><span class="btn-label"><i class="glyphicon glyphicon-envelope" ></i></span>Send Message</button>
+                </div>
+            </div>
+            </div>
+            
+            
+    </div>
+
+    <input type="checkbox" ng-model="selectedAll" style="cursor: pointer;" ng-click="selectAllDriver();checksAll(driver)"> Select All </input>
+    <table ng-table="tableParams3" class="table table-striped table-bordered ng-table-rowselected" show-filter="true">
+        <tr ng-repeat="driver in $data track by $index" ng-style="driver.drvLicenseStatus === 'Expired' && {'background-color':'#f47f7f'} || {'background-color':'#cfdbe2'}" ng-show="$data.length > 0">
+            <td>
+                <input type="checkbox" ng-model="driver.Selected" title="'send sms'" name="send" value="" ng-checked="selectedAll" ng-click="selectDriver(driver.contactNo,driver.name)" style="margin-left:auto; margin-right:auto;" />
+                <!--| ng-change="sendMsg(user.conuserId)" -->
+            </td>
+            <td title="'Driver ID'" filter="{ id: 'text'}" sortable="'id'" style="text-transform: capitalize;text-align: left;">{{driver.id}}</td>
+            <td title="'Name'" filter="{ name: 'text'}" sortable="'name'" style="text-transform: capitalize;text-align: left;">{{driver.name}}</td>
+            <td title="'Address'" filter="{ address: 'text'}" sortable="'address'" style="text-transform: capitalize;text-align: left;">{{driver.address}}</td>
+            <td title="'Contact Number'" filter="{ contactNo: 'text'}" sortable="'contactNo'" style="text-transform: capitalize;text-align: left;width: 10%">{{driver.contactNo}}</td>
+            <td title="'Car Type'" filter="{ isLuxury: 'text'}" sortable="'isLuxury'" style="text-align: left; width: 5%">{{driver.isLuxury}}</td>
+            <td title="'License Status'" filter="{ drvLicenseStatus: 'text'}" sortable="'drvLicenseStatus'" style="text-align: left; width: 5%">{{driver.drvLicenseStatus}}</td>
+            <td title="'Created Date'" sortable="'createdDate'" style="text-transform: capitalize;text-align: left;">{{driver.createdDate |date:'dd/MM/yyyy'}}</td>
+            <td title="'Remark'" filter="{ remark: 'text'}" sortable="'remark'" style="text-align: left; width: 5%">{{driver.remark}}</td>
+            <td title="'OTP'" sortable="'otp'" style=" text-align: left;">{{driver.otp}}</td>
+            <td title="'Mobile'" filter="{ registrationType: 'text'}" sortable="'registrationType'" style=" text-align: left; width: 5%">{{driver.registrationType}}</td>
+            <td title="'Driver Average Rating'" filter="{ rateAverage: 'text'}" sortable="'rateAverage'" style=" text-align: left; width: 5%"><i ng-repeat="i in getNumber(driver.rateAverage) track by $index" class="glyphicon ng-scope fa fa-star text-orange" style="color: darkviolet;" ng-show ="driver.rateAverage>0"></i>
+            <i ng-show ="driver.rateAverage==0"></i></td>
+            <td title="'Driver Code'" filter="{ driverCode: 'text'}" sortable="'driverCode'" style=" text-align: left; width: 5%">{{driver.driverCode}}</td>
+            <td title="'Reg./Unreg.'" filter="{ driverCode: 'text'}" sortable="'driverCode'" style=" text-align: left; width: 5%">
+             
+                <div ng-show="driver.driverCode !== null">
+                    <span style='font-size:28px;'>&#9989;</span>
+                    </div>
+            
+            </td>
+            <td title="'Menu'" style="text-align:left">
+                <div class="btn-group">
+                    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        <em class="fa fa-bars"></em>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ng-click="updateDriver(driver.id,driver.conuserId)"><i class="fa fa-pencil fa-fw"></i> Edit</a></li>
+                        <li><a ng-click="deleteDriverConfirm(driver.id)"><i class="fa fa-trash-o fa-fw"></i> Delete</a></li>
+                        <li><a ng-click="settlementPopup(driver.id)"><i class="fa fa-list-alt fa-fw"></i> Booking History</a></li>
+                        <li><a ng-click="jobRequestPopup(driver.id)"><i class="fa fa-list-alt fa-fw"></i> Job Request History</a></li>
+                        <!-- <li><a ng-click="rechargeAccountPopup(driver.id)"><i class="fa icon-wallet fa-fw"></i> Recharge</a></li> -->
+                        <li><a ng-click="deductAccountPopup(driver.id)"><i class="fa fa-inr fa-fw"></i> Payment</a></li>
+                         <li><a ng-click="blockDriver(driver.id)"><i class="fa fa-ban"></i> Block driver for customer</a></li>
+                          <li><a ng-click="blockDriverHistory(driver.id)"><i class="fa fa-history"></i> Blocked driver history</a></li>
+                            <li><a ng-click="driverEmploymentHistory()"><i class="fa fa-list-alt fa-fw"></i>Employment History</a></li>
+
+                    </ul>
+                </div>
+            </td>
+            <td title="'Action'" style="text-align:left">
+                <div class="btn-group">
+                    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> 
+                     <i class="fa fa-ellipsis-v" style="font-size:27px;"></i>   
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>  
+                    <button class="pull-right btn btn-labeled  " style="width: 96%; " ng-class="{redstyle : driver.status == 'Active'}"  ng-click="activate(driver.conuserId,driver.id)">
+                        Active</button>
+                 </li><br>
+                        <li> 
+                    <button  class="pull-right btn btn-labeled  " style="width: 96%;"  ng-class="{redstyle : driver.status == 'Inactive'}"  ng-click="showconfirmbox(driver.id)">
+                        Inactive</button>
+                 </li><br>
+                        <li>  
+                    <button class="pull-right btn btn-labeled  " style="width: 96%;"  ng-class="{redstyle : driver.status == 'Blocked'}"  ng-click="blockJob(driver.conuserId,driver.id)">
+                        Blocked</button> 
+                 </li>
+                        
+
+                    </ul>
+                </div>
+            </td>
+            <!-- <td title="'Action'" filter="{ status: 'text'}" sortable="'status'" style="text-align:left; width: 10%">
+                <div ng-if="driver.status == 'Active'">
+                    <button class="pull-right btn btn-labeled btn-primary" style="width: 96%;" ng-click="showconfirmbox(driver.id)">
+                        Active</button>
+                </div>
+                <div ng-if="driver.status == 'Blocked'">
+                    <button class="pull-right btn btn-labeled btn-danger" style="width: 96%;" ng-click="activate(driver.conuserId,driver.id)">
+                        Blocked</button>
+                </div>
+            </td> -->
+            <td title="'Driver Account'" style="text-align: center;"><a href="" ng-click="DriverAccountPopup(driver.id)" style="color: #131e26">{{driver.drvBalance}}</a></td>
+             <td title="'Test Score'" style="text-align: center;"> {{driver.testScore}}</a></td>
+        </tr>
+        <tr ng-show="$data.length == 0">
+            <td>No record found</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+    <div class="col-xs-12" style="height: 50px">
+        <div class="col-xs-5"></div>
+    </div>
+    <div class="col-xs-12" style="height: 50px">
+        <div class="col-xs-5"></div>
+    </div>
+    <div class="col-xs-12" style="height: 50px">
+        <div class="col-xs-5"></div>
+    </div>
+</div>
+<script type="text/ng-template" id="/employmentHostoryPopUp.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" ng-init="fetchDriverDetails()" style="margin-top: -15px; font-size: 20px;"> Driver Employment History
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 3%;" ng-init="getEmploymentHistory()">
+                <div class="col-xs-12" style = "color: #0722ab">
+                    <div class="col-sm-4">
+                    <table border="2" align="center" style="background-color: antiquewhite;width: 650px;">
+                        <tr style="color: aliceblue;background: blue;">
+                        <th >&nbsp;Customer Name</th>
+                        <th>&nbsp;Status</th>
+                        <th>&nbsp;Doj</th> 
+                            <th>&nbsp;Dol</th> 
+                                <th>&nbsp;Reason</th> 
+                                    <th  style="width:35%;">&nbsp;Description</th> 
+
+                        
+                        </tr>
+                        <tr ng-repeat="appointedCustomerDetails1 in appintedCustomerDetails track by $index" style = "background-color: azure;color: black;">
+                        <td>&nbsp; {{appointedCustomerDetails1.customer_name}}</td>
+                        <td>&nbsp; {{appointedCustomerDetails1.status }}</td>
+                        <td>&nbsp; {{appointedCustomerDetails1.doj | date:'dd-MM-yyyy'}}</td>
+                         <td>&nbsp; {{appointedCustomerDetails1.dol | date:'dd-MM-yyyy'}}</td>
+                          <td>&nbsp; {{appointedCustomerDetails1.left_reasons}}</td>
+
+                         
+                          <td>&nbsp; {{appointedCustomerDetails1.description}}</td>
+                       
+                         
+                             </tr>
+                    </table>
+
+                    <br><br>
+                 </div> 
+                        
+                </div>
+    </div>
+</script>
+<script type="text/ng-template" id="/updateDriver.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" ng-init="fetchDriverDetails()" style="margin-top: -15px; font-size: 20px;"> Update Driver
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div class="row">
+            <div class="col-md-10">
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-4 col-border" ng-style="(count > 0 && driver.firstName1 == null) && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Name As Per Bank Name</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="firstName" ng-model="driver.firstName" placeholder="First Name" maxlength="20" allow-pattern="[a-z\s]" />
+                            <span id="firstName1" ng-model="driver.firstName1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border" ng-style="count > 0 && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">&nbsp;</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="middleName" ng-model="driver.middleName" placeholder="Middle Name" maxlength="20" allow-pattern="[a-z\s]" />
+                            <span id="middleName1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border" ng-style="count > 0 && driver.lastName1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">&nbsp;</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="lastName" ng-model="driver.lastName" placeholder="Last Name" maxlength="20" allow-pattern="[a-z\s]" />
+                            <span id="lastName1" style="color:red"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-4 col-border" ng-style="count > 0 && driver.cellNumber1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Mobile Number</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="cellNumber" ng-model="driver.cellNumber" placeholder="Mobile Number" maxlength=10 numbers-only="numbers-only" readonly/>
+                            <span id="cellNumber1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border">
+                            <label class="margin-bottom-0">Emergency Number</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="emergencyNumber" ng-model="driver.emergencyNumber" placeholder="Mobile Number" maxlength=10 minlength=10 numbers-only="numbers-only" />
+                            <span id="mobileNumber1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border" ng-style="count > 0 && driver.isLuxury1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Car Type</label>
+                            <br/>
+                            <select class="form-control input-hover" id="isLuxury" ng-model="driver.isLuxury" ng-options="sa.desc as sa.desc for sa in luxuryArray" style="padding: 0px 16px;height:25px;">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="isLuxury1" style="color:red"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-3 col-border">
+                            <label class="margin-bottom-0">
+                                <strong style="font-size: 13px;">License Expiry Date</strong>
+                            </label>
+                            <br/>
+                            <input type="text" id="trDate" datepicker-popup="yyyy-MM-dd" ng-model="driver.trDate" is-open="openedStart" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openStart($event)" placeholder="TR Date" />
+                            <br/>
+                            <span id="trDate1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-3 col-border">
+                            <label class="margin-bottom-0">
+                                <strong></strong>
+                            </label>
+                            <br/>
+                            <input type="text" id="ntDate" datepicker-popup="yyyy-MM-dd" ng-model="driver.ntDate" is-open="openToDate" datepicker-options="dateOptions" close-text="Close" class="input-hover " ng-click="openedToDate($event)" placeholder="NT Date" />
+                            <br/>
+                            <span id="ntDate1" style="color:red"></span>
+                        </div>
+                          <div class="col-md-3 col-border" ng-style="count > 0 && user.status1 == null && {'padding-bottom': '23px'}  || count == 0  && {} " >
+                            <label class="margin-bottom-0">Operation City</label>
+                            <br/>
+                            <select class="form-control input-hover" id="operationCity" ng-model="driver.operationCity" ng-options="sa as sa for sa in cityAt" style="padding: 0px 16px;height:25px;">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="operationCity1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-3 col-border">
+                            <label class="margin-bottom-0">Status</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="status" ng-model="driver.status" readonly/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        
+                        <div class="col-md-3 col-border">
+                            <label class="margin-bottom-0">Driver Code</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="driverCode" ng-model="driver.driverCode" placeholder="Driver Code" numbers-only="numbers-only" />
+                            <span id="driverCode1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-3 col-border" ng-style="count > 0 && driver.pv1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">PV</label>
+                            <br/>
+                            <select class="form-control input-hover" id="pv" ng-model="driver.pv" ng-options="pa.desc as pa.desc for pa in pvArray" style="padding: 0px 16px;height:25px;">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="pv1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-3 col-border">
+                            <label class="margin-bottom-0">
+                                <strong>PV Expiry Date</strong>
+                            </label>
+                            <br/>
+                            <input type="text" id="pvDate" datepicker-popup="yyyy-MM-dd" ng-model="driver.pvDate" is-open="openedStart1" datepicker-options="dateOptions1" close-text="Close" class="input-hover" ng-click="openStart1($event)" placeholder="PV Expiry Date" />
+                            <br/>
+                            <span id="trDate1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-3 col-border">
+                            <label class="margin-bottom-0">
+                                <strong>CPV Date</strong>
+                            </label>
+                            <br/>
+                            <input type="text" id="pvDate" datepicker-popup="yyyy-MM-dd" ng-model="driver.cpvDate" is-open="openedStart2" datepicker-options="dateOptions2" close-text="Close" class="input-hover" ng-click="openStart2($event)" placeholder="CPV Date" />
+                            <br/>
+                            <span id="trDate1" style="color:red"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row margin-bottom-10">
+                <div class="col-md-12">
+                        
+                        <div class="col-md-9 col-border">
+                         <label class="margin-bottom-0">Driver Address</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="freeAddress" ng-model="driver.freeAddress" placeholder="Address" />
+                            <span id="freeAddress1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-3 col-border">
+                            <label class="margin-bottom-0">Birth Date</label>
+                            <br/>
+                             <input type="text" id="bdate" datepicker-popup="yyyy-MM-dd" ng-model="driver.bdate" is-open="openBirthDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openStartBirth($event)" max-date="maxDate" placeholder="Birth date" />
+                            <span id="bdate1" style="color:red"></span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                         
+                       
+                         <div class="col-md-9 col-border" ng-style="count > 0 && driver.currentaddr1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Driver Location</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="currentaddr" ng-model="driver.currentaddr" placeholder="Address"  />
+                            <span id="currentaddr1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-3 col-border">
+                            <label class="margin-bottom-0" > <strong style="font-size: 13px;">License Issue Date</strong></label>
+                            <br/>
+                             <input type="text" id="licenceIssueDate" datepicker-popup="yyyy-MM-dd" ng-model="driver.licenseIssueDate" is-open="openLicenseDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openStartLicense($event)" placeholder="license Issue Date" />
+                            <span id="licenceIssueDate1" style="color:red"></span>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                       
+                        <div class="col-md-9 col-border" ng-style="count > 0 && driver.permanentaddr1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Permanent Address</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="permanentaddr" ng-model="driver.permanentaddr" placeholder="Address"  />
+                            <span id="permanentaddr1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-3 col-border" ng-style="count > 0 && driver.vehicle1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Driver is a</label>
+                            <br/>
+                            <select class="form-control input-hover" id="pv" ng-model="driver.vehicle" ng-options="pa.desc as pa.desc for pa in vehicleArray" style="padding: 0px 16px;height:25px;">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="pv1" style="color:red"></span>
+                        </div>
+                         
+                    </div>
+
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-3 col-border" ng-style="count > 0 && driver.vehicle1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Interview Status</label>
+                            <br/>
+                            <select class="form-control input-hover" id="pv" ng-model="driver.interviewStatus" ng-options="pa.desc as pa.desc for pa in interviewStatusArray" style="padding: 0px 16px;height:25px;">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="pv1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border">
+                            <label class="margin-bottom-0">Fitness Certificate</label>
+                            <br/>
+                            <select class="form-control input-hover" id="fitnessCertificate" ng-model="driver.fitnessCertificate" ng-options="pa.desc as pa.desc for pa in pvArray" style="padding: 0px 16px;height:25px;">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="fitnessCertificate1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border" ng-if="driver.fitnessCertificate">
+                            <label class="margin-bottom-0" > <strong style="font-size: 13px;"> Date Of Fitness</strong></label>
+                            <br/>
+                             <input type="text" id="licenceIssueDate" datepicker-popup="yyyy-MM-dd" ng-model="driver.DOF" is-open="openDateOfFitness" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openStartDateOfFitness($event)" placeholder="Date Of Fitness Certificate" />
+                            <span id="licenceIssueDate1" style="color:red"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-8 col-border" ng-style="count > 0 && driver.vehicle1 == null &&  {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Interview Link</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="interviewLink" ng-model="driver.interviewLink" placeholder="" readonly ng-click="copylink()" />
+                            <span id="interviewLink" style="color:red"></span>
+
+                            <!-- <button ng-click="copylink()">{{driver.interviewLink}}<i class="fa fa-copy" style="font-size:24px"></i></button> -->
+                            
+                        </div>
+                        <div class="col-md-3 col-border">
+                            <a ng-click="copylink()"><i class="fa fa-copy" style="font-size:24px"></i></a>
+                        </div>
+                    </div>
+                </div>
+                 <div class="row margin-bottom-10" ng-hide="show">
+                    <div class="col-md-12"> 
+                    <div class="col-md-6 col-border"  >
+                <span class="btn-label" ng-click="show ='true'">
+                    <button class="pull-right btn btn-labeled btn-pink" style="margin: 10px; background-color: darkblue;" ng-click="searchById()" >
+                          <span class="btn-label">Remark and Bank Details
+                           </span> <i class= "fa fa-plus"> </i> </button>
+
+                    
+                        <div class="col-md-2 col-border"  >
+                            
+                        </div>
+                        <div class="col-md-4 col-border"  >
+                            
+                        </div>
+                        
+                           </span>
+                       </div>
+                   </div></div>
+                <div class="row margin-bottom-10" ng-show = "show">
+                    <div class="col-md-12">
+                        <div class="col-md-3 col-border" ng-style="count > 0 && driver.bankname1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Bank Name</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="bankname" ng-model="driver.bankname" placeholder="Bank Name" allow-pattern="[a-z\s]" />
+                            <span id="bankname1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-3 col-border" ng-style="count > 0 && driver.accno1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Account Number</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="accno" ng-model="driver.accno" placeholder="Account Number" minlength="3" maxlength="15" numbers-only="numbers-only" />
+                            <span id="accno1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-3 col-border" ng-style="count > 0 && driver.ifsc1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">IFSC Code</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="ifsc" ng-model="driver.ifsc" placeholder="IFSC Code" minlength="3" maxlength="15" />
+                            <span id="ifsc1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-3 col-border" ng-style="count > 0 && driver.driverTraining1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Driver Training</label>
+                            <br/>
+                            <select class="form-control input-hover" id="driverTraining" ng-model="driver.driverTraining" ng-options="pa.desc as pa.desc for pa in driverTrainingArray" style="padding: 0px 16px;height:25px;">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="driverTraining1" style="color:red"></span>
+                        </div>
+                    </div>
+                     
+                </div>
+                <div class="row margin-bottom-10" ng-show = "show">
+                    <div class="col-md-12">
+                        <div class="col-md-12 col-border">
+                            <label class="margin-bottom-0"><strong>Remark</strong></label>
+                            <textarea rows="2" cols="90" class="input-hover" id="remark" ng-model="driver.remark" placeholder="Remark"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row margin-bottom-10" ng-show = "show">
+                    <div class="col-md-12">
+                        <div class="col-md-6 col-border"  ></div><div class="col-md-4 col-border"  ></div><div class="col-md-2 col-border"  >
+                     <span class="btn-label" ng-click="show = false"> 
+
+                        <button class="pull-right btn btn-labeled btn-pink" style="margin: 10px; background-color: darkblue;" ng-click="searchById()" >
+                          <span class="btn-label">Hide
+                           </span> <i class= "fa fa-minus"> </i> </button>
+                           </span></div></div></div>
+            </div>
+            <div class="col-md-2">
+                <img src="app/img/photo-user.png" style="width: 100%;" />
+            </div>
+        </div>
+        <div class="row" style="margin-top: 3%;">
+            <div class="col-xs-12" style="margin-bottom: 20px;">
+                <div class="col-xs-4" style="text-align:right">
+                    <button class="mb-sm btn btn-success" ng-click="verifyDriverCode(driver)" ng-disabled="submitUserBtn">Activate Driver</button>
+                </div>
+                 <div class="col-xs-4" style="text-align:right">
+                    <button class="mb-sm btn btn-success" ng-click="verifyDriverCodeUpdate(driver)" ng-disabled="submitUserBtn">Update Driver</button>
+                </div>
+                <div class="col-xs-4">
+                    <button class="mb-sm btn btn-danger" ng-click="cancel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/sendMessage.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Send Message
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak ng-init="">
+        <form ng-submit="">
+            <div class="row">
+                <div class="col-md-10">
+                    <textarea style="margin-left: 162px" rows="5" cols="50" ng-model="sendRequestAdv" id="text1" name="sendRequestAdv"></textarea required>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 3%;">
+                <div class="col-xs-12" style="margin-bottom: 20px;">
+                    <div class="col-xs-6" style="text-align:right">
+                        <button class="btn btn-primary" ng-disabled="!sendRequestAdv" value="" ng-click="sendMessage(sendRequestAdv)">send message</button>
+                    </div>
+                    <div class="col-xs-6">
+                        <button class="mb-sm btn btn-danger" ng-click="cancel()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/driverAccountPopup.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Driver Account Details
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div class="row ng-scope">
+            <div class="col-lg-12">
+                <!-- START panel-->
+                <div class="panel panel-primary" id="panelDemo8" ng-init="getAccountDetails()">
+                    <div class="panel-heading">Account Of Driver {{driverAccountDetails[0].drvName}}</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-12" ng-show="accountExist === true" style="border: 2px transparent;padding: 10px;">
+                                <div class="col-sm-3">
+                                    <label>Account Number:
+                                        <h4>{{driverAccountDetails[0].accountId}}</h4></label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Driver Id:
+                                        <h4>{{driverAccountDetails[0].driverId}}</h4></label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Balance:
+                                        <h4>{{driverAccountDetails[0].totalBalance.toFixed(2)}}</h4>
+                                    </label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Last Transaction:
+                                        <h4>{{driverAccountDetails[0].lastTransaction.toFixed(2)}}</h4>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-12" ng-show="accountExist === false">
+                                <label>
+                                    <h3>Account does not exist.</h3></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer"></div>
+                </div>
+                <!-- END panel-->
+            </div>
+        </div>
+        <div class="row ng-scope">
+            <div class="col-lg-12">
+                <!-- START panel-->
+                <div class="panel panel-success" id="panelDemo9">
+                    <div class="panel-heading">Transaction History</div>
+                    <div class="panel-body">
+                        <div class="center" ng-show="accountExist === true">
+                            
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Transaction Date</th>
+                                            <th>Description</th>
+                                            <th>CR</th>&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;
+                                            <th>DR</th>
+                                            <th>Balance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in cruise | limitTo:limit" ng-show="cruise.length > 0">
+                                            <td>{{item.transactionDate | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+                                            <td>{{item.description}}</td>
+                                            <td><span ng-if="item.amount>0">{{item.amount.toFixed(2)}}</span></td>
+                                             
+                                            <td><span ng-if="item.amount<0">{{item.amount.toFixed(2)}}</span></td>
+                                            <td>{{item.balance.toFixed(2)}}</td>
+                                        </tr>
+                                        <tr ng-show="cruise.length == 0">
+                                            <td>No record found</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                    </tbody>
+                                        <tfoot>
+                                            <td colspan="10">
+                                                <button class="btn" href="#" ng-click="loadMore()">Load More</button>
+                                            </td>
+                                        </tfoot>
+                                    
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-sm-12" ng-show="accountExist === false">
+                            <label>
+                                <h3>Transaction history does not exist.</h3></label>
+                        </div>
+                    </div>
+                    <div class="panel-footer"></div>
+                </div>
+                <!-- END panel-->
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/driverRechargeAccountPopup.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Recharge Driver Account
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div class="row ng-scope">
+            <div class="col-lg-12">
+                <!-- START panel-->
+                <div class="panel panel-primary" id="panelDemo8" ng-init="getRechargeAccountDetails()">
+                    <div class="panel-heading">Account Of Driver {{rechargeAccountDetails[0].drvName}}</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-12" ng-show="rechargeAccountExist === true" style="border: 2px transparent;padding: 10px;">
+                                <div class="col-sm-3">
+                                    <label>Account Number:
+                                        <h4>{{rechargeAccountDetails[0].accountId}}</h4></label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Driver Id:
+                                        <h4>{{rechargeAccountDetails[0].driverId}}</h4></label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Balance:
+                                        <h4>{{rechargeAccountDetails[0].totalBalance.toFixed(2)}}</h4>
+                                    </label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Last Transaction:
+                                        <h4>{{rechargeAccountDetails[0].lastTransaction.toFixed(2)}}</h4>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-12" ng-show="rechargeAccountExist === false">
+                                <label>
+                                    <h3>Account does not exist.</h3></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer"></div>
+                </div>
+                <!-- END panel-->
+            </div>
+        </div>
+        <div class="row ng-scope">
+            <div class="col-lg-12">
+                <!-- START panel-->
+                <div class="panel panel-success" id="panelDemo9">
+                    <div class="panel-heading">Add Money</div>
+                    <div class="panel-body">
+                        <div class="center" ng-show="rechargeAccountExist === true">
+                            <div class="row margin-bottom-10">
+                                <div class="col-md-12">
+                                    <div class="row margin-bottom-10">
+                                        <div class="col-md-12">
+                                            <div class="col-md-4 col-border">
+                                                <label class="margin-bottom-0">Amount</label>
+                                                <br/>
+                                                <input type="text" class="input-hover" id="amount" ng-model="account.amount" placeholder="Enter amount" numbers-only="numbers-only" />
+                                                <span id="amount1" style="color:red"></span>
+                                            </div>
+                                            <div class="col-md-8 col-border">
+                                                <label class="margin-bottom-0">Description</label>
+                                                <br/>
+                                                <input type="text" class="input-hover" id="description" ng-model="account.description" placeholder="Enter description" />
+                                                <span id="description1" style="color:red"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 3%;">
+                                <div class="col-xs-12" style="margin-bottom: 20px;">
+                                    <div class="col-xs-4">
+                                    </div>
+                                    <div class="col-xs-4" style="text-align: center">
+                                        <button class="mb-sm btn btn-success" ng-click="confirm(account)" ng-disabled="rechargeBtn">Recharge</button>
+                                    </div>
+                                    <div class="col-xs-4">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" ng-show="rechargeAccountExist === false">
+                            <label>
+                                <h3>Account does not exist.</h3></label>
+                        </div>
+                    </div>
+                    <div class="panel-footer"></div>
+                </div>
+                <!-- END panel-->
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/driverDeductAccountPopup.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Driver Payment
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div class="row ng-scope">
+            <div class="col-lg-12">
+                <!-- START panel-->
+                <div class="panel panel-primary" id="panelDemo8" ng-init="getDeductAccountDetails()">
+                    <div class="panel-heading">Account Of Driver {{deductAccountDetails[0].drvName}}</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-12" ng-show="deductAccountExist === true" style="border: 2px transparent;padding: 10px;">
+                                <div class="col-sm-3">
+                                    <label>Account Number:
+                                        <h4>{{deductAccountDetails[0].accountId}}</h4></label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Driver Id:
+                                        <h4>{{deductAccountDetails[0].driverId}}</h4></label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Balance:
+                                        <h4>{{deductAccountDetails[0].totalBalance.toFixed(2)}}</h4>
+                                    </label>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label>Last Transaction:
+                                        <h4>{{deductAccountDetails[0].lastTransaction.toFixed(2)}}</h4>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-12" ng-show="deductAccountExist === false">
+                                <label>
+                                    <h3>Account does not exist.</h3></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer"></div>
+                </div>
+                <!-- END panel-->
+            </div>
+        </div>
+        <div class="row ng-scope">
+            <div class="col-lg-12">
+                <!-- START panel-->
+                <div class="panel panel-success" id="panelDemo9">
+                    <div class="panel-heading">Pay Money</div>
+                    <div class="panel-body">
+                        <div class="center" ng-show="deductAccountExist === true">
+                            <div class="row margin-bottom-10">
+                                <div class="col-md-12">
+                                    <div class="row margin-bottom-10">
+                                        <div class="col-md-12">
+                                            <div class="col-md-4 col-border">
+                                                <label class="margin-bottom-0">Amount</label>
+                                                <br/>
+                                                <input type="text" class="input-hover" id="amount" ng-model="account.amount" placeholder="Enter amount" numbers-only="numbers-only" />
+                                                <span id="amount1" style="color:red"></span>
+                                            </div>
+                                            <div class="col-md-8 col-border">
+                                                <label class="margin-bottom-0">Description</label>
+                                                <br/>
+                                                <input type="text" class="input-hover" id="description" ng-model="account.description" placeholder="Enter description" />
+                                                <span id="description1" style="color:red"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 3%;">
+                                <div class="col-xs-12" style="margin-bottom: 20px;">
+                                    <div class="col-xs-4">
+                                    </div>
+                                    <div class="col-xs-4" style="text-align: center">
+                                        <button class="mb-sm btn btn-success" ng-click="confirm(account)" ng-disabled="deductBtn">Pay</button>
+                                    </div>
+                                    <div class="col-xs-4">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" ng-show="deductAccountExist === false">
+                            <label>
+                                <h3>Account does not exist.</h3></label>
+                        </div>
+                    </div>
+                    <div class="panel-footer"></div>
+                </div>
+                <!-- END panel-->
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/blockDriver.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Block Driver For Customer
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div>
+            <form class="form-horizontal ng-pristine ng-valid">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-12 margin-bottom-10" ng-init="getCustomerMobileDetails(customerMobile)">
+                              
+                                <div class="col-xs-10">
+                                    <br>
+                                    <h4><angucomplete-alt id="mobileNo" style="width: 135px;" placeholder="Search Customer's Mobile Number or name" pause="500" initial-value="" input-changed="mobileSelected()" selected-object="search.mobileNumber" local-data="customerList" search-fields="mobileNumber,customerName" title-field="custDetails" minlength=1 input-class=" input-hover" match-class="highlight" focus-me/></h4>
+                                    <span id="mobileNo1" style="color:red"></span>
+                                    <br>
+                                    <label class="margin-bottom-0"><strong>Remark</strong></label>
+                            <textarea rows="2" cols="30" class="input-hover" id="remark" ng-model="remark" placeholder="Remark"></textarea>
+                                </div>
+                                  <div class="col-xs-2"></div>
+                                <div class="col-xs-3"></div>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="col-xs-12" style="text-align: center">
+                            <button class="btn btn-labeled btn-danger" ng-click="driverBlockForCustomers(remark)">
+                                <h4>Block</h4></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/blockDriverHistory.html"  >
+    <div class="panel panel-default" style="overflow-x: auto" ng-init="blockDriverData()">
+ <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;" > Block Driver History
+              <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+   <table  class="table table-striped table-bordered">
+        <tr >
+            <th><center>Customer Name</center></th>
+           
+            <th><center>Unblock</center></th>
+
+        </tr>
+        <tr ng-repeat = "item in customerArray">
+            <td >{{item.customerName}}</td>
+            <td><button class="btn btn-labeled btn-success" ng-click="unblockDriverForCustomer()">Unblock
+            </button></td>
+        </tr>
+        <tr  ng-if="customerArray.length==0"><td colspan="2"> No records available</td> </tr>
+</table>
+</div></div></div>
+
+    </script>
+    <script type="text/ng-template" id="/sendPushNotification.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Push Notification
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak ng-init="">
+        <form ng-submit="">
+            <div class="row">
+                <div class="col-md-10">
+                    <textarea style="margin-left: 162px" rows="5" cols="50" ng-model="sendRequestAdv" id="text1" name="sendRequestAdv"></textarea required>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 3%;">
+                <div class="col-xs-12" style="margin-bottom: 20px;">
+                    <div class="col-xs-6" style="text-align:right">
+                        <button class="btn btn-primary" ng-disabled="!sendRequestAdv" value="" ng-click="sendNotification(sendRequestAdv)" >Send Notification</button>
+                    </div>
+                    <div class="col-xs-6">
+                        <button class="mb-sm btn btn-danger" ng-click="cancel()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>

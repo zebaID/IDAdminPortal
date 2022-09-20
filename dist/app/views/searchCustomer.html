@@ -1,0 +1,452 @@
+<h3>Search Customer</h3>
+<!-- Row Select Example-->
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+
+
+
+<div class="panel panel-default" style="overflow-x: auto">
+    <div class="panel-heading">
+        <div class="row">
+            <div ng-show="searchCustFlag == true">
+                <div class="col-xs-12">
+                    <div class="col-xs-3">
+                        <legend>
+                            <h5><a ng-click="searchByNameAndNumber()">Search Customer by name or number </a></h5>
+                        </legend>
+                    </div>
+                    <div class="col-xs-6"></div>
+                    <div class="col-xs-3">
+                    <button class="pull-right btn btn-labeled btn-primary" ng-click="newCustomer()">
+                        <span class="btn-label"><i class="fa fa-plus"></i>
+                           </span> Add Customer</button>
+                   
+                </div>
+                </div>
+            </div>
+
+
+            <div ng-show="searchCustFlag == false">
+                <div class="col-xs-12">
+                    <div class="col-xs-2">
+                        <button class="pull-right btn btn-labeled btn-primary" style="padding-top: -2px;
+                    padding-bottom: -2px;" ng-click="backToSearch('mobileNumber')">
+                            <span class="btn-label"><i class="fa fa-chevron-left"></i>
+                     </span> Back
+                        </button>
+                    </div>
+                </div>
+                <br>
+                <br>
+
+
+
+
+                <div class="col-xs-12">
+                    <div class="col-xs-3">
+                    </div>
+
+
+
+                    <div class="col-xs-6 margin-bottom-10" ng-init="getCustomerMobileDetails11()">
+                    <label class="margin-bottom-0"><span>Customer Mobile Number</span></label>
+
+                        <h4><angucomplete-alt id="mobileNo" style="width: 135px;" placeholder="Search Customer by name or mobile" pause="500" initial-value="" input-changed="mobileSelected11()" selected-object="search.mobileNumber" local-data="customerList" search-fields="mobileNumber,customerName" ng-click="custSearchMobileSelected()" title-field="custDetails" minlength=1 input-class=" input-hover" match-class="highlight" focus-me /></h4>
+                        
+                    </div>
+
+
+
+                    <!-- <div class="col-xs-6 margin-bottom-10" ng-init="fetchCustomerLists()">
+                    <label class="margin-bottom-0"><span>Customer Mobile Number</span></label>
+
+                        <h4><angucomplete-alt id="mobileNo" style="width: 135px;" placeholder="Search Customer by name or mobile" pause="500" initial-value="" input-changed="mobileSelected11()" selected-object="search.mobileNumber" local-data="customerList" search-fields="mobileNumber,customerName" title-field="custDetails" minlength=1 input-class=" input-hover" match-class="highlight" focus-me/></h4>
+                        
+                    </div> -->
+
+
+
+
+                    <div class="col-xs-3">
+                        <button class="pull-right btn btn-labeled btn-primary" style="padding-top: 5px;
+    padding-bottom: 5px;" ng-click="searchCustById()">
+                            Search</button>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <div ng-show="searchCustFlag == true">
+                
+                <div class="col-xs-12">
+                    <div class="col-xs-3">
+                    <label>
+                        From Date</label>
+                    <input type="text" ng-model="searchData.frmDate" id="frmDate" style="height: 24px;" datepicker-popup="dd-MM-yyyy" is-open="openedStart" min-date="minDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openStart($event)" ng-blur="changeMin(frmDate)" />
+                    <br>
+                    <span id="frmDate1" style="color:red"></span>
+                </div>
+
+
+                <div class="col-xs-3">
+                    <label>
+                        To Date</label>
+                    <input type="text" ng-model="searchData.toDate" id="toDate" style="height: 24px;" datepicker-popup="dd-MM-yyyy" is-open="openToDate" min-date="minDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openedToDate($event)" />
+                    <br>
+                    <span id="toDate1" style="color:red"></span>
+
+                </div>
+
+
+                <div class="col-xs-4 col-border">
+                    <label class="margin-bottom-0">Customer Status</label>
+                    <br/>
+                    <select class="form-control input-hover" id="driverStatus" ng-model="searchData.driverStatus" ng-options="sa.desc as sa.desc for sa in custSearchStatusArray" style="padding: 0px 16px;height:25px;">
+                        <option value="">--Select Status--</option>
+                    </select>
+                     <br>
+                    <span id="driverStatus1" style="color:red"></span>
+                </div>
+
+
+                <div class="col-xs-2">
+                    <button class="pull-right btn btn-labeled btn-primary" style="padding-top: 5px;
+padding-bottom: 5px;" ng-click="getCustomerSerchList(searchData)">
+                        Search</button>
+                </div>
+            </div>
+
+
+
+            </div>
+            <div class="col-xs-12" style="height: 50px">
+                <div class="col-xs-5"></div>
+            </div>
+            <div class="col-xs-12" style="height: 50px">
+                <div class="col-xs-5"></div>
+            </div>
+            <div class="col-xs-12" style="height: 50px">
+                <div class="col-xs-5"></div>
+            </div>
+            <div class="col-xs-12" style="height: 50px">
+                <div class="col-xs-5"></div>
+            </div>
+            <div class="col-xs-12" style="height: 50px">
+                <div class="col-xs-5"></div>
+            </div>
+            <div class="col-xs-12" style="height: 50px">
+                <div class="col-xs-5"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script type="text/ng-template" id="/addCustomer.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> New Customer
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div class="row">
+            <div class="col-md-10">
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-4 col-border" ng-style="(count > 0 && customer.firstName1 == null) && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Name</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="firstName" ng-model="customer.firstName" placeholder="First Name" allow-pattern="[a-z\s]" />
+                            <span id="firstName1" ng-model="customer.firstName1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border" ng-style="count > 0 && customer.lastName1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">&nbsp;</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="lastName" ng-model="customer.lastName" placeholder="Last Name" allow-pattern="[a-z\s]" />
+                            <span id="lastName1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border" ng-style="count > 0 && customer.cellNumber1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Mobile Number</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="cellNumber" ng-model="customer.cellNumber" placeholder="Mobile Number" ng-blur="verifyMobile(customer.cellNumber)" maxlength=10 minlength=10 numbers-only="numbers-only" />
+                            <span id="cellNumber1" style="color:red"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-4 col-border" ng-style="count > 0 && customer.email1 == null && {'padding-bottom': '23px'}  || count ==0  && {} ">
+                            <label class="margin-bottom-0">Email Id</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="email" ng-model="customer.email" placeholder="Email Id" ng-blur="verifyEmail(customer.email)" />
+                            <span id="email1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border" ng-style="count > 0 && customer.status1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Status</label>
+                            <br/>
+                            <select class="form-control input-hover" id="status" ng-model="customer.status" ng-options="sa.desc as sa.desc for sa in statusArray" style="padding: 0px 16px;height:25px;">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="status1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border" ng-style="count > 0 && customer.landmark1 == null && {'padding-bottom':'23px'} || count == 0 && {}">
+                            <label class="margin-bottom-0">Landmark</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="landmark" ng-model="customer.landmark" placeholder="Flat No, Building Name, Society Name" />
+                            <span id="landmark1" style="color:red"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-4 col-border" ng-style="count > 0 && customer.customerType1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Customer Type</label>
+                            <br/>
+                            <select class="form-control input-hover" id="customerType" ng-model="customer.customerType" ng-options="ta.desc as ta.desc for ta in tripArray" style="padding: 0px 16px;height:25px;">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="customerType1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-8 col-border" ng-style="count > 0 && customer.address1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Address</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="address" ng-model="customer.address" placeholder="Area/Location"  />
+                            <span id="address1" style="color:red"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <img src="app/img/photo-user.png" style="width: 100%;" />
+            </div>
+        </div>
+        <div class="row" style="margin-top: 3%;">
+            <div class="col-xs-12" style="margin-bottom: 20px;">
+                <div class="col-xs-6" style="text-align:right">
+                    <button class="mb-sm btn btn-success" ng-click="addCustomer(customer)" ng-disabled="submitUserBtn">Add Customer</button>
+                </div>
+                <div class="col-xs-6">
+                    <button class="mb-sm btn btn-danger" ng-click="cancel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+
+
+
+<script type="text/ng-template" id="/StartDutyDatePopup.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Select Date And Time To Start Duty
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak ng-init="getLineUpData()">
+        <br> <strong><h4> Select Start Duty Date And Time:</h4></strong>
+        <br>
+        <label class="margin-bottom-0">
+            <strong><h4>Start Duty Date:</h4></strong>
+        </label>
+        <br/>
+        <input type="text" id="bookingReportingDate" datepicker-popup="dd-MM-yyyy" ng-model="booking.bookingReportingDate" is-open="openedStart" max-date="maxDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openStart($event)" style="width: 135px;height: 28px;" />
+        <br/>
+        <span id="bookingReportingDate1" style="color:red"></span>
+        <br>
+        <label class="margin-bottom-0">
+            <strong><h4>Start Duty Time:</h4></strong>
+        </label>
+        <br/>
+        <select ng-model="booking.hours" id="hours" class="select-hover" style="    margin-top: 5px;">
+            <option selected value="00">00</option>
+            <option value="01">01</option>
+            <option value="02">02</option>
+            <option value="03">03</option>
+            <option value="04">04</option>
+            <option value="05">05</option>
+            <option value="06">06</option>
+            <option value="07">07</option>
+            <option value="08">08</option>
+            <option value="09">09</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+        </select>
+        <select ng-model="booking.minutes" id="minutes" class="select-hover" style="    margin-top: 5px;">
+            <option selected value="00">00</option>
+            <option value="15">15</option>
+            <option value="30">30</option>
+            <option value="45">45</option>
+        </select>
+        <br/>
+        <span id="reportingTime1" style="color:red"></span>
+        <br>
+        <br/>
+        <button class="mb-sm btn btn-green" ng-click="startDuty(booking)" ng-hide="startDutyFlag1 == false"> Start Duty
+        </button>
+        <button class="mb-sm btn btn-green" ng-click="offDuty(booking)" ng-show="offDutyFlag1 == true">Off Duty
+        </button>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+
+
+<script type="text/ng-template" id="/OffDutyDatePopup.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Select Date And Time To Off Duty
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div class="row">
+            <div class="col-xs-12 margin-bottom-10" ng-show="dutyType == 'Outstation'">
+                <div class="col-xs-6">
+                    <label class="margin-bottom-0">
+                        <strong>Off Duty Date:</strong>
+                    </label>
+                    <br/>
+                    <input type="text" id="bookingToDate" datepicker-popup="dd-MM-yyyy" ng-model="booking.bookingToDate" is-open="openToDate" max-date="maxDate" datepicker-options="dateOptions" close-text="Close" class="input-hover " ng-click="openedToDate($event)" style="width: 135px;height: 28px;" />
+                    <br/>
+                    <span id="bookingToDate1" style="color:red"></span>
+                </div>
+                <div class="col-xs-6">
+                    <label class="margin-bottom-0">
+                        <strong>Off Duty Time</strong>
+                    </label>
+                    <br/>
+                    <select ng-model="booking.tohours" id="bookingReleivingTime" class="select-hover" style="    margin-top: 5px;">
+                        <option selected value="00">00</option>
+                        <option value="01">01</option>
+                        <option value="02">02</option>
+                        <option value="03">03</option>
+                        <option value="04">04</option>
+                        <option value="05">05</option>
+                        <option value="06">06</option>
+                        <option value="07">07</option>
+                        <option value="08">08</option>
+                        <option value="09">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                    </select>
+                    <select ng-model="booking.tominutes" id="bookingReleivingTime" class="select-hover" style="margin-top: 5px;">
+                        <option selected value="00">00</option>
+                        <option value="15">15</option>
+                        <option value="30">30</option>
+                        <option value="45">45</option>
+                    </select>
+                    <br/>
+                    <span id="bookingReleivingTime1" style="color:red"></span>
+                </div>
+            </div>
+            <div class="col-xs-12" ng-show="dutyType != 'Outstation'">
+                <div class="col-xs-6">
+                    <label class="margin-bottom-0">
+                        <strong>Off Duty Date:</strong>
+                    </label>
+                    <br/>
+                    <input type="text" id="bookingToDatelocal" datepicker-popup="dd-MM-yyyy" ng-model="booking.toDate" is-open="openToDate" max-date="maxDate" datepicker-options="dateOptions" close-text="Close" class="input-hover " ng-click="openedToDate($event)" style="width: 135px;height: 28px;" />
+                    <br/>
+                    <span id="bookingToDate1local" style="color:red"></span>
+                </div>
+                <div class="col-xs-6">
+                    <label class="margin-bottom-0">
+                        <strong>Off Duty Time</strong>
+                    </label>
+                    <br/>
+                    <select ng-model="booking.tohour1" id="bookingReleivingTimelocal" class="select-hover" style="    margin-top: 5px;">
+                        <option selected value="00">00</option>
+                        <option value="01">01</option>
+                        <option value="02">02</option>
+                        <option value="03">03</option>
+                        <option value="04">04</option>
+                        <option value="05">05</option>
+                        <option value="06">06</option>
+                        <option value="07">07</option>
+                        <option value="08">08</option>
+                        <option value="09">09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                    </select>
+                    <select ng-model="booking.tomin1" id="bookingReleivingTimelocal" class="select-hover" style="margin-top: 5px;">
+                        <option selected value="00">00</option>
+                        <option value="15">15</option>
+                        <option value="30">30</option>
+                        <option value="45">45</option>
+                    </select>
+                </div>
+                <span id="bookingReleivingTime1local" style="color:red"></span>
+            </div>
+            <div class="col-xs-12 margin-bottom-10" style="margin-bottom: 10px; margin-top: 10px;">
+                <div class="col-xs-6">
+                    <label class="margin-bottom-0">
+                        <strong>Drop Location:</strong>
+                    </label>
+                    <br/>
+                    <input type="text" id="bookingToLocation" class="input-hover" ng-model="offDutyAddress" ng-autocomplete googleplace="">
+                    <span id="bookingToLocation1" style="color:red"></span>
+                </div>
+            </div>
+            <div class="col-xs-12" style="margin-bottom: 10px; margin-top: 10px;">
+                <div class="col-xs-12" style="text-align: center">
+                    <button class="mb-sm btn" style="background-color: #4CAF50; color: white; width:120px; " ng-click="offDuty(booking,offDutyAddress)" ng-disabled="isDisabled">Off Duty
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+

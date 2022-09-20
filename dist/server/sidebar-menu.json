@@ -1,0 +1,44 @@
+[
+  {
+    "text": "Main Navigation",
+    "heading": "true",
+    "translate": "sidebar.heading.HEADER"
+  },
+  {
+    "text": "Dashboard",
+    "sref": "app.dashboard",
+    "icon": "icon-speedometer",
+    "translate": "sidebar.nav.DASHBOARD"
+  },
+  {
+    "text": "Manage User",
+    "sref": "app.manageUser",
+    "icon": "fa fa-user"
+  },
+   {
+    "text": "Manage Booking",
+    "sref": "app.manageBooking",
+    "icon": "fa fa-thumbs-up"
+  },
+   {
+    "text": "Manage Drivers",
+    "sref": "app.manageDriver",
+    "icon": "fa fa-male"
+  },
+   {
+    "text": "Manage Customers",
+    "sref": "app.manageCustomer",
+    "icon": "fa fa-car"
+  },
+  {
+    "text": "Booking Report",
+    "sref": "app.dailyBookingReport",
+    "icon": "fa fa-list-alt"
+  },
+  {
+    "text": "Collection Report",
+    "sref": "app.dailyCollectionReport",
+    "icon": "fa fa-table"
+  }
+
+]

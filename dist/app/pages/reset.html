@@ -1,0 +1,23 @@
+<div style="margin-top: 100px !important;" class="block-center wd-xl">
+    <div class="panel panel-flat">
+        <div class="panel-heading text-center" style="margin-bottom: -10px;">
+            <a href="#">
+                   <img style="width: 30%" src="app/img/Indian-Drivers-logo.png"/>
+            </a>
+        </div>
+        <div class="panel-body">
+            <p class="text-center">Enter your email to reset password</p>
+            <form role="form" validate-form="" novalidate="">
+                <div class="form-group has-feedback">
+                    <input type="text"  ng-model="userReset.email" class="form-control" placeholder="Email" id="email" ng-model-options="{debounce: 50}" ng-blur="verifyEmail(userReset.email)">
+                    <div>
+                        <span style="margin-right:5%; color:red;" id="email1"></span>
+                    </div>
+                </div>
+                
+                <button  type="submit" style="font-size:15px;height: 40px;" ng-click="resetPassword(userReset)" class="btn btn-block btn-primary btn-lg" ng-disabled="submitUserBtn">Reset Password</button>
+                 <div ng-show="authMsg" style="margin-top: 2%;" style="margin-bottom:0px;" class="alert alert-danger text-center">{{authMsg}}</div>
+        </div>
+    </div>
+</div>
+

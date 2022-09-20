@@ -1,0 +1,9 @@
+{
+  "name": "OwnerPortal",
+  "version": "0.0.1",
+  "description": "OwnerPortal",
+  "author": "consrv",
+  "dependencies": {
+    "express": "^4.12.2",
+    "restler": "^3.2.2"}
+}

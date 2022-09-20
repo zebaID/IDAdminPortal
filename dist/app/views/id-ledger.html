@@ -1,0 +1,62 @@
+<h3>Collection Report</h3>
+<!-- Row Select Example-->
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <!-- <div class="row" style="margin-bottom: 10px;">
+            <div class="col-sm-8"></div>
+            <div class="col-sm-4">
+                <button class="pull-right btn btn-labeled btn-primary" ng-click="newUser()">
+                    <span class="btn-label"><i class="fa fa-plus"></i>
+                           </span> Add New</button>
+            </div>
+        </div> -->
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-7" style="border: 2px transparent;padding: 10px;">
+                <div class="col-sm-5">
+                    <label>
+                        From Date</label>
+                    <br/>
+                    <input type="date" ng-model="frmDate" style="height: 24px;" />
+                </div>
+                <div class="col-sm-5">
+                    <label>
+                        To Date</label>
+                    <br/>
+                    <input type="date" ng-model="toDate" style="height: 24px;" />
+                </div>
+                <div class="col-sm-2">
+                    &nbsp;
+                    <br/>
+                    <button ng-click="searchRecords(frmDate,toDate)" ng-model-options="{debounce: 1000}" class="pull-right btn btn-sm btn-info" style="height: 24px;line-height: 0.5; margin-top:5px"> Search</button>
+                    <!-- ng-change="searchRecords(searchName)" -->
+                </div>
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
+    </div>
+    <table ng-table="tableParams3" class="table table-striped ng-table-rowselected">
+        <tr ng-repeat="user in $data track by $index" ng-show="$data.length > 0">
+            <!-- | filter:searchName -->
+            <td title="'Driver Name'" filter="{ name: 'text'}" sortable="'name'" style="text-transform: capitalize;text-align: left;">{{user.name}}</td>
+            <td title="'Driver Address'" filter="{ address: 'text'}" sortable="'address'" style="text-transform: capitalize;text-align: left;">{{user.address}}</td>
+            <td title="'From Date'" filter="{ reportingDate: 'date'}" sortable="'reportingDate'" style="text-align: left;">{{user.reportingDate | date:'dd/MM/yyyy hh:mm a'}}</td>
+            <td title="'To Date'" filter="{ toDate: 'date'}" sortable="'toDate'" style="text-align: left;">{{user.toDate | date:'dd/MM/yyyy hh:mm a'}}</td>
+            <td title="'Amount'" filter="{ amount: 'number'}" sortable="'amount'" style="text-align: left;">{{user.amount}} INR</td>
+            <!--  <td ng-click="submitTournament(user.id,user.name)" title="'Scoring Type'" filter="{ scoringType: 'text'}" sortable="'scoringType'">{{user.scoringType}}</td> -->
+        </tr>
+        <tr ng-show="$data.length == 0">
+            <td>No record found</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+</div>

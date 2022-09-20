@@ -1,0 +1,688 @@
+<h3>Job Report</h3>
+<!-- Row Select Example-->
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+<div class="panel panel-default" style="overflow-x: auto" ng-init="getDriverJob()">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="col-xs-4">
+                    <button class="pull-left btn btn-labeled btn-primary" style="padding-top: -2px;
+                    padding-bottom: -2px;" ng-click="backToSearchReport()">
+                        <span class="btn-label"><i class="fa fa-chevron-left"></i>
+                     </span> Back
+                    </button>
+                </div>
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4">
+                    <button class="pull-right btn btn-labeled btn-primary" style="" ng-click="addJob()">
+                        <span class="btn-label"><i class="fa fa-plus"></i>
+                           </span>New Job</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table ng-table="tableParams3" class="table table-striped table-bordered ng-table-rowselected" show-filter="true">
+        <tr ng-repeat="job in $data | orderBy:['jobStatusOrder','-createdDate']" ng-show="$data.length > 0">
+            <td title="'Job Id'" filter="{ clientId: 'text'}" sortable="'clientId'" style="text-transform: capitalize;text-align: left;">{{job.id}}</td>
+            <td title="'Client Name'" filter="{ custName: 'text'}" sortable="'custName'" style="text-transform: capitalize;text-align: left;">{{job.custName}}</td>
+             
+            <td title="'Area'" filter="{ area: 'text'}" sortable="'area'" style="text-transform: capitalize;text-align: left;">{{job.area}}</td>
+            <td title="'Duty Details'" filter="{ dutyType: 'text'}" sortable="'dutyType'" style="text-transform: capitalize;text-align: left;">{{job.dutyType}}
+            </td>
+            <td title="'Car Type'" filter="{ carType: 'text'}" sortable="'carType'" style="text-transform: capitalize;text-align: left;">{{job.carType}}
+            </td>
+            <td title="'Duty Hours'" filter="{ dutyHours: 'text'}" sortable="'dutyHours'" style="text-transform: capitalize;text-align: left;">{{job.dutyHours}}
+            </td>
+            <td title="'Client Salary'" filter="{ clientSalary: 'text'}" sortable="'clientSalary'" style="text-transform: capitalize;text-align: left;">{{job.clientSalary}}
+            </td>
+            <td title="'Driver Salary'" filter="{ driverSalary: 'text'}" sortable="'driverSalary'" style="text-transform: capitalize;text-align: left;">{{job.driverSalary}}
+            </td>
+            <td title="'Roll'" filter="{ role: 'text'}" sortable="'role'" style="text-transform: capitalize;text-align: left;">{{job.role}}
+            </td>
+            <td title="'Created By & Date'" filter="{ createdByName: 'text'}" sortable="'createdByName'" style="text-transform: capitalize;text-align: left;">{{job.createdByName}} ({{job.date}})
+            </td>
+            <td title="'Status'" filter="{ status: 'text'}" sortable="'status'" style="text-align:left;width: 10%">
+                <div ng-if="job.status === 'Open'">
+                    <button class="pull-right btn btn-labeled btn-primary" style="width: 95%;">
+                        Open</button>
+                </div>
+                <div ng-if="job.status === 'Closed'">
+                    <button class="pull-right btn btn-labeled btn-danger" style="width: 95%;">
+                        Closed</button>
+                </div>
+            </td>
+            <td title="'View Request'" style="text-align: center;"><a href="" ng-click="jobRequestPopup(job.id, job.custName, job.area)" style="color: #131e26"><i class="fa fa-eye fa-fw"></a></td>
+            <td title="'Apply Job'" style="text-align: center;"><a href="" ng-click="searchDriverPopup(job.id, job.custName, job.status)" style="color: #131e26">Apply Job</a></td>
+            <td title="'Edit'" style="text-align:left">
+                <button class="btn btn-sm btn-info" ng-click="updateJob(job.id)"><em class="fa fa-pencil-square-o"></em></button>
+            </td>
+        </tr>
+        <tr ng-show="$data.length == 0">
+            <td>No record found</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+</div>
+<script type="text/ng-template" id="/addJob.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Search Customer
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div>
+            <form class="form-horizontal ng-pristine ng-valid">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-12 margin-bottom-10" ng-init="getCustomerMobileDetails()">
+                                <div class="col-xs-3"></div>
+                                <div class="col-xs-6">
+                                    <h4><angucomplete-alt id="mobileNo" style="width: 135px;" placeholder="Search Mobile Number" pause="500" initial-value="" input-changed="mobileSelected()" selected-object="search.mobileNumber" local-data="customerList" search-fields="mobileNumber,customerName" title-field="custDetails" minlength=1 input-class=" input-hover" match-class="highlight" focus-me/></h4>
+                                    <span id="mobileNo1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-3"></div>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="col-xs-12" style="text-align: center">
+                            <button class="btn btn-labeled btn-primary" ng-disabled="disableCustSubmit" ng-click="verifyMobile()">
+                                <h4>Submit</h4></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/addNewJob.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> New Job
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div class="col-xs-12">
+            <legend>
+                <h4> Job Details </h4></legend>
+        </div>
+        <hr class="margin-bottom-10" />
+        <div>
+            <form class="form-horizontal ng-pristine ng-valid">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Contact Number:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" id="mobileNumber" class=" input-hover" ng-model="customerDetails.mobileNumber" minlength="10" maxlength="10" placeholder="Mobile Number" numbers-only="numbers-only" ng-disabled="mobileDisable1">
+                                    <span id="mobileNumber1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0"><strong>Customer Name:</strong></label>
+                                    <input type="text" id="firstName" class=" input-hover" ng-model="customerDetails.firstName" placeholder="First Name" ng-disabled="recordExist" allow-pattern="[a-z\s]">
+                                    <span id="firstName1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>&nbsp;</strong>
+                                    </label>
+                                    <input type="text" id="lastName" class=" input-hover" ng-model="customerDetails.lastName" placeholder="Last Name" ng-disabled="recordExist" allow-pattern="[a-z\s]">
+                                    <span id="lastName1" style="color:red"></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Email:</strong>
+                                    </label>
+                                    <input type="text" class="input-hover" id="email" ng-model="customerDetails.email" ng-disabled="recordExist" placeholder="Email Id" />
+                                    <span id="email1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">Car Type</label>
+                                    <br/>
+                                    <select class="form-control input-hover" id="carType" ng-model="customerDetails.carType" ng-options="ca.desc as ca.desc for ca in carTypeArray" style="padding: 0px 16px;height:25px; width: 150px">
+                                        <option value="">--Select--</option>
+                                    </select>
+                                    <span id="carType1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Car Name:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" class="input-hover" ng-model="customerDetails.carName" id="carName" placeholder="Car Name">
+                                    <span id="carName1" style="color:red"></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Duty Hours:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="number" class="input-hover" ng-model="customerDetails.dutyHours" id="dutyHours" placeholder="Duty Hours" style="width: 150px" step="1" min="1" max="15">
+                                    <span id="dutyHours1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Outstation:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" class="input-hover" ng-model="customerDetails.outstationDays" id="outstationDays" placeholder="Outstation Days" style="width: 150px">
+                                    <span id="outstationDays1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Driver Age:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" class="input-hover" ng-model="customerDetails.driverAge" id="driverAge" placeholder="Driver Age" style="width: 150px">
+                                    <span id="driverAge1" style="color:red"></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Driving Experience:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="number" class="input-hover" ng-model="customerDetails.drivingExp" id="drivingExp" placeholder="Driving Experience" style="width: 150px" step="0.5" min="1" max="40">
+                                    <span id="drivingExp1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Client Salary:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" class="input-hover" ng-model="customerDetails.clientSalary" id="clientSalary" placeholder="Client Salary">
+                                    <span id="clientSalary1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Driver Salary:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" class="input-hover" ng-model="customerDetails.driverSalary" id="driverSalary" placeholder="Driver Salary">
+                                    <span id="driverSalary1" style="color:red"></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Client Id:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" id="clientId" class="input-hover" ng-model="customerDetails.clientId" placeholder="Client Id" numbers-only="numbers-only" />
+                                    <span id="clientId1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Area:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" id="address" class="input-hover" ng-model="customerDetails.address" placeholder="Address">
+                                    <span id="address1" style="color:red"></span>
+                                </div>
+                               
+                            </div>
+                            <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Weekly Off:</strong>
+                                    </label>
+                                    <br/>
+                                    <select chosen="" data-placeholder="Select Days" multiple="multiple" class="chosen-select form-control select-hover" id="weeklyOff" ng-model="customerDetails.weeklyOff" ng-options="wa.id as wa.desc for wa in weeklyOffArray" style="padding: 0px 16px;height:25px; width: 100%;">
+                                        <option value="">--Select--</option>
+                                    </select>
+                                    <span id="weeklyOff1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Duty Details:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" id="dutyDetail" class="input-hover" ng-model="customerDetails.dutyDetail" placeholder="Duty Details">
+                                    <span id="dutyDetail1" style="color:red"></span>
+                                </div>
+                                 <div class="col-xs-4">
+                                   <label class="margin-bottom-0">Location</label>
+                                   <br/>
+                                   <select class="form-control input-hover" id="Cities" ng-model="customerDetails.location " ng-options="sa as sa for sa in cityAt" style="padding: 0px 16px;height:25px; width: 150px">
+                                       <option value="">--Select--</option>
+                                   </select>
+                                   <span id="location" style="color:red"></span>
+                               </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">Roll</label>
+                                    <br/>
+                                    <select class="form-control input-hover" id="role" ng-model="customerDetails.role" ng-options="ra.desc as ra.desc for ra in roleArray" style="padding: 0px 16px;height:25px; width: 150px">
+                                        <option value="">--Select--</option>
+                                    </select>
+                                    <span id="role1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Duty Time:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" id="dutyTime" class="input-hover" ng-model="customerDetails.dutyTime" placeholder="Duty Time">
+                                    <span id="dutyTime1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Other:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" id="other" class="input-hover" ng-model="customerDetails.other" placeholder="Other">
+                                    <span id="other1" style="color:red"></span>
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+                            <div class="col-xs-12" style="margin-bottom: 10px; margin-top: 10px;">
+                                <div class="col-xs-4">
+                                </div>
+                                <div class="col-xs-4" style="text-align:center">
+                                    <button class="mb-sm btn btn-success" ng-disabled="isDisabledButton" ng-click="verifyEmailFunction(customerDetails)">Add Job</button>
+                                </div>
+                                <div class="col-xs-4">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/updateJob.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" ng-init="fetchJobDetails()" style="margin-top: -15px; font-size: 20px;"> Update
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <legend>
+            <h4> Job Details </h4> </legend>
+        <div>
+            <form class="form-horizontal ng-pristine ng-valid">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Contact Number:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" id="mobileNumber" class=" input-hover" ng-model="jobDetails.mobileNumber" placeholder="Mobile Number" readonly>
+                                    <span id="mobileNumber1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0"><strong>Customer Name:</strong></label>
+                                    <input type="text" id="firstName" class=" input-hover" ng-model="jobDetails.firstName" placeholder="First Name" readonly>
+                                    <span id="firstName1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>&nbsp;</strong>
+                                    </label>
+                                    <input type="text" id="lastName" class=" input-hover" ng-model="jobDetails.lastName" placeholder="Last Name" readonly>
+                                    <span id="lastName1" style="color:red"></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Email:</strong>
+                                    </label>
+                                    <input type="text" class="input-hover" id="email" ng-model="jobDetails.email" placeholder="Email Id" readonly/>
+                                    <span id="email1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">Car Type</label>
+                                    <br/>
+                                    <select class="form-control input-hover" id="carType" ng-model="jobDetails.carType" ng-options="ca.desc as ca.desc for ca in carTypeArray" style="padding: 0px 16px;height:25px; width: 150px">
+                                        <option value="">--Select--</option>
+                                    </select>
+                                    <span id="carType1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Car Name:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" class="input-hover" ng-model="jobDetails.carName" id="carName" placeholder="Car Name">
+                                    <span id="carName1" style="color:red"></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Duty Hours:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="number" class="input-hover" ng-model="jobDetails.dutyHours" id="dutyHours" placeholder="Duty Hours" style="width: 150px" step="1" min="1" max="15">
+                                    <span id="dutyHours1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Outstation:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" class="input-hover" ng-model="jobDetails.outstationDays" id="outstationDays" placeholder="Outstation Days" style="width: 150px" >
+                                    <span id="outstationDays1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Driver Age:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" class="input-hover" ng-model="jobDetails.driverAge" id="driverAge" placeholder="Driver Age" style="width: 150px">
+                                    <span id="driverAge1" style="color:red"></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Driving Experience:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="number" class="input-hover" ng-model="jobDetails.drivingExp" id="drivingExp" placeholder="Driving Experience" style="width: 150px" step="0.5" min="1" max="40">
+                                    <span id="drivingExp1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Client Salary:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" class="input-hover" ng-model="jobDetails.clientSalary" id="clientSalary" placeholder="Client Salary">
+                                    <span id="clientSalary1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Driver Salary:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" class="input-hover" ng-model="jobDetails.driverSalary" id="driverSalary" placeholder="Driver Salary">
+                                    <span id="driverSalary1" style="color:red"></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Client Id:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" id="clientId" class="input-hover" ng-model="jobDetails.clientId" placeholder="Client Id" numbers-only="numbers-only" />
+                                    <span id="clientId1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Area:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" id="address" class="input-hover" ng-model="jobDetails.address" placeholder="Address">
+                                    <span id="address1" style="color:red"></span>
+                                </div>
+                                 <div class="col-xs-4">
+                                   <label class="margin-bottom-0">Location</label>
+                                   <br/>
+                                   <select class="form-control input-hover" id="Cities" ng-model="jobDetails.location " ng-options="sa as sa for sa in cityAt" style="padding: 0px 16px;height:25px; width: 150px">
+                                       <option value="">--Select--</option>
+                                   </select>
+                                   <span id="location" style="color:red"></span>
+                               </div>
+                            </div>
+                            <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-6">
+                                    <label class="margin-bottom-0">
+                                        <strong>Weekly Off:</strong>
+                                    </label>
+                                    <br/>
+                                    <select chosen="" data-placeholder="Select Days" multiple="multiple" class="chosen-select form-control select-hover" id="weeklyOff" ng-model="jobDetails.weeklyOff" ng-options="wa.id as wa.desc for wa in weeklyOffArray" style="padding: 0px 16px;height:25px; width: 100%;">
+                                        <option value="">--Select--</option>
+                                    </select>
+                                    <span id="weeklyOff1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-6">
+                                    <label class="margin-bottom-0">
+                                        <strong>Duty Details:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" id="dutyDetail" class="input-hover" ng-model="jobDetails.dutyDetail" placeholder="Duty Details">
+                                    <span id="dutyDetail1" style="color:red"></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">Roll</label>
+                                    <br/>
+                                    <select class="form-control input-hover" id="role" ng-model="jobDetails.role" ng-options="ra.desc as ra.desc for ra in roleArray" style="padding: 0px 16px;height:25px; width: 150px">
+                                        <option value="">--Select--</option>
+                                    </select>
+                                    <span id="role1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Duty Time:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" id="dutyTime" class="input-hover" ng-model="jobDetails.dutyTime" placeholder="Duty Time">
+                                    <span id="dutyTime1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">Status</label>
+                                    <br/>
+                                    <select class="form-control input-hover" id="status" ng-model="jobDetails.status" ng-options="sa.desc as sa.desc for sa in statusArray" style="padding: 0px 16px;height:25px; width: 150px">
+                                        <option value="">--Select--</option>
+                                    </select>
+                                    <span id="status1" style="color:red"></span>
+                                </div>
+                                
+                            </div>
+                            <div class="col-xs-12">
+                               <div class="col-xs-10">
+                                    <label class="margin-bottom-0">
+                                        <strong>Other:</strong>
+                                    </label>
+                                    <br/>
+                                    <textarea cols="90" rows="3" onkeyup="AutoGrowTextArea(this)" style="overflow:hidden" ng-model="jobDetails.other"> </textarea>
+                                    <!-- <input type="text" id="other" class="input-hover" ng-model="jobDetails.other" placeholder="Other" title ="{{jobDetails.other}}" value="{{jobDetails.other}}"> -->
+                                    <span id="other1" style="color:red"></span>
+                                </div> 
+                            </div>
+                            <br>
+                            <br>
+                            <div class="col-xs-12" style="margin-bottom: 20px; margin-top: 10px;">
+                                <div class="col-xs-4">
+                                </div>
+                                <div class="col-xs-4" style="text-align:center">
+                                    <button class="mb-sm btn btn-success" ng-disabled="isDisabledButton" ng-click="verifyClientId1(jobDetails)">Update Job</button>
+                                </div>
+                                <div class="col-xs-4">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/javascript">
+// Auto-Grow-TextArea script.
+// Script copyright (C) 2011 www.cryer.co.uk.
+// Script is free to use provided this copyright header is included.
+function AutoGrowTextArea(textField)
+{
+  if (textField.clientHeight < textField.scrollHeight)
+  {
+    textField.style.height = textField.scrollHeight + "px";
+    if (textField.clientHeight < textField.scrollHeight)
+    {
+      textField.style.height = 
+        (textField.scrollHeight * 2 - textField.clientHeight) + "px";
+    }
+  }
+}
+</script>
+<script type="text/ng-template" id="/applyJob.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Search Driver
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div>
+            <form class="form-horizontal ng-pristine ng-valid">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-12 margin-bottom-10" ng-init="getDriverMobileDetails()">
+                                <div class="col-xs-3"></div>
+                                <div class="col-xs-6">
+                                    <h4><angucomplete-alt id="mobileNo" style="width: 135px;" placeholder="Search Mobile Number" pause="500" initial-value="" input-changed="driverMobileSelected()" selected-object="search.mobileNumber" local-data="driverList" search-fields="mobileNumber,driverName" title-field="drvDetails" minlength=1 input-class=" input-hover" match-class="highlight"/></h4>
+                                    <span id="mobileNo1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-3"></div>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="col-xs-12" style="text-align: center">
+                            <button class="btn btn-labeled btn-primary" ng-disabled="disableDrvSubmit" ng-click="verifyDrvMobile()">
+                                <h4>Submit</h4></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/addDriverRequest.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> New Request
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div class="col-xs-12">
+            <label>
+                <h4> Customer Name: {{customerName}}</h4></label>
+        </div>
+        <div class="col-xs-12">
+            <legend>
+                <h4> Driver Details </h4></legend>
+        </div>
+        <hr class="margin-bottom-10" />
+        <div>
+            <form class="form-horizontal ng-pristine ng-valid">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Contact Number:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" id="mobileNumber" class=" input-hover" style="width: 200px;" ng-model="drvRequestDetails.mobileNumber" minlength="10" maxlength="10" placeholder="Mobile Number" numbers-only="numbers-only" ng-disabled="drvMobileDisable1">
+                                    <span id="mobileNumber1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0"><strong>Driver Name:</strong></label>
+                                    <input type="text" id="firstName" class=" input-hover" style="width: 200px;" ng-model="drvRequestDetails.firstName" placeholder="First Name" ng-disabled="drvRecordExist" allow-pattern="[a-z\s]">
+                                    <span id="firstName1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>&nbsp;</strong>
+                                    </label>
+                                    <input type="text" id="lastName" class=" input-hover" style="width: 200px;" ng-model="drvRequestDetails.lastName" placeholder="Last Name" ng-disabled="drvRecordExist" allow-pattern="[a-z\s]">
+                                    <span id="lastName1" style="color:red"></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-6">
+                                    <label class="margin-bottom-0">
+                                        <strong>Address:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" id="address" class="input-hover" ng-model="drvRequestDetails.address" placeholder="Address" ng-disabled="drvRecordExist"  >
+                                    <span id="address1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-6 col-border" ng-style="count > 0 && user.status1 == null && {'padding-bottom': '23px'}  || count == 0  && {} " >
+                            <label class="margin-bottom-0">Operation City</label>
+                            <br/>
+                            <select class="form-control input-hover" id="operationCity" ng-model="drvRequestDetails.city" ng-options="sa as sa for sa in cities" style="padding: 0px 16px;height:25px;" ng-disabled="drvRecordExist">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="operationCity1" style="color:red"></span>
+                        </div>
+                            </div>
+                            <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-6">
+                                    <label class="margin-bottom-0"><strong>Remark</strong></label>
+                                    <textarea rows="2" cols="30" class="input-hover" id="remark" ng-model="drvRequestDetails.remark" placeholder="Remark"></textarea>
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+                            <div class="col-xs-12" style="margin-bottom: 10px; margin-top: 10px;">
+                                <div class="col-xs-4">
+                                </div>
+                                <div class="col-xs-4" style="text-align:center">
+                                    <button class="mb-sm btn btn-success" ng-disabled="isDisabledButton" ng-click="addDriverRequest(drvRequestDetails)">Add Request</button>
+                                </div>
+                                <div class="col-xs-4">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>

@@ -1,0 +1,187 @@
+ <h3>Billing Details</h3>
+<!-- Row Select Example-->
+<style type="text/css">
+    table th {
+        text-align: center;
+    }
+</style>
+<div class="col-sm-12">
+                <div class="col-sm-2"ng-controller="multipleBillCtrl">
+                    
+                </div>
+            </div>
+    <div ng-cloak>
+        <button class="btn btn-labeled btn-primary" style="padding-top: -2px;
+                    padding-bottom: -2px;" ng-click="backToSearchPageforbill()">
+                        <span class="btn-label"><i class="fa fa-chevron-left"></i>
+                        </span> Back
+                    </button>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;" ng-init="getInfo()"> Create Bill
+             
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div class="col-xs-12">
+            <legend> Billing Details</legend>
+        </div>
+        <hr class="margin-bottom-10" />
+        <div class="col-sm-12">
+            <div class="col-sm-3">
+                <label>
+                    Customer Name</label>
+                <input type="text" ng-model="cName" style="height: 33px;" class="input-hover" readonly />
+                <br>
+            </div>
+            <div class="col-sm-3">
+                <label>
+                    Contact Number</label>
+                <input type="text" ng-model="contactNo" style="height: 33px;" class="input-hover" readonly />
+                <br>
+            </div>
+            <div class="col-sm-3">
+                <label>
+                    Bill From Date</label>
+                <input type="text" ng-model="date.frmDate" style="height: 33px;" id="frmDate" datepicker-popup="dd-MM-yyyy" is-open="openedStart" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openStart($event)" ng-blur="changeMin(frmDate)" />
+                <br>
+                <span id="frmDate1" style="color:red"></span>
+            </div>
+            <div class="col-sm-3">
+                <label>
+                    Bill To Date</label>
+                <input type="text" ng-model="date.toDate" style="height: 33px;" id="toDate" datepicker-popup="dd-MM-yyyy" is-open="openToDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openedToDate($event)" />
+                <br>
+                <span id="toDate1" style="color:red"></span>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="col-sm-3">
+                <label>
+                    Reverse Charge (Y/N): </label>
+                <select class="form-control input-hover" id="rcy" ng-model="date.reverseCharged" ng-options="wa.rc as wa.rc for wa in reverseCarged">
+                    <option value="">--Select--</option>
+                </select>
+                <br>
+                <span id="rcy1" style="color:red"></span></div>
+            <div class="col-sm-6">
+                <label>
+                    Driver List: </label>
+                <select class="form-control input-hover" id="drilist" ng-model="date.driverName" ng-options="wa.driverName as wa.driverName for wa in driverArray" ng-change="manageUnitRate(date.driverName)">
+                    <option value="">--Select--</option>
+                </select>
+                <br>
+                <span id="drilist1" style="color:red"></span>
+            </div>
+            <div class="col-sm-3" ng-show="driverArray.length>0" >
+              <button style="margin-top: 26px;" class="btn btn-primary" ng-click="addNextDriver(date, date.driverName)">Save and Add Next</button>  
+            </div>
+        </div>
+        <div class="col-sm-12"></div>
+        <div class="col-sm-12"></div>
+        <br>
+        <br>
+       <!-- < ng-repeat="ar in driverArray" > -->
+        <table class="table table-hover"  ng-show="driverArray.length>0" style="width: fit-content;">
+            <thead style="background-color: #beccbf;">
+                <tr>
+                    <th>
+                        Description
+                    </th>
+                    <th> Rate </th>
+                    <th> Unit </th>
+                    <th> Quantity </th>
+                    <th>Action</th>
+                </tr>
+                <tr>
+                    <th>
+                        <select class="form-control input-hover" id="Description" ng-model="infodata.Description" ng-options="wa.description as wa.description for wa in invoice1" placeholder="Description" ng-change="selectRateAndUnit(infodata.Description)">
+                        </select>
+                    </th>
+                    <th>
+                        <select class="form-control input-hover" id="rate" ng-model="infodata.rate" ng-options="wa.rate as wa.rate for wa in invoice1" placeholder="Rate" disabled="true">
+                        </select>
+                    </th>
+                    <th>
+                        <select class="form-control input-hover" id="unit" ng-model="infodata.unit" ng-options="wa.unit as wa.unit for wa in invoice1" placeholder="Unit" disabled="true">
+                        </select>
+                    </th>
+                    <th>
+                        <input type="number" ng-model="infodata.quantity" id="quantity" placeholder="Quantity" ng-hide="Percentage" style="line-height: 2;width: 80px" min="0" step="0.5">
+                        <input type="number" ng-model="infodata.quantity" id="quantity" placeholder="Quantity" ng-show="ot" style="line-height: 2;width: 80px" step="0.5" min="0">
+                        <th>
+                            <button type="button" class="btn btn-primary" ng-click="add(infodata)">Add item</button>
+                        </th>
+                </tr>
+                <tr>
+                    <th>
+                        <span id="Description1" style="color:red"></span>
+                    </th>
+                    <th> <span id="rate1" style="color:red"></span> </th>
+                    <th> <span id="unit1" style="color:red"></span> </th>
+                    <th> <span id="quantity1" style="color:red"></span> </th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <br><span id="selectionStream" style="color:red"></span>
+            <tbody>
+                <tr ng-repeat="user in invoice" style="background-color:powderblue;">
+                    <td> {{user.description}}</td>
+                    <td> {{user.rate | number : 2}}</td>
+                    <td> {{user.unit}}</td>
+                    <td> {{user.quantity}}</td>
+                    <td>
+                        <button type="button" class="btn btn-danger" ng-click="remove($index)">Delete</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Sub Total: </td>
+                    <td>{{subTotal() | number : 2}} <i class="fa fa-rupee"></i></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>CGST (9%):</td>
+                    <td>{{cgst() | number: 2}} <i class="fa fa-rupee"></i></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>SGST: (9%) </td>
+                    <td>{{sgst() | number: 2}} <i class="fa fa-rupee"></i></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td> Grand Total: </td>
+                    <td>{{grandTotal() | number : 2}} <i class="fa fa-rupee"></i></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td> Advance: </td>
+                    <td>
+                        <input type="text" ng-model="Advance" id="quantity" placeholder="Amount" style="line-height: 2;width: 80px" numbers-only="numbers-only"> <i class="fa fa-rupee"></i></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td> Amount Payable: </td>
+                    <td>{{grandTotal() - Advance | number: 2}} <i class="fa fa-rupee"></i></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="col-sm-12">
+        <div class="col-sm-2">
+                <label>
+                    Remark:</label></div><div class="col-sm-10">
+<input type="text" ng-model="date.remark"  placeholder ="Note" style="height: 33px;" class="input-hover"   />
+</div></div><br><div class="col-sm-12"></div>
+        <br>
+        <center ng-show="driverArray.length==0">
+            <button class="btn btn-sm btn-success" ng-click="SubmitAndPrint()" ng-disabled="isDisabledButtongen"><span class="btn-label"><em class="fa fa-file-text"></em></span>Generate</button>
+        </center>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+

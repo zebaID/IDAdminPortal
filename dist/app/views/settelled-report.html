@@ -1,0 +1,168 @@
+<h3>Settlement Report
+</h3>
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+<div class="panel panel-default" ng-controller="settlementCtrl">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-sm-12" style="border: 2px transparent;padding: 10px;">
+                <form class="form-horizontal ng-pristine ng-valid">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="col-xs-12 margin-bottom-10" ng-init="getDriverDetails(driverMobile)">
+                                    <div class="col-xs-4"></div>
+                                    <div class="col-xs-4">
+                                        <h4><angucomplete-alt id="mobileNo" style="width: 135px;" placeholder="Search Driver by Name/Mobile" pause="500" initial-value="" input-changed="driverSelect()" selected-object="search.mobileNumber" local-data="driverList" search-fields="mobileNumber,driverName" title-field="driverDetails" minlength=1 maxlength=10 input-class=" input-hover" match-class="highlight" /></h4>
+                                        <span id="mobileNo1" style="color:red"></span>
+                                    </div>
+                                    
+                            <div class="col-xs-4" style="margin-left: -27px">
+                                <button class="btn btn-labeled btn-primary" style="height: 33px" ng-click="driverBookingDetails();bookingTable()">
+                                    <i class="fa fa-search"></i></button>
+                            </div>
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+                            <div class="col-xs-12">
+                            <div class="col-xs-8"></div>
+                            <div class="col-xs-4" style="text-align: right" ng-show="showTable">
+                                        <button class="btn btn-labeled btn-primary" ng-disabled="count == 0" ng-click="settlementBookingPopup()">
+                                            <h4>Settlement</h4></button>
+                                    </div>
+                              </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div ng-show="showTable">
+    <table ng-table="tableParams3" class="table table-striped table-bordered ng-table-rowselected" show-filter="true">
+        <tr ng-repeat="user in paidBookingDetails track by $index" ng-show="paidBookingDetails.length > 0">
+            <td title="''" style="width: 5%">
+                <input type="checkbox" name="pv" value="checked" ng-model="checked" id="pv1" ng-change="selectedBookings(user)" style="margin-left:auto; margin-right:auto;">
+            </td>
+            <td title="'Booking ID'" style="text-transform: capitalize;text-align:left">{{user.bookingId}}</td>
+            <td title="'Customer Name'" style="text-transform: capitalize;text-align:left">{{user.custName}}</td>
+            <td title="'Reporting Date/Time'" style="text-align:left">{{user.reportingDate | date:'dd/MM/yyyy'}} {{user.reportingTime}}</td>
+            <td title="'Status'" style="text-align: left;">{{user.status}}</td>
+            <td title="'Payment Status'" style="text-align: left;">{{user.driverPaymentStatus}}</td>
+            <td title="'Id Share'" style="text-align: right;">{{user.idShare}}</td>
+            <td title="'Driver Share'" style="text-align: right;">{{user.driverShare}}</td>
+            <td title="'Total Amount'" style="text-align: right;">{{user.actualAmt}}</td>
+            <td title="'Collected By Office'" style="text-align: right;">{{user.paymentOffice}}</td>
+            <td title="'Collected By Driver'" style="text-align: right;">{{user.paymentDriver}}</td>
+             <td title="'Hold'" style="text-align: center;" ng-click="changePaymentStatus(user.bookingId)"><i class="fa fa-lock"></i></td>
+        </tr>
+        <tr ng-show="paidBookingDetails.length == 0">
+            <td>No record found</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+    </div>
+</div>
+<script type="text/ng-template" id="/settlement.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Settlement Report
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div ng-init="calculateShare()">
+            <form class="form-horizontal ng-pristine ng-valid">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-12">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                    	<th>Booking Id</th>
+                                    	<th>Customer Name</th>
+                                    	<th>Reporting Date/Time</th>
+                                    	<th>Status</th>
+                                    	<th>Id Share</th>
+                                    	<th>Driver Share</th>
+                                    	<th>Total Amount</th>
+                                    	<th>Collected By Office</th>
+                                    	<th>Collected By Driver</th>
+                                    	</tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="user in settlementBookingData track by $index" ng-show="settlementBookingData.length > 0">
+                                        <td title="'Booking ID'" style="text-transform: capitalize;text-align:left">{{user.bookingId}}</td>
+                                        <td title="'Customer Name'" style="text-transform: capitalize;text-align:left">{{user.custName}}</td>
+                                        <td title="'Reporting Date/Time'" style="text-align:left">{{user.reportingDate | date:'dd/MM/yyyy'}} {{user.reportingTime}}</td>
+                                        <td title="'Status'" style="text-align: left;">{{user.status}}</td>
+                                        <td title="'Id Share'" style="text-align: right;">{{user.idShare}}</td>
+                                        <td title="'Driver Share'" style="text-align: right;">{{user.driverShare}}</td>
+                                        <td title="'Total Amount'" style="text-align: right;">{{user.actualAmt}}</td>
+                                        <td title="'Collected By Office'" style="text-align: left;">{{user.paymentOffice}}</td>
+                                        <td title="'Collected By Driver'" style="text-align: left;">{{user.paymentDriver}}</td>
+                                    </tr>
+                                    <tr ng-show="settlementBookingData.length == 0">
+                                        <td>No record found</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="col-xs-4"></div>
+                                <div class="col-xs-4" style="text-align: center" ng-show="cashToPayDriver == 0">
+                                    <label>
+                                        <strong>Cash Collect From Driver: </strong>Rs. {{cashCollectFromDriver}}
+                                    </label>
+                                   
+                                </div>
+                                <div class="col-xs-4" style="text-align: center" ng-show="cashCollectFromDriver == 0">
+                                    <label>
+                                        <strong>Cash Pay To Driver: </strong>Rs. {{cashToPayDriver}}
+                                    </label>
+                                    
+                                </div>
+                                <div class="col-xs-4"></div>
+                            </div>
+                            <br>
+                            <br>
+                            <br>
+
+                            <div class="col-xs-12" style="text-align: center">
+                                <button class="btn btn-labeled btn-primary" ng-click="updatePaymentStatus()">
+                                    <h4>Settlement</h4></button>
+
+                            </div>
+                        </div>
+                    </div>
+            </form>
+            </div>
+        </div>
+        <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+        </div>
+</script>

@@ -1,0 +1,31 @@
+<h3>Monthly Customer Billing </h3>
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+<div class="panel panel-default" style="overflow-x: auto">
+    <div class="panel-heading">
+        <div><br><br>
+            <div class="col-xs-12 margin-top-10">
+                <div class="col-xs-4" style="text-align-last: right; font-size: 20px;">
+                    <label> <span>Select Company:</span></label>
+                </div>
+                <div class="col-xs-5">
+                    <select class="form-control input-hover" id="tripType" ng-model="searchData.companyName" ng-options="ta.desc as ta.desc for ta in companyName" style="padding: 0px 16px;height:25px; font-size: 20px; text-align:center;">
+                        <option value="" >----------Select----------</option>
+                    </select>
+                    <span id="tripType1" style="color:red"></span>
+                </div>
+                <div class="col-xs-3">
+                    <button class="pull-right btn btn-labeled btn-primary" style="" ng-disabled="isDisabledButton" ng-click="setCompany(searchData.companyName)"> <span class="btn-label"><i class="fa fa-search"></i>
+                           </span>Submit</button>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <br>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>

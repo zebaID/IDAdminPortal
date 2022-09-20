@@ -1,0 +1,129 @@
+<h3>Search Payment Cycle Bookings</h3>
+<!-- Row Select Example-->
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style> 
+<div class="panel panel-default" style="overflow-x: auto">
+    <div class="panel-heading">
+       <div class="row">
+        
+            <div class="col-xs-12">
+                <div class="col-xs-3">
+                    <label>
+                        From Date</label>
+                    <input type="text" ng-model="searchData.frmDate" id="frmDate" style="height: 24px;" datepicker-popup="dd-MM-yyyy" is-open="openedStart" min-date="minDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openStart($event)" ng-blur="changeMin(frmDate)" />
+                    <br>
+                    <span id="frmDate1" style="color:red"></span>
+                </div>
+                <div class="col-xs-3">
+                    <label>
+                        To Date</label>
+                    <input type="text" ng-model="searchData.toDate" id="toDate" style="height: 24px;" datepicker-popup="dd-MM-yyyy" ng-model="booking.bookingToDate" is-open="openToDate" min-date="minDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openedToDate($event)" />
+                    <br>
+                    <span id="toDate1" style="color:red"></span>
+                </div>
+                <div class="col-xs-3 col-border">
+                    <label class="margin-bottom-0">Driver Batch</label>
+                    <br/>
+                    <select class="form-control input-hover" id="driverBatch" ng-model="searchData.driverBatchArray" ng-options="sa.desc as sa.desc for sa in driverBatchArray" style="padding: 0px 16px;height:25px;">
+                        <option value="">--Select Driver Batch--</option>
+                    </select>
+                    <span id="driverBatch1" style="color:red"></span>
+                </div>
+                <div class="col-xs-3">
+                    <button class="pull-right btn btn-labeled btn-primary" style="padding-top: 5px;
+    padding-bottom: 5px;" ng-click="searchPaymentCycleBooking(searchData)">
+                        Search</button>
+                </div>
+            </div>
+            <div class="col-xs-12" style="height: 50px">
+                <div class="col-xs-5"></div>
+            </div>
+          
+            <div class="col-xs-12" style="height: 50px">
+                <div class="col-xs-5"></div>
+            </div>
+            <div class="col-xs-12" style="height: 50px">
+                <div class="col-xs-5"></div>
+            </div>
+            <div class="col-xs-12" style="height: 50px">
+                <div class="col-xs-5"></div>
+            </div>
+            <div class="col-xs-12" style="height: 50px">
+                <div class="col-xs-5"></div>
+            </div>
+            <div class="col-xs-12" style="height: 50px">
+                <div class="col-xs-5"></div>
+            </div>
+        
+       
+     </div>
+    </div>
+</div>
+
+<script type="text/ng-template" id="/payment-details-popup.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Settlement Report
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div ng-init="settlementBookingDetails()">
+            <form class="form-horizontal ng-pristine ng-valid">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12" style="padding-bottom: 20px">
+                            <div class="col-xs-8"></div>
+                            <div class="col-xs-4" style="text-align: right">
+                                <button class="btn btn-labeled btn-primary" ng-disabled="count == 0" ng-click="settlementCalculationPopup()">
+                                    <h4>Payment Cycle Details</h4></button>
+                            </div>
+                        </div>
+                        <div class="col-xs-12" style="padding-left: 33px; padding-right: 33px;">
+                            <table ng-table="tableParams3" class="table table-striped table-bordered ng-table-rowselected" show-filter="true">
+                                <tr ng-repeat="user in paymentDriverData track by $index" ng-show="paymentDriverData.length > 0">
+                                    <td title="''" style="width: 5%">
+                                        <input type="checkbox" name="pv" value="checked" ng-model="checked" id="pv1" ng-change="selectedBookings(user)" style="margin-left:auto; margin-right:auto;">
+                                    </td>
+                                    <td title="'Driver ID'" style="text-transform: capitalize;text-align:left">{{user.id}}</td>
+                                    <td title="'Driver Name'" style="text-transform: capitalize;text-align:left">{{user.driverName}}</td>
+                                    <td title="'Bank Name'" style="text-transform: capitalize;text-align:left">{{user.bankName}}</td>
+                                    <td title="'Account Number'" style="text-transform: capitalize;text-align:left">{{user.accountNumber}}</td>
+                                    <td title="'IFS Code'" style="text-transform: capitalize;text-align:left">{{user.ifscCode}}</td>
+                                    <td title="'Driver Payment Status'" style="text-align: center;" ng-click="changePaymentStatus(user.bookingId)">
+                                        <div ng-if="user.driverPaymentStatus == 'Hold'">
+                                            <i class="fa fa-lock" style="color: #f05050"></i>
+                                        </div>
+                                        <div ng-if="user.driverPaymentStatus == 'Unsettled'">
+                                            <i class="fa fa-unlock" style="color: #5d9cec"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr ng-show="paymentDriverData.length == 0">
+                                    <td>No record found</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>

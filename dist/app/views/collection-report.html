@@ -1,0 +1,184 @@
+<h3>Collection Report
+</h3>
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+<div class="panel panel-default" ng-init="getCollectionDetails()">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-sm-12" style="border: 2px transparent;padding: 10px;">
+                <div class="col-sm-2">
+                    <button class="pull-left btn btn-labeled btn-primary" style="padding-top: -2px;
+                    padding-bottom: -2px;" ng-click="backToSearchCollectionBooking()">
+                        <span class="btn-label"><i class="fa fa-chevron-left"></i>
+                     </span> Back
+                    </button>
+                </div>
+                <div class="col-sm-8">
+                </div>
+            </div>
+        </div>
+        <br/>
+        <br/>
+        <div align="center" ng-if="collectionBookingsData.length  === 0">
+            <div class="item item-text-wrap" style="padding: 0px;  background-color: whitesmoke;">No Bookings Are Available</div>
+        </div>
+        <div class="card" ng-repeat="booking in collectionBookingsData track by $index">
+            <div class="item item-divider" style="background-color: #387ef5;
+    color: white; text-align: center">
+                {{booking.reportingLocation}}
+            </div>
+            <div class="item item-text-wrap" style="padding: 0px; border-color: rgb(221,44,0);   background-color: whitesmoke;">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="col-xs-1">
+                        </div>
+                        <div class="col-xs-5" style="text-align: right">Booking ID: </div>
+                        <div class="col-xs-5" style="text-align: left">{{booking.bookingId}}
+                        </div>
+                        <div class="col-xs-1">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="col-xs-1">
+                        </div>
+                        <div class="col-xs-5" style="text-align: right">Reporting Date: </div>
+                        <div class="col-xs-5" style="text-align: left">{{booking.reportingDate | date:'dd MMMM yyyy'}} {{booking.reportingTime}}
+                        </div>
+                        <div class="col-xs-1">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="col-xs-1">
+                        </div>
+                        <div class="col-xs-5" style="text-align: right">Relieving Date : </div>
+                        <div class="col-xs-5" style="text-align: left">{{booking.releavingDate | date:'dd MMMM yyyy'}} {{booking.releavingTime}}</div>
+                        <div class="col-xs-1">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="col-xs-1">
+                        </div>
+                        <div class="col-xs-5" style="text-align: right">Status : </div>
+                        <div class="col-xs-5" style="text-align: left">{{booking.status}}</div>
+                        <div class="col-xs-1">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="col-xs-1">
+                        </div>
+                        <div class="col-xs-5" style="text-align: right">Total Charges : </div>
+                        <div class="col-xs-5" style="text-align: left">&#x20B9; {{booking.actualAmt}}</div>
+                        <div class="col-xs-1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item item-divider" style="background-color: whitesmoke;">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="col-xs-1">
+                        </div>
+                        <div class="col-xs-5" style="text-align: right">
+                            <button class="mb-sm btn" style="background-color: #FF902B; color: white; width:120px;" ng-click="openCollectedByOfficePopup(booking.bookingId)">Cash By Office
+                            </button>
+                        </div>
+                        <div class="col-xs-5" style="text-align: left">
+                            <button class="mb-sm btn" style="background-color: #564aa3; color: white; width:120px;" ng-click="openCollectedByDriverPopup(booking.bookingId)">Cash By Driver
+                            </button>
+                        </div>
+                        <div class="col-xs-1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a ng-if="myBookings.length - 1 === $index" ng-init="hide()">
+            </a>
+        </div>
+    </div>
+</div>
+<script type="text/ng-template" id="/collectedByOfficePopup.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Collected By Office
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div>
+            <form class="form-horizontal ng-pristine ng-valid">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-12 margin-bottom-10" ng-init="getOfficeCollectedAmt()">
+                                <div class="col-xs-3"></div>
+                                <div class="col-xs-6">
+                                    <input type="text" id="officeCollectedAmt" class=" input-hover" ng-model="officeCollectedAmt" placeholder="Office Collected Amount" numbers-only="numbers-only">
+                                    <span id="officeCollectedAmt1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-3"></div>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="col-xs-12" style="text-align: center">
+                            <button class="mb-sm btn" style="background-color: #5d9cec; color: white;" ng-disabled="isDisabledButton" ng-click="updateOfficeAmount(officeCollectedAmt)"> Update Amount
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/collectedByDriverPopup.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Collected By Driver
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div>
+            <form class="form-horizontal ng-pristine ng-valid">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-12 margin-bottom-10" ng-init="getDriverCollectedAmt()">
+                                <div class="col-xs-3"></div>
+                                <div class="col-xs-6">
+                                    <input type="text" id="driverCollectedAmt" class=" input-hover" ng-model="driverCollectedAmt" placeholder="Driver Collected Amount" numbers-only="numbers-only">
+                                    <span id="driverCollectedAmt1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-3"></div>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="col-xs-12" style="text-align: center">
+                          
+                             <button class="mb-sm btn" style="background-color: #5d9cec; color: white;" ng-disabled="isDisabledButton1"  ng-click="updateDriverAmount(driverCollectedAmt)"> Update Amount
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>

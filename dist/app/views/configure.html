@@ -1,0 +1,128 @@
+<h3>Exception Outstation City</h3>
+<!-- Row Select Example-->
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+<div class="panel panel-default" style="overflow-x: auto" ng-init="getCities()">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-sm-6">
+                 
+                          
+                     
+            </div>
+            <div class="col-sm-6">
+                <div class="col-sm-8">
+                </div>
+                <div class="col-sm-4">
+                    <button class="pull-right btn btn-labeled btn-primary" ng-click="newCity()">
+                        <span class="btn-label"><i class="fa fa-plus"></i>
+                           </span>Add City </button>
+                </div>
+                <div class="col-sm-4">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+   
+  <table ng-table="tableParams3" class="table table-striped table-bordered ng-table-rowselected" show-filter="true">
+    <tr ng-repeat="city in $data" ng-show="$data.length > 0">
+        <td title="'City Name'" filter="{ name: 'text'}" sortable="'name'" style="text-transform: capitalize;text-align: left;">{{city.name}}
+        </td>
+        <td title="'Edit'" style="text-align:left">
+                <button class="btn btn-sm btn-info" ng-click="updateCity(city.id)"><em class="fa fa-pencil-square-o"></em></button>
+        </td>
+        <td title="'Delete'" style="text-align:left"> 
+            <button class="btn btn-sm btn-danger" ng-click="deleteCity(city.id)"><em class="fa fa-trash"></em></button>
+        </td> 
+    </tr>
+    <tr ng-show="$data.length == 0">
+        <td>No record found</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+       
+        
+    </tr>
+</table>
+</div>
+<script type="text/ng-template" id="/addExceptionCity.html">
+<div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;">New Exception Outstation City
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+     <div class="modal-body" ng-cloak>
+        <div class="row">
+            <div class="col-md-10">
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-4 col-border" ng-style="(count > 0 && cityName1 == null) && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Name</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="cityName" ng-model="cityName" placeholder="City Name" allow-pattern="[a-z\s]" />
+                            <span id="cityName1" ng-model="cityName1" style="color:red"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div class="row" style="margin-top: 3%;">
+            <div class="col-xs-12" style="margin-bottom: 20px;">
+                <div class="col-xs-6" style="text-align:right">
+                    <button class="mb-sm btn btn-success" ng-click="addCity(cityName)" ng-disabled="submitUserBtn">Add City</button>
+                </div>
+                <div class="col-xs-6">
+                    <button class="mb-sm btn btn-danger" ng-click="cancel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/updateExceptionCity.html">
+<div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-init="fetchCityDetails()" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;">Update Exception Outstation City
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+     <div class="modal-body" ng-cloak>
+        <div class="row">
+            <div class="col-md-10">
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-4 col-border" ng-style="(count > 0 && city.Name1 == null) && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Name</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="Name" ng-model="city.name" placeholder="City Name" allow-pattern="[a-z\s]" />
+                            <span id="Name1" ng-model="city.Name1" style="color:red"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div class="row" style="margin-top: 3%;">
+            <div class="col-xs-12" style="margin-bottom: 20px;">
+                <div class="col-xs-6" style="text-align:right">
+                    <button class="mb-sm btn btn-success" ng-click="UpdateCity(city)" ng-disabled="submitUserBtn">Update City</button>
+                </div>
+                <div class="col-xs-6">
+                    <button class="mb-sm btn btn-danger" ng-click="cancel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>

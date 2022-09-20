@@ -1,0 +1,169 @@
+<h3>Job Request</h3>
+<!-- Row Select Example-->
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+<div class="panel panel-default" style="overflow-x: auto" ng-init="getJobRequest()">
+    <div class="panel-heading">
+        <div class="row">
+            
+            <div class="col-sm-12">
+                
+                <div class="col-sm-4">
+                    <button class="pull-left btn btn-labeled btn-primary" style="" ng-click="backToJobReport()">
+                        <span class="btn-label"><i class="fa fa-chevron-left"></i>
+                     </span>Back</button>
+                </div> 
+                
+            </div>
+            <div class="col-sm-12">
+                <div class="col-sm-5">
+                
+                <label class="margin-bottom-0"><strong><font size = "3">Customer Name: {{cname}}</font></strong></label>
+                        
+                </div>
+                 <div class="col-sm-7">
+                     <label class="margin-bottom-0"><strong><font size = "3">Area: {{JobArea}}</font></strong></label>
+                 </div>
+            </div>
+            
+        </div>
+    </div>
+    <table ng-table="tableParams3" class="table table-striped table-bordered ng-table-rowselected" show-filter="true">
+        <tr ng-repeat="job in $data | orderBy:'-createdDate'" ng-show="$data.length > 0">
+            <td title="'Job Id'" filter="{ jobId: 'text'}" sortable="'jobId'" style="text-transform: capitalize;text-align: left;">{{job.jobId}}</td>
+            <td title="'Driver Id'" filter="{ driverId: 'text'}" sortable="'driverId'" style="text-transform: capitalize;text-align: left;">{{job.driverId}}</td>
+            <td title="'Driver Name'" filter="{ drvName: 'text'}" sortable="'drvName'" style="text-transform: capitalize;text-align: left;">{{job.drvName}}</td>
+            <td title="'Contact Number'" filter="{ contactNo: 'text'}" sortable="'contactNo'" style="text-transform: capitalize;text-align: left;width: 10%">{{job.contactNo}}</td>
+            <td title="'Address'" filter="{ address: 'text'}" sortable="'address'" style="text-transform: capitalize;text-align: left;">{{job.address}}</td>
+
+            <td title="'Age'" filter="{ Age: 'text'}" sortable="'Age'" style="text-transform: capitalize;text-align: left;">{{getAge(job.age)}}</td>
+
+              <td title="'Experience'" filter="{ experience: 'text'}" sortable="'experience'" style="text-transform: capitalize;text-align: left;">{{job.experience}}</td>
+
+              <td title="'Reg./Unreg.'" filter="{ driverCode: 'text'}" sortable="'driverCode'" style=" text-align: left; width: 5%">
+                <!-- <div ng-show="job.driverCode === null">
+                   <span style='font-size:28px;'>&#10062;</span>
+                   </div> -->
+                   <div ng-show="job.driverCode !== null">
+                       <span style='font-size:28px;'>&#9989;</span>
+                       </div>
+               
+               </td>
+
+
+
+
+            <td title="'Status'" filter="{ status: 'text'}" sortable="'status'" style="text-transform: capitalize;text-align: left;">{{job.status}}</td>
+            <td title="'Remark'" filter="{ remark: 'text'}" sortable="'remark'" style="text-transform: capitalize;text-align: left;">{{job.remark}}</td>
+           <td title="'Applied Date'" filter="{ date: 'text'}" sortable="'date'" style="text-transform: capitalize;text-align: left;">{{job.date}}</td>
+           <td title="'Created By'" filter="{ createdByName: 'text'}" sortable="'createdByName'" style="text-transform: capitalize;text-align: left;">{{job.createdByName}}
+            </td>
+            <td title="'Edit'" style="text-align:left">
+                <button class="btn btn-sm btn-info" ng-click="updateRequest(job.id)"><em class="fa fa-pencil-square-o"></em></button>
+            </td>
+            
+           
+        </tr>
+        <tr ng-show="$data.length == 0">
+            <td>No record found</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+</div>
+
+
+<script type="text/ng-template" id="/updateRequest.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" ng-init="fetchRequestDetails()" style="margin-top: -15px; font-size: 20px;"> Update
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+       <div class="col-xs-12">
+        <h4> Customer Name: {{cname}}</h4>
+       </div>
+       <div class="col-xs-12">
+        <legend><h4> Request Details </h4></legend>
+        </div>
+        <div>
+            <form class="form-horizontal ng-pristine ng-valid">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>Contact Number:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" id="contactNo" class=" input-hover" style="width: 200px;" ng-model="job.contactNo" minlength="10" maxlength="10" placeholder="Mobile Number" numbers-only="numbers-only" readonly>
+                                   
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0"><strong>Driver Name:</strong></label>
+                                    <input type="text" id="firstName" class=" input-hover" style="width: 200px;" ng-model="job.firstName" placeholder="First Name" readonly>
+                                    
+                                </div>
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">
+                                        <strong>&nbsp;</strong>
+                                    </label>
+                                    <input type="text" id="lastName" class=" input-hover" style="width: 200px;" ng-model="job.lastName" placeholder="Last Name" readonly>
+                                   
+                                </div>
+                            </div>
+                            <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-4">
+                                    <label class="margin-bottom-0">Status</label>
+                                    <br/>
+                                    <select class="form-control input-hover" id="status" ng-model="job.status" ng-options="sa.desc as sa.desc for sa in statusArray" style="padding: 0px 16px;height:25px; width: 150px">
+                                        <option value="">--Select--</option>
+                                    </select>
+                                    <span id="status1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-8">
+                                    <label class="margin-bottom-0">
+                                        <strong>Address:</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" id="address" class="input-hover" ng-model="job.address" readonly>
+                                   
+                                </div>
+                            </div>
+                            <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-6">
+                                    <label class="margin-bottom-0"><strong>Remark</strong></label>
+                                    <textarea rows="2" cols="30" class="input-hover" id="remark" ng-model="job.remark" placeholder="Remark"></textarea>
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+                            <div class="col-xs-12" style="margin-bottom: 20px; margin-top: 10px;">
+                                <div class="col-xs-4">
+                                </div>
+                                <div class="col-xs-4" style="text-align:center">
+                                    <button class="mb-sm btn btn-success" ng-disabled="isDisabledButton" ng-click="updateRequestDetails(job)">Update</button>
+                                </div>
+                                <div class="col-xs-4">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>

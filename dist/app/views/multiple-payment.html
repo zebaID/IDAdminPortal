@@ -1,0 +1,71 @@
+<h3>Multiple Payment Report
+</h3>
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+<div class="panel panel-default" style="overflow-x: auto" ng-init="getMultiplePaymentBookings()">
+    <div class="panel-heading">
+        
+        <div class="row margin-bottom-10">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <div class="col-md-4">
+                        <button class="btn btn-labeled btn-primary" ng-click="backToSearch()">
+                            <span class="btn-label"><i class="fa fa-chevron-left"></i>
+                           </span>Back</button>
+                    </div>
+                    <div class="col-md-8">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="col-md-8">
+                    </div>
+                    <div class="col-md-4">
+                       <button title="Click To Paid Online" ng-disabled="count == 0" class="btn btn-sm btn-primary" ng-click="changeStatusToOnline()"><em class="fa fa-cc-mastercard"></em></button>
+                        <button title="Click To Cash By Office" ng-disabled="count == 0" class="btn btn-sm btn-info" ng-click="changeStatusToCashByOffice()"><em class="fa fa-inr"></em></button>
+                        <button title="Click To Cash By Driver" ng-disabled="count == 0" class="btn btn-sm btn-warning" ng-click="changeStatusToCahByDriver()"><em class="fa fa-male"></em></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <input type="checkbox" ng-model="multiplePaymentSelectFlag" style="cursor: pointer;" ng-click="multipleSelectBookingsFunction();multiplePaymentCheckAllFunction(user)"> Select All </input>
+    <table ng-table="tableParams3" class="table table-striped table-bordered ng-table-rowselected" show-filter="true">
+        <tr ng-repeat="user in $data track by $index" ng-show="$data.length > 0">
+             <td>
+                <input type="checkbox" ng-model="user.Selected" name="multiplePayment" value="" ng-checked="multiplePaymentSelectFlag" ng-click="singleSelectBookingsFunction(user)" style="margin-left:auto; margin-right:auto;"/>
+                <!--| ng-change="sendMsg(user.conuserId)" -->
+            </td>
+            <td title="'Booking ID'" filter="{ bookingId: 'text'}" sortable="'bookingId'" style="text-transform: capitalize;text-align:left" ng-click="bookingReportFunction(user)">{{user.bookingId}}</td>
+            <td title="'Customer Name'" filter="{ custName: 'text'}" sortable="'custName'" style="text-transform: capitalize;text-align:left" ng-click="bookingReportFunction(user)">{{user.custName}}</td>
+            <td title="'Customer Mobile'" filter="{ mobileNumber: 'text'}" sortable="'mobileNumber'" style="text-transform: capitalize;text-align:left" ng-click="bookingReportFunction(user)">{{user.mobileNumber}}</td>
+            <td title="'Car Type'" filter="{ carType: 'text'}" sortable="'carType'" style="text-transform: capitalize;text-align:left" ng-click="bookingReportFunction(user)">{{user.carType}}</td>
+            <td title="'Duty Type'" filter="{ dutyType: 'text'}" sortable="'dutyType'" style="text-transform: capitalize;text-align:left" ng-click="bookingReportFunction(user)">{{user.dutyType}}</td>
+            <td title="'Reporting Location'" filter="{ reportingLocation: 'text'}" sortable="'reportingLocation'" style="text-transform: capitalize;text-align:left" ng-click="bookingReportFunction(user)">{{user.reportingLocation}}</td>
+            <td title="'Status'" filter="{ status: 'text'}" sortable="'status'" style="text-transform: capitalize;text-align:left" ng-click="bookingReportFunction(user)">{{user.status}}</td>
+            <td title="'Driver Name'" filter="{ drvName: 'text'}" sortable="'drvName'" style="text-transform: capitalize;text-align:left" ng-click="bookingReportFunction(user)">{{user.drvName}}</td>
+            <td title="'Reporting Date/Time'" filter="{ reportingDate: 'date'}" sortable="'reportingDate'" style="text-align:left" ng-click="bookingReportFunction(user)">{{user.reportingDate | date:'dd/MM/yyyy'}} {{user.reportingTime}}</td>
+            <td title="'Relieving Date/Time'" filter="{ releavingDate: 'date'}" sortable="'releavingDate'" style="text-align:left" ng-click="bookingReportFunction(user)">{{user.releavingDate | date:'dd/MM/yyyy'}} {{user.releavingTime}}</td>
+            <td title="'Driver Share'" filter="{ driverShare: 'number'}" sortable="'driverShare'" style="text-align: right;" ng-click="bookingReportFunction(user)">{{user.driverShare}}</td>
+            <td title="'ID Share'" filter="{ idShare: 'number'}" sortable="'idShare'" style="text-align: right;" ng-click="bookingReportFunction(user)">{{user.idShare}}</td>
+            
+            <td title="'Total Amount'" filter="{ actualAmt: 'number'}" sortable="'actualAmt'" style="text-align: right;" ng-click="bookingReportFunction(user)">{{user.actualAmt}}</td>
+            <td title="'PM'" sortable="'paymentMethod'" style="text-align: left;" ng-click="bookingReportFunction(user)">{{user.paymentMethod}}</td>
+           
+        </tr>
+        <tr ng-show="$data.length == 0">
+            <td>No record found</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+</div>

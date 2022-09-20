@@ -1,0 +1,568 @@
+<h3>Billing Attendance Details</h3>
+<!-- Row Select Example-->
+<style type="text/css">
+table th {
+    text-align: center;
+}
+</style>
+<div class="panel panel-default" style="overflow-x: auto" ng-init="getBillingCustomerDetails()">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-sm-12">
+                <br><br>
+                <div class="col-sm-2">
+                    <button class="btn btn-labeled btn-primary" style="padding-top: -2px;
+                    padding-bottom: -2px;" ng-click="backToSearchPage()">
+                        <span class="btn-label"><i class="fa fa-chevron-left"></i>
+                     </span> Back
+                    </button>
+                </div>
+               <div class="col-sm-3">
+                    <label>
+                        Company Name</label>
+                    <input type="text" ng-model="companyCustomerData[0].name" id="name" style="height: 24px;" class="input-hover" readonly/>
+                </div>
+                <div class="col-sm-2">
+                    <label>
+                        Contact Number</label>
+                    <input type="text" ng-model="companyCustomerData[0].contactNo" id="contactNo" style="height: 24px;" class="input-hover" readonly/>
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-sm btn-info" ng-click="updateCompanyCustomerPopup12(companyCustomerData[0].id,companyCustomerData[0].conuserId)"><span class="btn-label"><em class="fa fa-pencil-square-o"></em></span>&nbsp;&nbsp;Edit&nbsp;&nbsp;</button>
+                </div>
+                <!-- <div class="col-sm-2">
+                    <button class="btn btn-sm btn-info" ng-click="billingAppointedDriverPopUp()">&nbsp;&nbsp;Appoint Driver&nbsp;&nbsp;</button>
+                    
+                </div><br><br> -->
+                <div class="col-sm-2">
+                    <br>
+                    <button class="btn btn-sm btn-info" ng-click="billingAppointedDriverHistoryPopUp()"> <em class="fa fa-list-alt fa-fw"></em>&nbsp;&nbsp;Appointed Driver History&nbsp;&nbsp;</button>
+                    
+                </div>
+               
+
+            </div>
+
+
+                
+            <br>
+            <br><br>
+            <br>
+              <div class="row" style="margin-top: 3%;" ng-init="searchAppointedDriverDetails()">
+                <div class="col-xs-12" style = "color: #0722ab"  >
+                    <div class="col-sm-6">
+                        <h3>Driver Allocated : </h3>
+                    <ol style = "color: #3e59de;"> 
+                        <li ng-repeat="appointedDriverDetails in appointedDriverData track by $index" style="font-size: 18px; color : #000000" > {{appointedDriverDetails.directorName}}
+                          <!--   <u ng-if="appointedDriverDetails.driverName == ''"> {{appointedDriverDetails.directorName}}</u> -->
+                               
+                             <u class="btn btn-labeled " ng-click="driverAttendance(appointedDriverDetails.driverId,appointedDriverDetails.driverName,appointedDriverDetails.customerId)" style="font-size: 18px; color : #000000">{{appointedDriverDetails.driverName}}</u> &nbsp; &nbsp;   
+                 
+                    <button class="btn btn-sm btn-info" ng-if="appointedDriverDetails.status == 'Not Appointed'" ng-click="billingAppointedDriverPopUp(appointedDriverDetails.customerId)">&nbsp;&nbsp;Appoint Driver&nbsp;&nbsp;</button><br>
+                       
+             
+               
+                            
+                        </li> 
+                     </ol>
+                 </div> 
+                        
+                </div>
+             </div>
+            <div class="col-xs-12">
+                <br>
+                <br>
+                  
+            </div>
+        </div>
+        <br>
+        <br>
+    </div>
+
+</div>
+<script type="text/ng-template" id="/driverAppoinmentHistoryPopUp.html">
+    <div class="modal-header" style="border:-1px;background-color:#02C7FC;" ng-cloak>
+        <div class="col-xs-12 text-center" ng-init="fetchDriverDetails()" style="margin-top: -15px; color:#3B4C50; font-size: 20px;"> Driver Employment History
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer; color:#3B4C50;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 3%;" ng-init="getAppointDriverHistory()">
+                <div class="col-xs-12" style = "color: #0722ab">
+                    <div class="col-sm-4">
+                    <table border="2" align="center" style="background-color: antiquewhite;width: 650px;">
+                        <tr style="color:#000000; aliceblue;background: #02C7FC;">
+                        <th >Driver Name</th>
+                        <th  >Status</th>
+                        <th>Doj</th>
+                        <th>Dol</th>
+                        <th>Reason</th> 
+                        <th style="width:35%;">Desctiption</th> 
+                        </tr>
+                        <tr  style = "background-color: azure;color: black;" ng-repeat="billingAppintedDriverDetails in billingAppintedDriverDetails track by $index">
+                        <td >&nbsp; <u class="btn btn-labeled " ng-if="billingAppintedDriverDetails.status == 'Left'" ng-click="billingDriverApptendance(billingAppintedDriverDetails.driverid,billingAppintedDriverDetails.doj,billingAppintedDriverDetails.dol)" style="font-size: 18px; color : #000000">{{billingAppintedDriverDetails.driver_name}}</u>
+                        <b class="btn btn-labeled " ng-if="billingAppintedDriverDetails.status == 'Appointed'" style="font-size: 18px; color : #000000">{{billingAppintedDriverDetails.driver_name}}</b> </td>
+                        <td>&nbsp; {{billingAppintedDriverDetails.status }}</td>
+                        <td>&nbsp; {{billingAppintedDriverDetails.doj | date:'dd/MM/yyyy'}} </td>
+                         <td>&nbsp; {{billingAppintedDriverDetails.dol | date:'dd/MM/yyyy'}} </td>
+                            <td>&nbsp; {{billingAppintedDriverDetails.left_reasons}} </td>
+                               <td>&nbsp; {{billingAppintedDriverDetails.description}} </td>
+                          
+                        
+                        </tr>
+                    </table>
+
+                    <br><br>
+                 </div> 
+                        
+                </div>
+    </div>
+</script>
+<script type="text/ng-template" id="/updateCompanyCustomerPopup.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" ng-init="fetchCompanyCustomerDetails123()" style="margin-top: -15px; font-size: 20px;"> Billing Company
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div class="col-xs-12">
+            <legend> Company Details</legend>
+        </div>
+        <hr class="margin-bottom-10" />
+        <div>
+            <form class="form-horizontal ng-pristine ng-valid">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-12 margin-bottom-10">
+                                
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0"><strong>Company/Client Name</strong></label>
+                                    <input type="text" id="firstName" class=" input-hover" style="width: 150px;" ng-model="billCustomer.firstName" placeholder="First Name" allow-pattern="[a-z\s]">
+                                    <span id="firstName1" style="color:red"></span>
+                                </div>
+                                 
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0">
+                                        <strong>Mobile Number</strong>
+                                    </label>
+                                    <input type="text" class="input-hover" id="mobileNumber" style="width: 150px;" minlength="10" maxlength="10" ng-model="billCustomer.contactNo" ng-disabled="exist" placeholder="Mobile Number" readonly/>
+                                    <span id="customerType1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0">
+                                        <strong>Agreement Number</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" id="agreementNumber" class=" input-hover" style="width: 150px;" ng-model="billCustomer.agreementNumber" placeholder="Agreement Number" numbers-only="numbers-only" readonly>
+                                    <span id="agreementNumber1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0">
+                                        <strong>Landline</strong>
+                                    </label>
+                                    <input type="text" class="input-hover" id="landlineNumber" style="width: 150px;" ng-model="billCustomer.landline" placeholder="Landline Number" numbers-only="numbers-only" />
+                                    <span id="landlineNumber1" style="color:red"></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 margin-bottom-10">
+                                
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0">
+                                        <strong>Email</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" class="input-hover" id="email" style="width: 150px;" ng-model="billCustomer.email" placeholder="Email Id" />
+                                    <span id="email1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0">
+                                        <strong>Contact Person Name</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" class="input-hover" id="contactPersonName" style="width: 150px;" ng-model="billCustomer.contactPersonName" placeholder="Name" />
+                                    <span id="contactPersonName1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0">
+                                        <strong>Contact Person Email</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" class="input-hover" id="contactPersonEmail" style="width: 150px;" ng-model="billCustomer.contactPersonEmail" placeholder="Email Id" />
+                                    <span id="contactPersonEmail1" style="color:red"></span>
+                                </div>
+                                 <div class="col-xs-3">
+                                    <i class="fa fa-plus-circle fa-lg" style="color:#06B92C" ng-click="contact2(0)"  ng-if="contact12 == '0'"></i>
+                                     <i class="fa fa-minus-circle fa-lg" style="color:#DF1609" ng-click="contact2(1)"  ng-if="contact12 == '1'"></i>
+                                </div>
+                            </div>
+                               <div class="col-xs-12 margin-bottom-10" ng-if="contact12 == '1'">
+                                
+                                 
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0">
+                                        <strong>Contact Person2 Name</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" class="input-hover" id="contactPerson2Name" style="width: 150px;" ng-model="billCustomer.contactPerson2Name" placeholder="Name" />
+                                    <span id="contactPerson2Name1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0">
+                                        <strong>Contact Person2 Email</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" class="input-hover" id="contactPerson2Email" style="width: 150px;" ng-model="billCustomer.contactPerson2Email" placeholder="Email Id" />
+                                    <span id="contactPerson2Email1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-6">
+                                    <label class="margin-bottom-0">
+                                        <strong>Contact Person2 Mobile Number</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" class="input-hover" id="contactPerson2MobileNumber" style="width: 180px;" ng-model="billCustomer.contactPerson2MobileNumber" />
+                                    <span id="contactPerson2MobileNumber1" style="color:red"></span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0">
+                                        <strong>Vehicle Name</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" class="input-hover" id="vehicleName" style="width: 150px;" ng-model="billCustomer.vehicleName" placeholder="Vehicle Name" />
+                                    <span id="vehicleName1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0">
+                                        <strong>Vehicle Type</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" class="input-hover" id="vehicleType" style="width: 150px;" ng-model="billCustomer.vehicleType" placeholder="SMV/PMV/ATV/PATV" />
+                                    <span id="vehicleType1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0">
+                                        <strong>GSTN Number</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" class="input-hover" id="gstnNumber" style="width: 150px;" ng-model="billCustomer.gstinNumber" placeholder="GSTN Number" readonly/>
+                                    <span id="gstnNumber1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0">
+                                        <strong>HSA Number</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" class="input-hover" id="hsaNumber" style="width: 150px;" ng-model="billCustomer.hsaNumber" placeholder="HSA Number" />
+                                    <span id="hsaNumber1" style="color:red"></span>
+                                </div>
+                            </div>
+                           
+                            <div class="col-xs-12">
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0"><strong>Admin Charge</strong></label>
+                                    <input type="text" id="adminCharge" class=" input-hover" style="width: 150px;" ng-model="billCustomer.adminCharge" placeholder="Admin Charge" numbers-only="numbers-only">
+                                    <br/>
+                                    <span id="adminCharge1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0">
+                                        <strong>Admin Charge Type</strong>
+                                    </label>
+                                    <br/>
+                                    <select class="form-control input-hover" id="adminChargeType" ng-model="billCustomer.adminChargeType" ng-options="ac.desc as ac.desc for ac in adminChargeArray" style="padding: 0px 16px;height:25px;">
+                                        <option value="">--Select--</option>
+                                    </select>
+                                    <br/>
+                                    <span id="adminChargeType1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0"><strong>Agreement Period</strong></label>
+                                    <input type="text" placeholder="From Date" id="agreementStartDate" datepicker-popup="yyyy-MM-dd" ng-model="billCustomer.agreementStartDate" is-open="openedStart" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openStart($event)" style="width: 150px;height: 25px;" />
+                                    <br/>
+                                    <span id="agreementStartDate1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0"><strong>&nbsp;</strong></label>
+                                    <input type="text" placeholder="To Date" id="agreementEndDate" datepicker-popup="yyyy-MM-dd" ng-model="billCustomer.agreementEndDate" is-open="openToDate" datepicker-options="dateOptions" close-text="Close" class="input-hover " ng-click="openedToDate($event)" style="width: 150px;height: 25px;" />
+                                    <br/>
+                                    <span id="agreementEndDate1" style="color:red"></span>
+                                </div>
+                            </div>
+                             <div class="col-xs-12 margin-bottom-10">
+                                <div class="col-xs-12">
+                                    <label class="margin-bottom-0">
+                                        <strong>Office Address</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" id="address" class="input-hover" ng-model="billCustomer.address" placeholder="Address">
+                                    <span id="address1" style="color:red"></span>
+                                </div>
+                            </div>
+                             <div class="col-xs-12 margin-bottom-10">
+                                 <label  class="col-xs-12 margin-bottom-10">   </label>
+
+
+                                        <strong>Director Details:- (please Add only one Director at a time)</strong> 
+                                         <ul style = "color: #3e59de;"> 
+                                            <li ng-repeat="billCustomerDirectorDetails in billCustomerDirectorDetails track by $index" style="font-size: 18px; color : #000000" > 
+                                                   {{billCustomerDirectorDetails.directorName}} 
+                                                
+                                            </li> 
+                                         </ul>
+                                 <div class="col-xs-8 margin-bottom-10" ng-init="fetchAppointedCustomerList()"  >
+                                            <label class="margin-bottom-0"><span>Customer Mobile Number</span>
+                                            </label>
+                                            <angucomplete-alt id="customerMobileNumber" placeholder="Search customer by name or mobile" pause="500" initial-value="" ng-click="custSearchMobileSelected()" selected-object="search.mobileNumber1" local-data="allCustomerList" search-fields="id,mobileNumber,customerName" title-field="custDetails" minlength=1 maxlength=10 input-class=" input-hover" match-class="highlight" focus-me="shouldBeFocus" />
+                                                
+                                           
+                                </div>  
+                                 
+                               
+                                 <div class="col-xs-3"><button class="mb-sm btn btn-success" ng-disabled="isDisabledButton" ng-click="addDirectorDetails()">Add </button>
+                                     </div>
+                            </div>
+                             
+                            <div class="col-xs-12" style="margin-bottom: 10px; margin-top: 10px;">
+                                <div class="col-xs-4">
+                                </div>
+                                <div class="col-xs-4" style="text-align:center">
+                                    <button class="mb-sm btn btn-success" ng-disabled="isDisabledButton" ng-click="verifyEmailFunction1(billCustomer)">Update Customer</button>
+                                </div>
+                                <div class="col-xs-4">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+
+ 
+
+<script type="text/ng-template" id="/searchDriver.html" >
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Appoint Driver
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div> <br>       
+    
+                 
+        
+         <div class="col-xs-9 margin-bottom-10" ng-init="fetchsearchAppointedDrvList()">
+                        <label class="margin-bottom-0"><span>Driver Mobile Number</span>
+                        </label>
+                        <angucomplete-alt id="mobileNumber" placeholder="Search driver by name or mobile" pause="500" initial-value="" ng-click="drvSearchMobileSelected()" selected-object="search.mobileNumber2" local-data="searchDrvList" search-fields="id,mobileNumber,driverName" title-field="driverSearchData" minlength=1 maxlength=10 input-class=" input-hover" match-class="highlight" focus-me="shouldBeFocus"/><br>
+                       
+                       
+            </div>  
+                    <span id="appointDriverMobileNumber" style="color:red"></span>  
+                 
+                   <div class="col-xs-4" style="text-align:center">
+                   
+                                    <button class="mb-sm btn btn-success" ng-disabled="isDisabledButton" ng-click="driverAttendanceDetailsPopUp()">Next</button>
+                                </div>  
+       
+        
+    </div>
+      
+         <br><br> <br><br>
+          
+    <div class="modal-footer" style="text-align:center;background-color:initial;">
+    </div>
+</script>
+ 
+
+<script type="text/ng-template" id="/appointedDriverDetails.html">
+
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;">
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div class="col-xs-12">
+            <legend> Appoint Driver Details</legend>
+        </div>
+        <hr class="margin-bottom-10" />
+        <div>
+            <form class="form-horizontal ng-pristine ng-valid">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-12 margin-bottom-10">
+                                 
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0"><strong>Driver Name</strong></label>
+                                    <input type="text" id="name" class=" input-hover" style="width: 150px;" ng-model="appointDriverDetails.name" placeholder="First Name" allow-pattern="[a-z\s]" readonly/>
+                                    <span id="firstName1" style="color:red"></span>
+                                </div>
+                               <div class="col-xs-3">
+                                    <label class="margin-bottom-0">
+                                        <strong>Driver Number</strong>
+                                    </label>
+                                    <input type="text" class="input-hover" id="mobileNumber" style="width: 150px;" minlength="10" maxlength="10" ng-model="appointDriverDetails.mobileNumber" ng-disabled="exist" placeholder="Mobile Number" readonly/>
+                                    <span id="customerType1" style="color:red"></span>
+                                </div>
+                                
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0">
+                                        <strong>Duty Hours</strong>
+                                    </label>
+                                    <br/>
+                                    <select class="form-control input-hover" id="dutyHours" ng-model="appointDriverDetails.dutyHours" ng-options="ac.desc as ac.desc for ac in dutyHour" style="padding: 0px 16px;height:25px;">
+                                        <option value="">--Select--</option>
+                                    </select>
+                                    
+                                    <span id="dutyHours1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0">
+                                        <strong>Weekly Off</strong>
+                                    </label>
+                                    <br/>
+                                    <select class="form-control input-hover" id="weeklyOff" ng-model="appointDriverDetails.weeklyOff" ng-options="ac.desc as ac.desc for ac in weeklyOffArray" style="padding: 0px 16px;height:25px;">
+                                        <option value="">--Select--</option>
+                                    </select>
+                                    
+                                    <span id="weeklyOff1" style="color:red"></span>
+                                </div>
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0">
+                                        <strong>OT Rate</strong>
+                                    </label>
+                                    <input type="text" id="otRate" class=" input-hover" style="width: 150px;" ng-model="appointDriverDetails.otRate" placeholder="enter OT Rate" numbers-only="numbers-only">
+                                    <span id="otRate1" style="color:red"></span>
+                                </div>
+                                 <div class="col-xs-3">
+                                <label class="margin-bottom-0">
+                                    <strong>OSA Rate</strong>
+                                </label>
+                                <br/>
+                                <input type="text" id="osaRate" class=" input-hover" style="width: 150px;" ng-model="appointDriverDetails.osaRate" placeholder="enter OSA Rate" numbers-only="numbers-only">
+                                <span id="osaRate1" style="color:red"></span>
+                            </div>
+                                <div class="col-xs-3">
+                                    <label class="margin-bottom-0">
+                                        <strong>NSA Rate</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" id="nsaRate" class=" input-hover" style="width: 150px;" ng-model="appointDriverDetails.nsaRate" placeholder="enter NSA Rate" numbers-only="numbers-only">
+                                    <span id="nsaRate1" style="color:red"></span>
+                                </div>
+                            <div class="col-xs-3">
+                                <label class="margin-bottom-0">
+                                    <strong>ED Rate</strong>
+                                </label>
+                                <br/>
+                                <input type="text" id="edRate" class=" input-hover" style="width: 150px;" ng-model="appointDriverDetails.edRate" placeholder="enter ED Rate" numbers-only="numbers-only">
+                                <span id="edRate1" style="color:red"></span>
+                            </div>
+                            
+                            </div>
+                           <div class="col-xs-12 margin-bottom-10">
+                             <div class="col-xs-3">
+                                    <label class="margin-bottom-0">
+                                        <strong>Montly Net Salary</strong>
+                                    </label>
+                                    <br/>
+                                    <input type="text" id="salary" class=" input-hover" style="width: 150px;" ng-model="appointDriverDetails.salary" placeholder="Enter Salary" numbers-only="numbers-only">
+                                    <span id="salary1" style="color:red"></span>
+                                </div>
+                                
+                            <div class="col-xs-3">
+                                <label class="margin-bottom-0">
+                                    <strong>Driver Cycle</strong>
+                                </label>
+                                <br/>
+                                <select class="form-control input-hover" id="driverCycle" ng-model="appointDriverDetails.driverCycle" ng-options="ac.desc as ac.desc for ac in driverCycle" style="padding: 0px 16px;height:25px;">
+                                    <option value="">--Select--</option>
+                                </select>
+                                
+                                <span id="driverCycle1" style="color:red"></span>
+                            </div>
+                            <div class="col-xs-3">
+                                    <label class="margin-bottom-0"><strong>&nbsp;Appointed Date</strong></label>
+                                    <input type="text" placeholder="To Date" id="appointedDate" datepicker-popup="yyyy-MM-dd" ng-model="appointDriverDetails.appointedDate" is-open="openToDate" datepicker-options="dateOptions" close-text="Close" class="input-hover " ng-click="openedToDate($event)" style="width: 150px;height: 25px;" />
+                                    <br/>
+                                    <span id="appointedDate1" style="color:red"></span>
+                                </div>
+                             
+                            </div>
+                            
+                            </div>
+                           
+                            <div class="col-xs-12">
+                            <div class="col-xs-12" style="margin-bottom: 10px; margin-top: 10px;">
+                                <div class="col-xs-4">
+                                </div>
+                                <div class="col-xs-4" style="text-align:center">
+                                    <button class="mb-sm btn btn-success" ng-disabled="isDisabledButton" ng-click="appointDriver()">Appoint</button>
+                                </div>
+                                <div class="col-xs-4">
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+            </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/billingDriverApptendancePopUp.html" >
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Billing Driver Attendance Details
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div><br>
+     <div class="col-sm-12">
+             <div class="col-sm-5">
+                    <label>Select Month:
+                    </label>
+                    
+                     <input type="Month" id="attendanceMonth" ng-model="driverShowPastAttendancedata.month" style=" display: block; font: 16px 'Fira Sans', sans-serif;" class="input-hover" />
+                     <span  id="month1" style="color:red"></span>
+                </div>
+                 <div class="col-sm-2">
+                    
+                         <button class="btn btn-sm btn-info" ng-click="driverShowPastAttendance()">&nbsp;&nbsp;Show Attendance&nbsp;&nbsp;</button>
+                </div>
+                     <br>   <br>   <br><br>   
+        </div>
+       <table class="table table-striped table-bordered ng-table-rowselected" ng-init="driverShowPastAttendance()" >
+        <tr>
+            <th>Reporting Date/Time</th>
+            <th>Relieving Date/Time</th>
+            <th>Status</th>
+            
+        </tr> 
+        <tr ng-repeat="driverMonthAttendance1 in driverShowPastAttendancedata track by $index" >
+            <td><center>{{driverMonthAttendance1.inDate | date:'dd/MM/yyyy'}} ({{driverMonthAttendance1.inTime | date:'dd/MM/yyyy'}})</center></td>
+             <td><center>{{driverMonthAttendance1.outDate | date:'dd/MM/yyyy'}} ({{driverMonthAttendance1.outTime | date:'dd/MM/yyyy'}})</center></td>
+             <td><center>{{driverMonthAttendance1.dutyType }}</center></td>
+              
+        </tr>     
+    </table>
+          
+    <div class="modal-footer" style="text-align:center;background-color:initial;">
+    </div>
+</script>
+
+</style>

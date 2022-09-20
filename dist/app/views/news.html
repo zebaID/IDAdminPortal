@@ -1,0 +1,25 @@
+<h3>News</h3>
+<!-- Row Select Example-->
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+<div class="panel panel-default" style="overflow-x: auto" ng-init="news()">
+    
+    <div style="text-align: center; padding: 5px 0px;">
+            <img ng-src='{{logoApp}}' style="width: 30%;" />
+         </div>
+      
+<form>
+        <textarea rows="30" cols="40" class="input-hover" id="remark" ng-model="newsDetail" placeholder="News Details"></textarea>
+        <button class="mb-sm btn btn-success" ng-click="updateNews(newsDetail)"> Update News</button>
+    </form>
+          
+        </div>
+        </div>
+          
+ 
+         
+       
+     

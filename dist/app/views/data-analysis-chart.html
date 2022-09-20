@@ -1,0 +1,115 @@
+<h3>Booking Analysis Report</h3>
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+<div class="panel panel-default" style="overflow-x: auto;height: 350px;">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-xs-12 margin-bottom-10">
+            </div>
+            <div class="col-xs-12 margin-bottom-10">
+                <div class="col-xs-4">
+                    <label>
+                        From Date</label>
+                    <input type="text" ng-model="frmDate" id="frmDate" style="height: 24px;" datepicker-popup="dd-MM-yyyy" is-open="openedStart" min-date="minDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openStart($event)" ng-blur="changeMin(frmDate)" />
+                    <br>
+                    <span id="frmDate1" style="color:red"></span>
+                </div>
+                <div class="col-xs-4">
+                    <label>
+                        To Date</label>
+                    <input type="text" ng-model="toDate" id="toDate" style="height: 24px;" datepicker-popup="dd-MM-yyyy" is-open="openToDate" min-date="minDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openedToDate($event)" />
+                    <br>
+                    <span id="toDate1" style="color:red"></span>
+
+                </div>
+                <div class="col-xs-4">
+                    <button class="btn btn-labeled btn-primary" style="" ng-disabled="isDisabledButton" ng-click="fetchSearchedAnalysisDetails(frmDate, toDate)"> <span class="btn-label"><i class="fa fa-search"></i>
+                           </span>Search</button>
+                </div>
+            </div>
+           
+            <div class="col-xs-12 margin-bottom-10"></div>
+        </div>
+       
+    </div>
+</div>
+<h3>Search Analysis Report By User</h3>
+<div class="panel panel-default" style="overflow-x: auto;height: 350px;">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-xs-12 margin-bottom-10">
+            </div>
+            <div class="col-xs-12 margin-bottom-10">
+                <div class="col-xs-3">
+                    <label>
+                        From Date</label>
+                    <input type="text" ng-model="userFromDate" id="userFromDate" style="height: 24px;" datepicker-popup="dd-MM-yyyy" is-open="openedStart1" min-date="minDate1" datepicker-options="dateOptions1" close-text="Close" class="input-hover" ng-click="openStart1($event)" ng-blur="changeMin1(userFromDate)" />
+                    <br>
+                    <span id="userFromDate1" style="color:red"></span>
+                </div>
+                <div class="col-xs-3">
+                    <label>
+                        To Date</label>
+                    <input type="text" ng-model="userToDate" id="userToDate" style="height: 24px;" datepicker-popup="dd-MM-yyyy" is-open="openToDate1" min-date="minDate1" datepicker-options="dateOptions1" close-text="Close" class="input-hover" ng-click="openedToDate1($event)" />
+                    <br>
+                    <span id="userToDate1" style="color:red"></span>
+
+                </div>
+                <div class="col-xs-6" ng-init="fetchUserDetails()">
+
+                    <label class="margin-bottom-0"> <span>User Mobile Number</span></label>
+                    <h4><angucomplete-alt id="userMobileNo" style="width: 135px;" placeholder="Search user by name or mobile" pause="500" initial-value="" ng-click="userMobileSelected()" selected-object="search.userMobileNumber" local-data="analysisUserList" search-fields="mobileNumber,userName" title-field="userDetails" minlength=1 input-class=" input-hover" match-class="highlight"/></h4>
+                    <span id="userMobileNo1" style="color:red"></span>
+               </div>
+            </div>
+           <div class="col-xs-12 margin-bottom-10">
+               <div class="col-xs-4">
+               </div>
+               <div class="col-xs-4">
+                    <button class="btn btn-labeled btn-primary" style="" ng-disabled="isDisabledButton" ng-click="fetchSearchedAnalysisDetailsByUser(userFromDate, userToDate)"> <span class="btn-label"><i class="fa fa-search"></i>
+                           </span>Search</button>
+                </div>
+                <div class="col-xs-4">
+               </div>
+           </div>
+            <div class="col-xs-12 margin-bottom-10"></div>
+        </div>
+       
+    </div>
+</div>
+<!-- <h3>Overall Analysis Report</h3>
+<div class="panel panel-default" style="overflow-x: auto">
+    <div class="panel-heading">
+        <div class="row">
+    <div class="col-sm-12" style="border: 2px transparent;padding: 10px;" ng-init="selectYear()">
+        <div class="col-sm-3">
+            <label>
+                Select Year</label>
+            <select class="select-hover" id="" ng-model="searchData.year" style="padding: 0px 0px;height:25px;">
+                <option value="">--Select--</option>
+                <option ng-repeat="s in year | unique: 'year'" value="{{s.year}}">{{s.year}}</option>
+            </select>
+        </div>
+        <div class="col-sm-6">
+            <label>
+                Select Quarter</label>
+            <select class="select-hover" id="" ng-model="searchData.quarter" style="padding: 0px 0px;height:25px;">
+                <option value="">--Select--</option>
+                <option data-ng-repeat="q in quarter" value="{{q.quarter}}">{{q.quarter}}</option>
+            </select>
+        </div>
+        <div class="col-sm-3">
+            <button class=" btn btn-labeled btn-primary" style="padding-top: 5px;
+    padding-bottom: 5px;" ng-click="analysisSelectFunction(searchData)">
+                Search</button>
+        </div>
+         
+    </div>
+</div>
+<chart xData="lineChartXData" yData="lineChartYData" xName="Month" yName="Hours" subtitle="" ng-click="gotoReport()" ng-init="chartOnLoadFunction()"></chart>
+    </div>
+</div>
+ -->

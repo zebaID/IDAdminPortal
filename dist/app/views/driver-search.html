@@ -1,0 +1,421 @@
+<h3>Search Drivers</h3>
+<!-- Row Select Example-->
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+<div class="panel panel-default" style="overflow-x: auto">
+    <div class="panel-heading">
+        <div class="row">
+            <div ng-show="searchDrvFlag == true">
+                <div class="col-xs-12">
+                    <div class="col-xs-3">
+                        <legend>
+                            <h5><a ng-click="searchByNameAndNumber()">Search Driver by name or number </a></h5>
+                        </legend>
+                    </div>
+                    <div class="col-xs-6"></div>
+                    <div class="col-xs-3">
+                    <button class="pull-right btn btn-labeled btn-primary" ng-click="newDriver()">
+                        <span class="btn-label"><i class="fa fa-plus"></i>
+                           </span> Add Driver</button>
+                   
+                </div>
+                </div>
+            </div>
+            <div ng-show="searchDrvFlag == false">
+                <div class="col-xs-12">
+                    <div class="col-xs-2">
+                        <button class="pull-right btn btn-labeled btn-primary" style="padding-top: -2px;
+                    padding-bottom: -2px;" ng-click="backToSearch('mobileNumber')">
+                            <span class="btn-label"><i class="fa fa-chevron-left"></i>
+                     </span> Back
+                        </button>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="col-xs-12">
+                    <div class="col-xs-3">
+                    </div>
+                    <div class="col-xs-6 margin-bottom-10" ng-init="fetchsearchDrvList()">
+                        <label class="margin-bottom-0"><span>Driver Mobile Number</span></label>
+                        <angucomplete-alt id="mobileNumber" placeholder="Search driver by name or mobile" pause="500" initial-value="" ng-click="drvSearchMobileSelected()" selected-object="search.mobileNumber2" local-data="searchDrvList" search-fields="id,mobileNumber,driverName" title-field="driverSearchData" minlength=1 maxlength=10 input-class=" input-hover" match-class="highlight" focus-me="shouldBeOpen"/>
+                        
+                    </div>
+                    <div class="col-xs-3">
+                        <button class="pull-right btn btn-labeled btn-primary" style="padding-top: 5px;
+    padding-bottom: 5px;" ng-click="searchDriverDetailsById()">
+                            Search</button>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="searchDrvFlag == true">
+                <div class="col-xs-12">
+                    <div class="col-xs-6">
+                        <label class="margin-bottom-0">
+                            <strong>Driver Location:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="drvLocation" class="input-hover" ng-model="searchData.drvLocation"  >
+                        <span id="driverData1" style="color:red"></span>
+                    </div>
+                    <div class="col-xs-4 col-border">
+                        <label class="margin-bottom-0">Driver Status</label>
+                        <br/>
+                        <select class="form-control input-hover" id="driverStatus" ng-model="searchData.driverStatus" ng-options="sa.desc as sa.desc for sa in drvSearchStatusArray" style="padding: 0px 16px;height:25px;">
+                            <option value="">--Select Status--</option>
+                        </select>
+                        <span id="driverDataStatus" style="color:red"></span>
+                    </div>
+                    <div class="col-xs-2">
+                        <button class="pull-right btn btn-labeled btn-primary" style="padding-top: 5px;
+    padding-bottom: 5px;" ng-click="searchDriverDetails(searchData)">
+                            Search</button>
+                    </div>
+                </div>
+                 
+             
+            </div>
+             
+        </div>
+    </div>
+</div>
+
+
+<h3>Search Pv License Expired Drivers </h3>
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+<div class="panel panel-default" style="overflow-x: auto;height: 383px;">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-xs-12 margin-bottom-10"></div>
+            
+ <div class="col-xs-12">
+                 <div class="col-sm-4">
+                    <label>
+                        From Date</label>
+                         <input type="text" id="fromDate" ng-model="sData.pvfromDate" style="height: 24px;" datepicker-popup="dd-MM-yyyy" is-open="openedStart"   datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openStart($event)" placeholder="PV Expiry from Date"   />
+                </div>
+                <div class="col-sm-4">
+                    <label>
+                        To Date</label>
+                    <input type="text" id="ToDate" ng-model="sData.pvToDate" style="height: 24px;" datepicker-popup="dd-MM-yyyy"   is-open="openToDate"  datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openedToDate($event)" placeholder="PV Expiry To Date"/>
+                </div>
+                <div class="col-xs-4">
+                        <button class="pull-right btn btn-labeled btn-primary" style="padding-top: 5px;
+    padding-bottom: 5px;" ng-click="searchPvDriverDetails(sData)">
+                            <span class="btn-label"><i class="fa fa-search"></i>
+                           </span>Search Details</button>
+                    </div>
+             </div>
+
+
+</div></div></div>
+
+
+<h3 ng-show="roleId === '1'">Download Driver Data: </h3>
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+<div class="panel panel-default" style="overflow-x: auto;height: 383px;" ng-show="roleId === '1'">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-xs-12 margin-bottom-10"></div>
+            
+
+ 
+          
+              <div class="col-xs-12" >
+                
+                 <div class="col-sm-4">
+                    <label>
+                        From Date</label>
+                         <input type="text" id="fromDateOther" ng-model="sData.pvfromDate1" style="height: 24px;" datepicker-popup="dd-MM-yyyy" is-open="openedStartOthers"   datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openStartOthers($event)" placeholder="From Date"  />
+                </div>
+                <div class="col-sm-4">
+                    <label>
+                        To Date</label>
+                    <input type="text" id="ToDateOther" ng-model="sData.pvToDate1" style="height: 24px;" datepicker-popup="dd-MM-yyyy"   is-open="openToDateOthers"  datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openedToDateOthers($event)" placeholder="To Date" />
+                </div>
+                <div class="col-xs-4">
+                        <button class="pull-right btn btn-labeled btn-primary" style="padding-top: 5px;
+    padding-bottom: 5px;" ng-click="searchDriverDetailsOthers(sData)" >
+                            <span class="btn-label"><i class="fa fa-search"></i>
+                           </span>Search</button>
+                    </div>
+             </div>
+             <div class="col-xs-12 margin-bottom-10"></div>
+             <div class="col-xs-12" >
+                
+                 <div class="col-sm-3">
+                    
+                            <label class="margin-bottom-0">Search Driver For</label>
+                            <br/>
+                            <select class="form-control input-hover" id="pv" ng-model="sData.vehicle" ng-options="pa.desc as pa.desc for pa in vehicleArray" style="padding: 0px 16px;height:25px;">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="pv1" style="color:red"></span>
+                          
+                 </div>
+                 <div class="col-xs-5">
+                        <label class="margin-bottom-0">
+                            <strong>Driver Location:</strong>
+                        </label>
+                        <br/>
+                        <input type="text" id="drvLocation" class="input-hover" ng-model="sData.drvLocation"  >
+                        <span id="driverData1" style="color:red"></span>
+                    </div>
+             </div>
+
+<div class="col-xs-12 margin-bottom-10"></div>
+ 
+        </div>
+       
+    </div>
+</div>
+<h3>Search License Expired Drivers </h3>
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+<div class="panel panel-default" style="overflow-x: auto;height: 383px;">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-xs-12 margin-bottom-10"></div>
+            
+ 
+             <div class="col-xs-12">
+                 <div class="col-sm-4">
+                    <label>
+                        From Date</label>
+                         <input type="text" id="fromDateEx" ng-model="dlData.DLFromDate" style="height: 24px;" datepicker-popup="dd-MM-yyyy" is-open="openedStart1"   datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="experienceDate($event)" placeholder="License Issue  Date"   />
+                </div>
+                <div class="col-sm-4">
+                    <label>
+                        To Date</label>
+                    <input type="text" id="ToDateEx" ng-model="dlData.DLToDate" style="height: 24px;" datepicker-popup="dd-MM-yyyy"   is-open="openToDate1"  datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="experienceDate1($event)" placeholder="License Issue Date"/>
+                </div>
+                <div class="col-xs-4">
+                        <button class="pull-right btn btn-labeled btn-primary" style="padding-top: 5px;
+    padding-bottom: 5px;" ng-click="searchDLExpiryDriverDetails(dlData)">
+                            <span class="btn-label"><i class="fa fa-search"></i>
+                           </span>Search Details</button>
+                    </div>
+             </div>
+
+<div class="col-xs-12 margin-bottom-10"></div>
+        </div>
+       
+    </div>
+</div>
+<script type="text/ng-template" id="/addDriver.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> New Driver
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak ng-init ="getCities()">
+        <div class="row margin-bottom-10">
+            <div class="col-md-10">
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-4 col-border" ng-style="(count > 0 && driver.firstName1 == null) && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Name As Per Bank Name</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="firstName" ng-model="driver.firstName" placeholder="First Name" maxlength="20" allow-pattern="[a-z\s]" />
+                            <span id="firstName1" ng-model="driver.firstName1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border" ng-style="count > 0 && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">&nbsp;</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="middleName" ng-model="driver.middleName" placeholder="Middle Name" maxlength="20" allow-pattern="[a-z\s]" />
+                            <span id="middleName1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border" ng-style="count > 0 && driver.lastName1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">&nbsp;</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="lastName" ng-model="driver.lastName" placeholder="Last Name" maxlength="20" allow-pattern="[a-z\s]" />
+                            <span id="lastName1" style="color:red"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-4 col-border" ng-style="count > 0 && driver.cellNumber1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Mobile Number</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="cellNumber" ng-model="driver.cellNumber" placeholder="Mobile Number" ng-blur="verifyMobile(driver.cellNumber)" maxlength=10 numbers-only="numbers-only" />
+                            <span id="cellNumber1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border">
+                            <label class="margin-bottom-0">Emergency Number</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="emergencyNumber" ng-model="driver.emergencyNumber" placeholder="Mobile Number" maxlength=10 minlength=10 numbers-only="numbers-only" />
+                            <span id="mobileNumber1" style="color:red"></span>
+                        </div>
+
+
+                        <div class="col-md-4 col-border">
+                            <label class="margin-bottom-0">Birth Date</label>
+                            <br/>
+                             <input type="text" id="bdate" datepicker-popup="yyyy-MM-dd" ng-model="driver.bdate" is-open="openBirthDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openStart1($event)" placeholder="bdate" />
+                            <span id="bdate1" style="color:red"></span>
+                        </div>
+
+
+
+
+                         <div class="col-md-4 col-border">
+                            <label class="margin-bottom-0">Experience</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="experience" ng-model="driver.experience" placeholder="Experience " maxlength=2 minlength=1 numbers-only="numbers-only" />
+                            <span id="experience1" style="color:red"></span>
+                        </div>
+
+
+
+                        <div class="col-md-4 col-border" ng-style="count > 0 && driver.isLuxury1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                        <label class="margin-bottom-0">Car Type</label>
+                            <br/>
+                            <select class="form-control input-hover" id="isLuxury" ng-model="driver.isLuxury" ng-options="sa.desc as sa.desc for sa in luxuryArray" style="padding: 0px 16px;height:25px;">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="isLuxury1" style="color:red"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-4 col-border">
+                            <label class="margin-bottom-0">
+                                <strong>License Expiry Date</strong>
+                            </label>
+                            <br/>
+                            <input type="text" id="trDate" datepicker-popup="yyyy-MM-dd" ng-model="driver.trDate" is-open="openedStart" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openStart($event)" placeholder="TR Date" />
+                            <br/>
+                            <span id="trDate1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border">
+                            <label class="margin-bottom-0">
+                                <strong></strong>
+                            </label>
+                            <br/>
+                            <input type="text" id="ntDate" datepicker-popup="yyyy-MM-dd" ng-model="driver.ntDate" is-open="openToDate" datepicker-options="dateOptions" close-text="Close" class="input-hover " ng-click="openedToDate($event)" placeholder="NT Date" />
+                            <br/>
+                            <span id="ntDate1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border">
+                            <label class="margin-bottom-0">Driver Batch</label>
+                            <br/>
+                            <select class="form-control input-hover" id="driverBatch" ng-model="driver.driverBatch" ng-options="sa.desc as sa.desc for sa in driverBatchArray" style="padding: 0px 16px;height:25px;">
+                                <option value="">--Select Batch--</option>
+                            </select>
+                            <span id="driverBatch1" style="color:red"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-4 col-border" ng-init="driver.status=selectedStatus" ng-style="count > 0 && driver.status1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Status</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="status" ng-model="driver.status" placeholder="Status" readonly/>
+
+                            
+                            <span id="status1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border" ng-style="count > 0 && driver.driverCode1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Driver Code</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="driverCode" ng-model="driver.driverCode" placeholder="Driver Code" numbers-only="numbers-only" />
+                            <span id="driverCode1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border" ng-style="count > 0 && user.status1 == null && {'padding-bottom': '23px'}  || count == 0  && {} " >
+                            <label class="margin-bottom-0">Operation City</label>
+                            <br/>
+                            <select class="form-control input-hover" id="city" ng-model="driver.city" ng-options="sa as sa for sa in cityAt" style="padding: 0px 16px;height:25px;">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="city1" style="color:red"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">Driver Address</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="freeAddress" ng-model="driver.freeAddress" placeholder="Driver Address" />
+                            <span id="freeAddress1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-6 col-border" ng-style="count > 0 && driver.currentaddr1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Driver Location</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="currentaddr" ng-model="driver.currentaddr" placeholder="Driver Map Location"  />
+                            <span id="currentaddr1" style="color:red"></span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-12 col-border" ng-style="count > 0 && driver.permanentaddr1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Permanent Address</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="permanentaddr" ng-model="driver.permanentaddr" placeholder="Permanent Address" ng-autocomplete googleplace="" />
+                            <span id="permanentaddr1" style="color:red"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-4 col-border" ng-style="count > 0 && driver.bankname1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Bank Name</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="bankname" ng-model="driver.bankname" placeholder="Bank Name" allow-pattern="[a-z\s]" />
+                            <span id="bankname1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border" ng-style="count > 0 && driver.accno1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Account Number</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="accno" ng-model="driver.accno" placeholder="Account Number" minlength="3" maxlength="15" numbers-only="numbers-only" />
+                            <span id="accno1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border" ng-style="count > 0 && driver.ifsc1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">IFSC Code</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="ifsc" ng-model="driver.ifsc" placeholder="IFSC Code" minlength="3" maxlength="15" />
+                            <span id="ifsc1" style="color:red"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <img src="app/img/photo-user.png" style="width: 100%;" />
+            </div>
+        </div>
+        <div class="row" style="margin-top: 3%;">
+            <div class="col-xs-12" style="margin-bottom: 20px;">
+                <div class="col-xs-6" style="text-align:right">
+                    <button class="mb-sm btn btn-success" ng-click="verifyDriverCode1(driver)" ng-disabled="submitUserBtn">Add Driver</button>
+                </div>
+                <div class="col-xs-6">
+                    <button class="mb-sm btn btn-danger" ng-click="cancel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>

@@ -1,0 +1,222 @@
+ <h3>Enquiry Form</h3>
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+
+<div class="row">
+    <div class="col-xs-6">
+        <h3>Customer Enquiry Form</h3>
+        <div class="panel panel-default" style="overflow-x: auto;height: 676px;     width: 574px;">
+    <div class="panel-heading">
+         <div class="row">
+            <div class="col-md-10">
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+      <div class="col-xs-6"  >
+                            <label class="margin-bottom-0">First Name</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="firstName" ng-model="customer.firstName" placeholder="First Name" allow-pattern="[a-z\s]" />
+                            <span id="firstName1" ng-model="customer.firstName1" style="color:red"></span>
+                        </div>
+                        <div class="col-xs-6"></div></div></div></div></div>
+                         
+                        <div class="row">
+            <div class="col-md-10">
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-xs-6"  >
+                            <label class="margin-bottom-0">Last Name</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="lastName" ng-model="customer.lastName" placeholder="Last Name" allow-pattern="[a-z\s]" />
+                            <span id="lastName1" style="color:red"></span>  
+                        </div> <div class="col-xs-6"></div></div></div></div></div> 
+                        <div class="row">
+            <div class="col-md-10">
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">     
+             <div class="col-xs-6" ng-style="count > 0 && customer.cellNumber1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Mobile Number</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="cellNumber" ng-model="customer.cellNumber" placeholder="Mobile Number" ng-blur="verifyMobile(customer.cellNumber)"   numbers-only="numbers-only" />
+                            <span id="cellNumber1" style="color:red"></span>  
+                        </div><div class="col-xs-6"></div></div></div></div></div> 
+                        <div class="row">
+            <div class="col-md-10">
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">    
+                         <div class="col-xs-6 " ng-style="count > 0 && user.status1 == null && {'padding-bottom': '23px'}  || count == 0  && {} " >
+                            <label class="margin-bottom-0">Operation City</label>
+                            <br/>
+                            <select class="form-control input-hover" id="operationCity" ng-model="customer.operationCity" ng-options="sa as sa for sa in cityAt" style="padding: 0px 16px;height:25px;">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="operationCity1" style="color:red"></span> 
+                        </div><div class="col-xs-6"></div></div></div></div></div>
+            <div class="row">
+            <div class="col-md-10">
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">    
+                         <div class="col-xs-6 " >
+                            <label class="margin-bottom-0">Email Id</label>
+                            <br/>
+                            <input type="text" id="email" class="input-hover" ng-model="customer.email" placeholder="Email Id" />
+                            <span id="email1" style="color:red"></span> 
+                        </div><div class="col-xs-6"></div></div>
+                    </div>
+                </div>
+            </div>     
+
+            <div class="row">
+            <div class="col-md-10">
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">    
+                         <div class="col-xs-6 " >
+                            <label class="margin-bottom-0">Address</label>
+                            <br/>
+                            <input type="text" id="address" class="input-hover" ng-model="customer.address" placeholder="Address" allow-pattern="[a-z\s]" />
+                            <span id="address1" style="color:red"></span> 
+                        </div><div class="col-xs-6"></div></div>
+                    </div>
+                </div>
+            </div>     
+
+                         
+                        <div class="col-xs-6" style="text-align:right">
+                    <button class="mb-sm btn btn-success" ng-click="addCustomer(customer)" ng-disabled="submitUserBtn">Add Customer</button>
+                </div>
+                <br>
+               <hr/>  
+                     
+                    
+              <div class="row" ng-show="roleId === '1'">
+            <div class="col-sm-12" style="border: 2px transparent;padding: 10px;">
+                <div class="col-sm-4">
+                    <label>
+                        From Date</label>
+                    <input type="text" ng-model="frmDate" style="height: 24px;" datepicker-popup="dd-MM-yyyy" is-open="openedStart" min-date="minDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openStart($event)" ng-blur="changeMin(frmDate)" />
+                    <span id="fromDateId" style="color:red"></span>
+                </div>
+                <div class="col-sm-4">
+                    <label>
+                        To Date</label>
+                    <input type="text" ng-model="toDate" style="height: 24px;" datepicker-popup="dd-MM-yyyy"   is-open="openToDate" min-date="minDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openedToDate($event)"   />
+                    <span id="toDateId" style="color:red"></span>
+                </div>
+                <div class="col-sm-4">
+                    <div ng-controller="dailyBookingCtrl" style="float: right">
+                        <button class="mb-sm btn  btn-primary" style="" ng-click="searchEnquiryDetails(frmDate, toDate, search = 'customer')">
+                            <span class="btn-label"> 
+                           </span>Search Enquiry</button>
+                    </div>
+                </div>
+            </div>
+        </div>   
+                 
+                 
+             
+           
+            
+        
+       
+    </div>
+</div>
+        </div>
+    
+
+    <div class="row">
+    <div class="col-xs-6">
+        <h3>Driver Enquiry Form</h3>
+        <div class="panel panel-default" style="overflow-x: auto;height: 676px;     width: 574px;">
+    <div class="panel-heading">
+         <div class="row">
+            <div class="col-md-10">
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+      <div class="col-xs-6"  >
+                            <label class="margin-bottom-0">First Name</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="dfirstName" ng-model="driver.firstName" placeholder="First Name" allow-pattern="[a-z\s]" />
+                            <span id="dfirstName1"   style="color:red"></span>
+                        </div>
+                        <div class="col-xs-6"></div></div></div></div></div>
+                         
+                        <div class="row">
+            <div class="col-md-10">
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-xs-6"  >
+                            <label class="margin-bottom-0">Last Name</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="dlastName" ng-model="driver.lastName" placeholder="Last Name" allow-pattern="[a-z\s]" />
+                            <span id="dlastName1" style="color:red"></span>  
+                        </div> <div class="col-xs-6"></div></div></div></div></div> 
+                        <div class="row">
+            <div class="col-md-10">
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">     
+             <div class="col-xs-6" ng-style="count > 0 && driver.dcellNumber1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Mobile Number</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="dcellNumber" ng-model="driver.cellNumber" placeholder="Mobile Number" ng-blur="verifyMobile1(driver.cellNumber)"   numbers-only="numbers-only" />
+                            <span id="dcellNumber1" style="color:red"></span>  
+                        </div><div class="col-xs-6"></div></div></div></div></div> 
+                        <div class="row">
+            <div class="col-md-10">
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">    
+                         <div class="col-xs-6 " ng-style="count > 0 && user.status1 == null && {'padding-bottom': '23px'}  || count == 0  && {} " >
+                            <label class="margin-bottom-0">Operation City</label>
+                            <br/>
+                            <select class="form-control input-hover" id="doperationCity" ng-model="driver.operationCity" ng-options="sa as sa for sa in cityAt" style="padding: 0px 16px;height:25px;">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="doperationCity1" style="color:red"></span> 
+                        </div><div class="col-xs-6"></div></div></div></div></div>
+                         
+                        <div class="col-xs-6" style="text-align:right">
+                    <button class="mb-sm btn btn-success" ng-click="addDriver(driver)" ng-disabled="submitUserBtn1">Add Driver</button>
+                </div>
+                
+                     
+             <br>       
+            <hr/>    
+                 
+                 
+       <div class="row" ng-show="roleId === '1'">
+            <div class="col-sm-12" style="border: 2px transparent;padding: 10px;">
+                <div class="col-sm-4">
+                    <label>
+                        From Date</label>
+                    <input type="text" ng-model="frmDate1" style="height: 24px;" datepicker-popup="dd-MM-yyyy" is-open="openedStart1" min-date="minDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openStart1($event)" ng-blur="changeMin(frmDate)" />
+                    <span id="fromDateId1" style="color:red"></span>
+                </div>
+                <div class="col-sm-4">
+                    <label>
+                        To Date</label>
+                    <input type="text" ng-model="toDate1" style="height: 24px;" datepicker-popup="dd-MM-yyyy" ng-model="booking.bookingToDate" is-open="openToDate1" min-date="minDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openedToDate1($event)"   />
+                    <span id="toDateId" style="color:red"></span>
+                </div>
+                <div class="col-sm-4">
+                    <div ng-controller="dailyBookingCtrl" style="float: right">
+                        <button class="mb-sm btn  btn-primary" style="" ng-click="searchEnquiryDetails(frmDate1, toDate1, search = 'driver')">
+                            <span class="btn-label"> 
+                           </span>Search Enquiry</button>
+                    </div>
+                </div>
+            </div>
+        </div>      
+           
+            
+        
+       
+    </div>
+</div>
+        </div>
+</div>
+
+
+
+
+ 

@@ -1,0 +1,80 @@
+<h3>Analysis Result By User
+</h3>
+<style type="text/css">
+table th {
+    text-align: center;
+}
+</style>
+<div class="panel panel-default" style="overflow-x: auto">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="col-sm-4">
+                    <button class="pull-left btn btn-labeled btn-primary" ng-click="SearchCriteria()">
+                        <span class="btn-label"><i class="fa fa-chevron-left"></i>
+                           </span>Back</button>
+                </div>
+                <div class="col-sm-8">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <table class="table" border="2" width="100%">
+            <tr>
+                <td colspan="2">
+                    <font size="5"><b><u>Details:</u></b></font>
+                    <br>
+                    <br>
+                    <div class="col-xs-12">
+                        <div class="col-xs-4">
+                            <label>
+                                <h4>User Name: {{analysisUserName}}</h4></label>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="col-xs-12">
+                        <div class="col-xs-02">
+                        </div>
+                        <div class="col-xs-08">
+                            <div class="table-responsive">
+                                <table border="2" width="100%">
+                                    <thead>
+                                        <tr>
+                                            
+                                            <th>
+                                                <font size="4">Total Bookings</font>
+                                            </th>
+                                            <th>
+                                                <font size="4">Total Monthly Request</font>
+                                            </th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                           
+                                            <td align="center">
+                                                <font size="4">{{analysisDataByUser[0].bookingCount}}</font>
+                                            </td>
+                                            <td align="center">
+                                                <font size="4">{{analysisDataByUser[0].monthlyRequestCount}}</font>
+                                            </td>
+                                            
+                                        </tr>
+                                       
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-xs-02">
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

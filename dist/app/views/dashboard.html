@@ -1,0 +1,30 @@
+<div ng-controller="LoginFormController">
+
+<h3>Dashboard
+   <!-- small {{ 'dashboard.WELCOME' | translate:{ appName: app.name } }}  !-->
+</h3>
+<!-- START widgets box-->
+<div class="row">
+    <div ng-repeat='tile in tileList track by $index'>
+        <div class="col-lg-3 col-sm-6">
+            <!-- START widget-->
+            <a href="{{tile.url}}" style="text-decoration:none">
+                <div class="panel widget {{tile.outsideColor}}">
+                    <div class="row row-table">
+                        <div class="col-xs-4 text-center {{tile.insideColor}} pv-lg">
+
+                            <em class="{{tile.iconName}} fa-3x" ng-show="tile.tileName !== 'Manage Booking'"></em>
+                            <img src="app/img/lineup.png" style="width:30%" ng-show="tile.tileName === 'Manage Booking'"/>
+                        </div>
+                        <div class="col-xs-8 pv-lg">
+                            <div class="h2 mt0">{{tile.initial}}</div>
+                            <div class="text-uppercase" style="font-size:12px">{{tile.tileName}}</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+</div>
+<!-- END widgets box-->

@@ -1,0 +1,538 @@
+<h3>Add Driver with Car </h3>
+<!-- Row Select Example-->
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+<div class="panel panel-default" style="overflow-x: auto;height: 170px;" >
+    <div class="panel-heading">
+<div class="col-xs-12">
+        <div class="col-xs-3">
+
+        </div>
+
+
+ 
+         <div class="col-xs-6 margin-bottom-10" ng-init="fetchsearchDrvList()">
+                        <label class="margin-bottom-0"><span>Driver Mobile Number</span></label>
+                        <angucomplete-alt id="mobileNumber" placeholder="Search driver by name or mobile" pause="500" initial-value="" ng-click="drvSearchMobileSelected()" selected-object="search.mobileNumber2" local-data="searchDrvList" search-fields="id,mobileNumber,driverName" title-field="driverSearchData" minlength=1 maxlength=10 input-class=" input-hover" match-class="highlight" focus-me="shouldBeFocus"/>
+                        
+                    </div>
+        <br> 
+        <div class="col-xs-3">
+             <button class="pull-right btn btn-labeled btn-primary" style="padding-top: 5px;
+    padding-bottom: 5px;" ng-click="driverNewCar()">
+            Add Driver Car</button>
+</div>
+
+</div>
+<div class="col-xs-12">
+ <div class="col-xs-3">
+        </div>
+            <div class="col-xs-6 margin-bottom-10"  >
+<span id="mobile1" style="color:red"></span>
+</div></div>
+
+</div></div>
+  <script type="text/ng-template" id="/carType.html" >
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Car Types
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 3%;" ng-init="searchDriverCarDetails()">
+            <div class="col-xs-12" style = "color: #0722ab">
+                    The Existing Cars Registered with US
+                <ol style = "color: #3e59de;"> 
+                    <li ng-repeat="driver in carData track by $index"> 
+                        <a ng-click="openCar(driver.carRegNo)"> {{driver.carName}} 
+                 {{driver.carRegNo}} </a></li> </ol>
+                  </div>     
+            </div>
+    </div>
+     <div class="row" style="margin-top: 3%;">
+        <div class="col-xs-12" style="margin-bottom: 20px;">
+            <div class="col-xs-6">         
+            
+                    <label class="margin-bottom-0">Car Type</label>
+                    <br/>
+                    <select class="form-control input-hover" id="basicType" ng-model="cartype.basicType" ng-options="sa.desc as sa.desc for sa in basicType" style="padding: 0px 16px;height:25px;">
+                    <option value="">--Select--</option>
+                    </select>
+                    <span id="basicType1" style="color:red"></span>
+            
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 3%;">
+        <div class="col-xs-12" style="margin-bottom: 20px;">
+            <div class="col-xs-6">         
+            
+                    <label class="margin-bottom-0">Car Category</label>
+                    <br/>
+                    <select class="form-control input-hover" id="category" ng-model="cartype.category" ng-options="sa.desc as sa.desc for sa in caetegory" style="padding: 0px 16px;height:25px;">
+                    <option value="">--Select--</option>
+                    </select>
+                    <span id="category1" style="color:red"></span>
+            
+            </div>
+        </div>
+    </div>
+     <div class="row" style="margin-top: 3%;">
+        <div class="col-xs-12" style="margin-bottom: 20px;">
+            
+             <div class="col-xs-6">
+                    <button class="mb-sm btn btn-danger" ng-click="cancelCarType()">Back</button>
+             </div>
+             <div class="col-xs-6">
+                  <button class="pull-right btn btn-success btn-primary" style="padding-top: 5px;
+                padding-bottom: 5px;" ng-click="driverCarType(cartype)">
+                  Next</button>
+             </div>
+        </div>
+    </div>
+
+
+ 
+     
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/carDetails.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Car Details
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak  >
+        <div class="row margin-bottom-10">
+            <div class="col-md-10">
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-xs-6">         
+            
+                            <label class="margin-bottom-0">Car Name</label>
+                            <br/>
+                            <select class="form-control input-hover" id="carname" ng-model="cardetails.carname" ng-options="sa.desc as sa.desc for sa in carname" style="padding: 0px 16px;height:25px;">
+                            <option value="">--Select--</option>
+                            </select>
+                            <span id="carname1" style="color:red"></span>
+            
+                      </div>
+                            
+                       <div class="col-xs-6">         
+            
+                            <label class="margin-bottom-0">Car Varient :</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="carvarient" ng-model="cardetails.carvarient" placeholder="Car Varient" />
+                             
+                             
+                            <span id="carvarient1" style="color:red"></span>
+            
+                      </div>
+                    </div>
+                </div>
+                
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+
+                        <div class="col-xs-6">         
+            
+                            <label class="margin-bottom-0">Insurance company name :</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="insurancecompanyname" ng-model="cardetails.insurancecompanyname" placeholder="Insurance company name " />
+                             
+                            </select>
+                            <span id="insurancecompanyname1" style="color:red"></span>
+            
+                      </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">Engine Number :</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="enginenumber" ng-model="cardetails.enginenumber" placeholder="Engine Number" />
+                            <span id="enginenumber1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">Chassis Number :</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="chassisnumber" ng-model="cardetails.chassisnumber" placeholder="Chassis Number"/>
+                            <span id="chassisnumber1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">Car Registration No :</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="carregistrationnumber" ng-model="cardetails.carregistrationnumber" ng-blur="verifyCarRegNo(cardetails.carregistrationnumber)" allow-pattern="[A-Z0-9\s]" placeholder="Car Registration No" minlength=9 maxlength=10 capitalize/>
+                            <span id="carregistrationnumber1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">Car Manufacturing Date :</label>
+                            <br/>
+                            <input type="text" id="carManDate" datepicker-popup="dd-MM-yyyy" ng-model="cardetails.carManDate" is-open="carManDate1" max-date="dtmax" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="carManDate($event)" placeholder="Manufacturing Date" readonly />
+                            <span id="carManDate1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">RC & Insurance Copy & Documented ? :</label>
+                            <br/>
+                            <select class="form-control input-hover" id="rcinsurance" ng-model="cardetails.rcinsurance" ng-options="sa.desc as sa.desc for sa in rc" style="padding: 0px 16px;height:25px;">
+                            <option value="">--Select--</option>
+                            </select>
+                            <span id="rcinsurance1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">PV Date :</label>
+                            <br/>
+                            <input type="text" id="pvDate" datepicker-popup="dd-MM-yyyy" ng-model="cardetails.pvDate" is-open="pvDate1" datepicker-options="dateOptions" max-date="dtmax" close-text="Close" class="input-hover" ng-click="pvDate($event)" placeholder="PV Date" readonly/>
+                            <span id="pvDate1" style="color:red"></span>
+                            <br>
+                        </div>
+                        <div class="col-md-6 col-border">
+
+                            <label class="margin-bottom-0">Permit Expiry Date:</label>
+                            <br/>
+                            <input type="text" id="permitExDate" datepicker-popup="dd-MM-yyyy" ng-model="cardetails.PermitExDate" is-open="PermitExDate1" min-date="mindate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="PermitExDate($event)" placeholder="Permit Expiry Date" readonly />
+                            <span id="permitExDate2" style="color:red"></span>
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">Vehical Passing Date :</label>
+                            <br/>
+                            <input type="text" id="vehPassDate" datepicker-popup="dd-MM-yyyy" ng-model="cardetails.vehPassDate" is-open="vehPassDate1" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="vehPassDate($event)" placeholder="Vehical Passing Date" readonly/>
+                            <span id="vehPassDate2" style="color:red"></span>
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">KM Covered:</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="kmcovered" ng-model="cardetails.kmcovered" placeholder="KM Covered" numbers-only="numbers-only"/>
+                            <span id="kmcovered1" style="color:red"></span>
+                        </div>
+
+                        <div class="col-md-8 col-border">
+                            <label class="margin-bottom-0">Remark:</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="remark" ng-model="cardetails.remark" placeholder="Remark"/>
+                            <span id="remark1" style="color:red"></span>
+                        </div>
+                       
+        </div>
+        
+        <br><br>
+        <br><br>
+         <div class="row" style="margin-top: 3%;">
+        <div class="col-xs-12" style="margin-bottom: 20px;">
+            <br>
+             <div class="col-xs-6">
+
+                    <button class="mb-sm btn btn-danger" ng-click="backtocartype()">Back</button>
+             </div>
+             <div class="col-xs-6">
+                  <button class="pull-right btn btn-success btn-primary" style="padding-top: 5px;
+                padding-bottom: 5px;" ng-click="driverCarDetails(cardetails)">
+                  Next</button>
+             </div>
+        </div>
+    </div>
+    </div>
+     
+</script>
+  <script type="text/ng-template" id="/showCar.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Car Details
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak  >
+        <div class="row margin-bottom-10">
+            <div class="col-md-10">
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-xs-6">         
+            
+                            <label class="margin-bottom-0">Car Name</label>
+                            <br/>
+                            <select class="form-control input-hover" id="carname" ng-model="car.carName" ng-options="sa.desc as sa.desc for sa in carname" style="padding: 0px 16px;height:25px;"
+                            disabled="true">
+                            <option value="">--Select--</option>
+                            </select>
+                            <span id="carname1" style="color:red"></span>
+            
+                      </div>
+                            
+                       <div class="col-xs-6">         
+            
+                            <label class="margin-bottom-0">Car Varient :</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="carvarient" ng-model="car.carVariant" placeholder="Car Varient" readonly/>
+                             
+                             
+                            <span id="carvarient1" style="color:red"></span>
+            
+                      </div>
+                    </div>
+                </div>
+                 <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-xs-6">         
+            
+                            <label class="margin-bottom-0">Car Type</label>
+                            <br/>
+                            <input type="test"  class="form-control input-hover" id="carType" ng-model="cartype.carType"  style="padding: 0px 16px;height:25px;" readonly>
+                             
+                            <span id="carType1" style="color:red"></span>
+            
+                      </div>
+                            
+                       <div class="col-xs-6">         
+            
+                            <label class="margin-bottom-0">Car Catagory :</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="carCategory" ng-model="cartype.carCategory" placeholder="Car Catagory" readonly />
+                             
+                             
+                            <span id="carCategory1" style="color:red"></span>
+            
+                      </div>
+                    </div>
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+
+                        <div class="col-xs-6">         
+            
+                            <label class="margin-bottom-0">Insurance company name :</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="insurancecompanyname" ng-model="car.carInsuranceCompany" placeholder="Insurance company name "  readonly/>
+                             
+                            </select>
+                            <span id="insurancecompanyname1" style="color:red"></span>
+            
+                      </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">Engine Number :</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="enginenumber" ng-model="car.engineNo" placeholder="Engine Number"  readonly/>
+                            <span id="enginenumber1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">Chassis Number :</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="chassisnumber" ng-model="car.chassisNo" placeholder="Chassis Number" readonly/>
+                            <span id="chassisnumber1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">Car Registration No :</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="carregistrationnumber" ng-model="car.carRegistrationNo" placeholder="Car Registration No" readonly/>
+                            <span id="carregistrationnumber1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">Car Manufacturing Date :</label>
+                            <br/>
+                            <input type="text" id="carManDate" datepicker-popup="dd-MM-yyyy" ng-model="car.manufacturingDate" is-open="carManDate1" max-date="dtmax" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="carManDate($event)" placeholder="Manufacturing Date" readonly/>
+                            <span id="carManDate1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">RC & Insurance Copy & Documented ? :</label>
+                            <br/>
+                            <input type="text" class="form-control input-hover" id="rcinsurance" ng-model="car.rcInsuranceCopyDocumented"  readonly>
+                            
+                            <span id="rcinsurance1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">PV Date :</label>
+                            <br/>
+                            <input type="text" id="pvDate" datepicker-popup="dd-MM-yyyy" ng-model="car.pvDate" is-open="pvDate1" datepicker-options="dateOptions" max-date="dtmax" close-text="Close" class="input-hover" ng-click="pvDate($event)" placeholder="PV Date" readonly/>
+                            <span id="pvDate1" style="color:red"></span>
+                            <br>
+                        </div>
+                        <div class="col-md-6 col-border">
+
+                            <label class="margin-bottom-0">Permit Expiry Date:</label>
+                            <br/>
+                            <input type="text" id="permitExDate" datepicker-popup="dd-MM-yyyy" ng-model="car.permitExpiryDate" is-open="PermitExDate1" min-date="mindate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="PermitExDate($event)" placeholder="Permit Expiry Date" readonly/>
+                            <span id="permitExDate2" style="color:red"></span>
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">Vehical Passing Date :</label>
+                            <br/>
+                            <input type="text" id="vehPassDate" datepicker-popup="dd-MM-yyyy" ng-model="car.vehiclePassingDate" is-open="vehPassDate1" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="vehPassDate($event)" placeholder="Vehical Passing Date" readonly/>
+                            <span id="vehPassDate2" style="color:red"></span>
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">KM Covered:</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="kmcovered" ng-model="car.vehicleKmAsOnDate" placeholder="KM Covered" numbers-only="numbers-only" readonly/>
+                            <span id="kmcovered1" style="color:red"></span>
+                        </div>
+
+                        <div class="col-md-8 col-border">
+                            <label class="margin-bottom-0">Remark:</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="remark" ng-model="car.remark" placeholder="Remark" readonly/>
+                            <span id="remark1" style="color:red"></span>
+                        </div>
+                       
+        </div>
+        
+          
+    </div>
+     
+</script>
+ <script type="text/ng-template" id="/carVerification.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;">Details Verifications
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak  >
+        <div class="row margin-bottom-10">
+            <div class="col-md-10">
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-xs-6">         
+            
+                            <label class="margin-bottom-0">Car Name</label>
+                            <br/>
+                            <select class="form-control input-hover" id="carname" ng-model="cardetails.carname" ng-options="sa.desc as sa.desc for sa in carname" style="padding: 0px 16px;height:25px;" disabled>
+                            <option value="">--Select--</option>
+                            </select>
+                            
+            
+                      </div>
+                            
+                       <div class="col-xs-6">         
+            
+                            <label class="margin-bottom-0">Car Varient :</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="carvarient" ng-model="cardetails.carvarient" readonly />
+                             
+                            </select>
+                            
+            
+                      </div>
+                    </div>
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+
+                        <div class="col-xs-6">         
+            
+                            <label class="margin-bottom-0">Car Type</label>
+                    <br/>
+                    <select class="form-control input-hover" id="basicType" ng-model="cartype.basicType" ng-options="sa.desc as sa.desc for sa in basicType" style="padding: 0px 16px;height:25px;" disabled>
+                    <option value="">--Select--</option>
+                    </select>
+                     
+            
+                      </div>
+                      <div class="col-xs-6">         
+            
+                           <label class="margin-bottom-0">Car Category</label>
+                    <br/>
+                    <select class="form-control input-hover" id="category" ng-model="cartype.category" ng-options="sa.desc as sa.desc for sa in caetegory" style="padding: 0px 16px;height:25px;" disabled>
+                    <option value="">--Select--</option>
+                    </select>
+                     
+            
+                      </div>
+                        <div class="col-xs-6">         
+            
+                            <label class="margin-bottom-0">Insurance company name :</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="insurancecompanyname" ng-model="cardetails.insurancecompanyname" readonly  />
+                             
+                            </select>
+                            
+            
+                      </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">Engine Number :</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="enginenumber" ng-model="cardetails.enginenumber" readonly/>
+                            
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">Chassis Number :</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="chassisnumber" ng-model="cardetails.chassisnumber" readonly/>
+                          
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">Car Registration No :</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="carregistrationnumber" ng-model="cardetails.carregistrationnumber" readonly/>
+                            
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">Car Manufacturing Date :</label>
+                            <br/>
+                            <input type="text" id="carManDate"  ng-model="cardetails.carManDate"      class="input-hover date"   readonly />
+                            
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">RC & Insurance Copy & Documented ? :</label>
+                            <br/>
+                            <select class="form-control input-hover" id="rcinsurance" ng-model="cardetails.rcinsurance" ng-options="sa.desc as sa.desc for sa in rc" style="padding: 0px 16px;height:25px;" disabled>
+                            <option value="">--Select--</option>
+                            </select>
+                           <br>
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">PV Date :</label>
+                            <br/>
+                            <input type="text" id="pvDate"   ng-model="cardetails.pvDate"  class="input-hover"   readonly />
+                          
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">Permit Expiry Date:</label>
+                            <br/>
+                            <input type="text" id="PermitExDate"  ng-model="cardetails.PermitExDate"   class="input-hover"   readonly />
+                           
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">Vehical Passing Date :</label>
+                            <br/>
+                             <input type="text" id="vehPassDate"   ng-model="cardetails.vehPassDate"  datepicker-options="dateOptions"  class="input-hover"  e-dateformat="dd-MM-yyyy"  readonly />
+                            
+                        </div>
+                        <div class="col-md-6 col-border">
+                            <label class="margin-bottom-0">KM Covered:</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="kmcovered" ng-model="cardetails.kmcovered" readonly/>
+                            
+                        </div>
+
+                        <div class="col-md-8 col-border">
+                            <label class="margin-bottom-0">Remark:</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="remark" ng-model="cardetails.remark" readonly/>
+                            
+                        </div>
+                         
+        </div>
+        
+        <br><br>
+        <br><br>
+         <div class="row" style="margin-top: 3%;">
+        <div class="col-xs-12" style="margin-bottom: 20px;">
+            <br>
+             <div class="col-xs-6">
+                    <button class="mb-sm btn btn-danger" ng-click="backtocardetails()">Back</button>
+             </div>
+             <div class="col-xs-6">
+                  <button class="pull-right btn btn-success btn-primary" style="padding-top: 5px;
+                padding-bottom: 5px;" ng-click="addCarDetails(cartype,cardetails)">
+                  Confirm</button>
+             </div>
+        </div>
+    </div>
+    </div>
+</script>
+

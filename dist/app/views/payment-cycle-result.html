@@ -1,0 +1,42 @@
+<h3>Payment Cycle Report
+</h3>
+<style type="text/css">
+table th {
+    text-align: left !important;
+} 
+</style>
+<div class="panel panel-default" style="overflow-x: auto" ng-init="getPaymentCycleDetails()">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-sm-12" style="border: 2px transparent;padding: 10px;">
+                <div class="col-sm-2">
+                     <button class="pull-left btn btn-labeled btn-primary"  style ="padding-top: -2px;
+                    padding-bottom: -2px;" ng-click="backToSearchPaymentCycle()">
+                        <span class="btn-label"><i class="fa fa-chevron-left"></i>
+                     </span>
+                    Back</button>
+                </div>
+                <div class="col-sm-8">
+                    
+                </div>
+               
+            </div>
+        </div>
+    </div>
+    <table ng-table="tableParams3" class="table table-striped table-bordered ng-table-rowselected" show-filter="true">
+        <tr ng-repeat="payment in $data | orderBy:'-createdDate'" ng-show="$data.length > 0">
+            <td title="'Payment ID'" filter="{ paymentId: 'text'}" sortable="'paymentId'" style="text-transform: capitalize;text-align:left" ng-click="paymentCycleFunction(payment)">{{payment.paymentId}}</td>
+            <td title="'Payment Cycle Name'" filter="{ cycleName: 'text'}" sortable="'cycleName'" style="text-transform: capitalize;text-align:left" ng-click="paymentCycleFunction(payment)">{{payment.cycleName}}</td>
+            <td title="'Payment Cycle Status'" filter="{ paymentCycleStatus: 'text'}" sortable="'paymentCycleStatus'" style="text-transform: capitalize;text-align:left" ng-click="paymentCycleFunction(payment)">{{payment.paymentCycleStatus}}</td>
+            <td title="'Created Date'" filter="{ createdDate: 'text'}" sortable="'createdDate'" style="text-transform: capitalize;text-align:left" ng-click="paymentCycleFunction(payment)">{{payment.createdDate}}</td>
+            
+        </tr>
+        <tr ng-show="$data.length == 0">
+            <td>No record found</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            
+        </tr>
+    </table>
+</div>

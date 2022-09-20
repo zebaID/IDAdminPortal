@@ -1,0 +1,274 @@
+<h3>Manage User</h3>
+<!-- Row Select Example-->
+<style type="text/css">
+table th {
+    text-align: left !important;
+}
+</style>
+<div class="panel panel-default" style="overflow-x: auto" ng-init="getUser();getCities()">
+    <div class="panel-heading">
+        
+        <div class="row">
+                         <div class="col-sm-4"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-6">
+                <div class="col-sm-8">
+                   
+                            
+                      
+                </div>
+                <div class="col-sm-4">
+                    <button class="pull-right btn btn-labeled btn-primary" 0.
+                    ng-click="newUser()">
+                        <span class="btn-label"><i class="fa fa-plus"></i>
+                           </span> Add User</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table ng-table="tableParams3" class="table table-striped table-bordered ng-table-rowselected" show-filter="true">
+        <tr ng-repeat="user in $data track by $index" ng-show="$data.length > 0">
+            
+            <td title="'Name'" filter="{ name: 'text'}" sortable="'name'" style="text-transform: capitalize;text-align: left;">{{user.name}}</td>
+            <td title="'Email'" filter="{ email: 'text'}" sortable="'email'" style="text-align: left;">{{user.email}}</td>
+            
+            <td title="'Contact Number'" filter="{ contactNo: 'text'}" sortable="'contactNo'" style="text-transform: capitalize;text-align: left;">{{user.contactNo}}</td>
+            <td title="'Role'" filter="{ role: 'text'}" sortable="'role'" style="text-transform: capitalize;text-align: left;">{{user.role}}</td>
+            <td title="'Operation City'" filter="{ operationCity: 'text'}" sortable="'operationCity'" style="text-transform: capitalize;text-align: left;">{{user.operationCity}}</td>
+            <td title="'Created Date'" sortable="'createdDate'" style="text-transform: capitalize;text-align: left;">{{user.createdDate |date:'dd/MM/yyyy'}}</td>
+            
+            <td title="'Edit'" style="text-align:left">
+                <button class="btn btn-sm btn-info" ng-click="update(user.conUserId)"><em class="fa fa-pencil-square-o"></em></button>
+
+            </td>
+            <td title="'Action'" filter="{ status: 'text'}" sortable="'status'" style="text-align:left;width: 10%">
+                <div ng-if="user.status == 'Active'">
+                    <button class="pull-right btn btn-labeled btn-primary" style="width: 95%;" ng-click="deactivate(user.conUserId)">
+                        Active</button>
+                </div>
+                <div ng-if="user.status == 'Blocked'">
+                    <button class="pull-right btn btn-labeled btn-danger" style="width: 95%;" ng-click="activate(user.conUserId)">
+                        Blocked</button>
+                </div>
+            </td>
+        </tr>
+        <tr ng-show="$data.length == 0">
+            <td>No record found</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
+</div>
+<script type="text/ng-template" id="/addUser.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> New User
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body"  ng-init ="getCities()" ng-cloak>
+        <div class="row">
+            <div class="col-md-10">
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-4 col-border" ng-style="(count > 0 && user.firstName1 == null) && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Name</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="firstName" ng-model="user.firstName" placeholder="First Name" allow-pattern="[a-z\s]" />
+                            <span id="firstName1" ng-model="user.firstName1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border" ng-style="count > 0 && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">&nbsp;</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="middleName" ng-model="user.middleName" placeholder="Middle Name" allow-pattern="[a-z\s]" />
+                            <span id="middleName1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border" ng-style="count > 0 && user.lastName1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">&nbsp;</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="lastName" ng-model="user.lastName" placeholder="Last Name" allow-pattern="[a-z\s]" />
+                            <span id="lastName1" style="color:red"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-6 col-border" ng-style="count > 0 && user.email1 == null && {'padding-bottom': '23px'}  || count ==0  && {} ">
+                            <label class="margin-bottom-0">Email Id</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="email" ng-model="user.email" placeholder="Email Id" ng-blur="verifyEmail(user.email)" />
+                            <span id="email1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-6 col-border" ng-style="count > 0 && user.cellNumber1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Mobile Number</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="cellNumber" ng-model="user.cellNumber" placeholder="Mobile Number" ng-blur="verifyMobile(user.cellNumber)" maxlength=10 minlength=10 numbers-only="numbers-only" />
+                            <span id="cellNumber1" style="color:red"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-6 col-border" ng-style="count > 0 && user.status1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Role</label>
+                            <br/>
+                             
+                            <select chosen="" data-placeholder="select role" multiple="multiple" class="chosen-select form-control select-hover" id="role" ng-model="user.role" ng-options="sa.id as sa.desc for sa in roleArray" style="padding: 0px 16px;height:25px; width: 100%;">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="role1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-6 col-border" ng-style="count > 0 && user.status1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Status</label>
+                            <br/>
+                            <select class="form-control input-hover" id="status" ng-model="user.status" ng-options="sa.desc as sa.desc for sa in statusArray" style="padding: 0px 16px;height:25px;">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="status1" style="color:red"></span>
+                        </div>
+                       
+                    </div>
+                    
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                         <div class="col-md-6 col-border" ng-style="count > 0 && user.status1 == null && {'padding-bottom': '23px'}  || count == 0  && {} " >
+                            <label class="margin-bottom-0">Location</label>
+                            <br/>
+                            <select class="form-control input-hover" id="city" ng-model="user.city" ng-options="sa as sa for sa in cityAt" style="padding: 0px 16px;height:25px;">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="city1" style="color:red"></span>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+            <div class="col-md-2" style="padding-top: 20px;">
+                <img src="app/img/photo-user.png" style="width: 100%;" />
+                
+            </div>
+        </div>
+        <div class="row" style="margin-top: 3%;">
+            <div class="col-xs-12" style="margin-bottom: 20px;">
+                <div class="col-xs-6" style="text-align:right">
+                    <button class="mb-sm btn btn-success" ng-click="addUser(user)" ng-disabled="submitUserBtn">Add User</button>
+                </div>
+                <div class="col-xs-6">
+                    <button class="mb-sm btn btn-danger" ng-click="cancel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>
+<script type="text/ng-template" id="/updateUser.html">
+    <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
+        <div class="col-xs-12 text-center" ng-init="fetchUserDetails()" style="margin-top: -15px; font-size: 20px;"> Update User
+            <div style="float:right; width: 20px;">
+                <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body" ng-cloak>
+        <div class="row">
+            <div class="col-md-10">
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-4 col-border" ng-style="(count > 0 && user.firstName1 == null) && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Name</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="firstName" ng-model="user.firstName" placeholder="First Name" allow-pattern="[a-z\s]" />
+                            <span id="firstName1" ng-model="user.firstName1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border" ng-style="count > 0 && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">&nbsp;</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="middleName" ng-model="user.middleName" placeholder="Middle Name" allow-pattern="[a-z\s]" />
+                            <span id="middleName1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-4 col-border" ng-style="count > 0 && user.lastName1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">&nbsp;</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="lastName" ng-model="user.lastName" placeholder="Last Name" allow-pattern="[a-z\s]" />
+                            <span id="lastName1" style="color:red"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-6 col-border" ng-style="count > 0 && user.email1 == null && {'padding-bottom': '23px'}  || count ==0  && {} ">
+                            <label class="margin-bottom-0">Email Id</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="email" ng-model="user.email" placeholder="Email Id" readonly/>
+                            <span id="email1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-6 col-border" ng-style="count > 0 && user.cellNumber1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Mobile Number</label>
+                            <br/>
+                            <input type="text" class="input-hover" id="cellNumber" ng-model="user.cellNumber" placeholder="Mobile Number" maxlength=10 minlength=10 numbers-only="numbers-only" readonly/>
+                            <span id="cellNumber1" style="color:red"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                        <div class="col-md-6 col-border" ng-style="count > 0 && user.role1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Role</label>
+                            <br/>
+                            <select chosen data-placeholder="select role" multiple="multiple" class="chosen-select form-control select-hover" id="role" ng-model="user.role" ng-options="sa.id as sa.desc for sa in roleArray" style="padding: 0px 16px;height:25px; width: 100%;">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="role1" style="color:red"></span>
+                        </div>
+                        <div class="col-md-6 col-border" ng-style="count > 0 && user.status1 == null && {'padding-bottom': '23px'}  || count == 0  && {} ">
+                            <label class="margin-bottom-0">Status</label>
+                            <br/>
+                            <select class="form-control input-hover" id="status" ng-model="user.status" ng-options="sa.desc as sa.desc for sa in statusArray" style="padding: 0px 16px;height:25px;">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="status1" style="color:red"></span>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row margin-bottom-10">
+                    <div class="col-md-12">
+                         <div class="col-md-6 col-border" ng-style="count > 0 && user.status1 == null && {'padding-bottom': '23px'}  || count == 0  && {} " >
+                            <label class="margin-bottom-0">Location</label>
+                            <br/>
+                            <select class="form-control input-hover" id="operationCity" ng-model="user.operationCity" ng-options="sa as sa for sa in cityAt" style="padding: 0px 16px;height:25px;">
+                                <option value="">--Select--</option>
+                            </select>
+                            <span id="city1" style="color:red"></span>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+            <div class="col-md-2" style="padding-top: 20px;">
+                <img src="app/img/photo-user.png" style="width: 100%;" />
+            </div>
+        </div>
+        <div class="row" style="margin-top: 3%;">
+            <div class="col-xs-12" style="margin-bottom: 20px;">
+                <div class="col-xs-6" style="text-align:right">
+                    <button class="mb-sm btn btn-success" ng-click="updateUser(user)" ng-disabled="submitUserBtn">Update User</button>
+                </div>
+                <div class="col-xs-6">
+                    <button class="mb-sm btn btn-danger" ng-click="cancel()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="modal-footer" style="text-align:center;border:-1px;background-color:gainsboro;">
+    </div>
+</script>

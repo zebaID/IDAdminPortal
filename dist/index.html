@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" data-ng-app="angle">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="{{app.description}}">
+    <meta name="keywords" content="app, responsive, angular, bootstrap, dashboard, admin">
+    <title data-ng-bind="pageTitle()">Indian Drivers</title>
+    <script src="//ajax.microsoft.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="app/css/style.css">
+    <link rel="stylesheet" href="app/css/app.css" data-ng-if="!app.layout.isRTL">
+    <link rel="stylesheet" href="app/css/app-rtl.css" data-ng-if="app.layout.isRTL">
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZVdypRwWG3MBmQXD12X1KPgt9lZDEKX4&sensor=false&region=in&libraries=places"></script>
+    <script type="text/javascript" src="/master/js/custom/markerWithLabel.js"></script>
+    <script src="master/js/modules/directives/socket.js"></script>
+    <script src="http://jawj.github.io/OverlappingMarkerSpiderfier/bin/oms.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    
+</head>
+
+<body data-ng-class="{ 'layout-fixed' : app.layout.isFixed, 'aside-collapsed' : app.layout.isCollapsed, 'layout-boxed' : app.layout.isBoxed, 'layout-fs': app.useFullLayout, 'hidden-footer': app.hiddenFooter }">
+    <div data-ui-view="" data-autoscroll="false" data-ng-class="{'mainViewAnimation whirl traditional': loader == 1,'mainViewAnimation':loader == 0}" class="wrapper"></div>
+    <script src="app/js/base.js"></script>
+    <script src="app/js/app.js"></script>
+    
+</body>
+
+</html>
