@@ -4634,6 +4634,7 @@ ConUsers.sendSMS({
                                     cancellationId: bookingData.cancellationId,
                                     otherReason: bookingData.otherCancellationReason,
                                     returnFareAmt: returnFareText,
+                                    returnFarekm: returnFare,
                                     driverShare: driverShare,
                                     idShare: idShare,
                                     returnTime: returnTravelHours,
@@ -5462,7 +5463,12 @@ ConUsers.sendSMS({
             var url = 'http://65.0.186.134:3000';
            // var url = 'http://43.240.67.79:3000';
             $scope.isDisabledButton = true;
-
+            var returnFarekm=0;
+            if (booking.dutyType == 'Outstation' && booking.journeyType == 'One Way') {
+               
+                        returnFarekm = (booking.returnFarekm);
+                   
+            }
             function addZero(i) {
                 if (i < 10) {
                     i = "0" + i;
@@ -5529,7 +5535,8 @@ ConUsers.sendSMS({
                             "bookingId": $rootScope.lineupBookingDetails.bookingId,
                             "requestFrom": "ADMIN_START",
                             "offDutyDate": null,
-                            "offDutyTime": null
+                            "offDutyTime": null,
+                            "distanceBetweenPickupAndDrop":returnFarekm
                         };
                         $http.post(url + '/updateInvoiceOnStartAndOffDuty', obj).
                         success(function(result) {
@@ -5614,7 +5621,12 @@ ConUsers.sendSMS({
        $scope.offDuty = function(booking, offDutyAddress, journeyType) {
             $rootScope.loader = 1;
             $scope.isDisabled = true;
-
+            var returnFarekm=0;
+            if ($rootScope.lineupBookingDetails.dutyType == 'Outstation' && journeyType == 'One Way') {
+               
+                returnFarekm = ($rootScope.lineupBookingDetails.returnFarekm);
+           
+         }
             function addZero(i) {
                 if (i < 10) {
                     i = "0" + i;
@@ -5871,7 +5883,8 @@ ConUsers.sendSMS({
                     "bookingId": $rootScope.lineupBookingDetails.bookingId,
                     "requestFrom": "ADMIN_OFF",
                     "offDutyDate": offDutyDate,
-                    "offDutyTime": offDutyTime
+                    "offDutyTime": offDutyTime,
+                    "distanceBetweenPickupAndDrop":returnFarekm
                 };
                 if(journeyType === 'One Way'){
                     
@@ -6853,6 +6866,7 @@ ConUsers.sendSMS({
 
                                 }
                             }
+                            
 
 
                             var driverShare = '0';
@@ -6972,9 +6986,11 @@ ConUsers.sendSMS({
                                                 idShare: idShare,
                                                 carTypeValue: carTypeText,
                                                 returnFareAmt: returnFareText,
+                                                returnFarekm:returnFare,
                                                 driverShare: driverShare,
                                                 idShare: idShare,
                                                 returnTime: returnTravelHours,
+                                                returnFarekm:returnFare,
                                                 bookingDate: createdDate,
                                                 bookBy: ' Created By ' + $scope.bookedBy,
                                                 remark: bookingData.remark,
