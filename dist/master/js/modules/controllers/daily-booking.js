@@ -4522,9 +4522,12 @@ ConUsers.sendSMS({
                         if (bookingData.isOutstation == true && bookingData.isRoundTrip == false) {
                             if (bookingData.outstationBookings.length > 0) {
                                 if (!angular.isUndefined(bookingData.outstationBookings[0].returnTravelTime) || bookingData.outstationBookings[0].returnTravelTime != null || bookingData.outstationBookings[0].returnTravelTime != '') {
+                                   if(bookingData.outstationBookings[0].returnTravelTime != null){
                                     returnFare = (bookingData.outstationBookings[0].returnTravelTime).toFixed(2);
                                     returnFareText = ' (' + ((bookingData.outstationBookings[0].returnTravelTime)-125).toFixed(2) + ' KM ' + '* 6)';
-                                }
+                               
+                                   }
+                                     }
                             }
                         } else if (bookingData.isOutstation == false && bookingData.isRoundTrip == false) {
                             if(bookingData.operationCity === 'Aurangabad'){
@@ -6834,9 +6837,11 @@ ConUsers.sendSMS({
                             if (bookingData.isOutstation == true && bookingData.isRoundTrip == false) {
                                 if (bookingData.outstationBookings.length > 0) {
                                     if (!angular.isUndefined(bookingData.outstationBookings[0].returnTravelTime) || bookingData.outstationBookings[0].returnTravelTime != null || bookingData.outstationBookings[0].returnTravelTime != '') {
+                                        if(bookingData.outstationBookings[0].returnTravelTime != null){
                                         returnFare = (bookingData.outstationBookings[0].returnTravelTime).toFixed(2);
                                         returnFareText = ' (' + ((bookingData.outstationBookings[0].returnTravelTime)-125).toFixed(2) + ' KM ' + '* 6)';
                                     }
+                                }
                                 }
                             } else if (bookingData.isOutstation == false && bookingData.isRoundTrip == false) {
                                if(bookingData.operationCity === 'Aurangabad'){
