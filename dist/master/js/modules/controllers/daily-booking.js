@@ -3056,19 +3056,24 @@ if(angular.isUndefined($rootScope.operationCitySelect) || $rootScope.operationCi
                 $http.post(distancemap).success(function(resultresponce) {
                 console.log('result' + JSON.stringify(resultresponce));
                 if (resultresponce.rows[0].elements[0].status === 'NOT_FOUND') {
-                    distance = 0;
-                    dropLat = pickLat;
-                    dropLng = pickLong; 
-               }
+                         distance = 0;
+                         dropLat = pickLat;
+                         dropLng = pickLong; 
+                    }
                 if(dropLat!=null&&dropLng!=null){
                     if (resultresponce.rows[0].elements[0].status === 'ZERO_RESULTS') {
                          distance = 0;
                          dropLat = pickLat;
                          dropLng = pickLong; 
                     } else {
-                         distance=Math.round((resultresponce['rows'][0]['elements'][0]['distance']['value'])/1000);
-                     }
-                }
+                        if(resultresponce['rows'][0]['elements'][0]['status']==='NOT_FOUND'){
+                         distance=0;
+                        }else{
+                            distance=Math.round((resultresponce['rows'][0]['elements'][0]['distance']['value'])/1000);
+                         }   
+                        }
+                        }
+                
                 var count1 = 0;
 
                      if ($rootScope.pickAddressResults.results.length == '0') {
