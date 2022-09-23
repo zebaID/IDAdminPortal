@@ -3037,8 +3037,10 @@ if(angular.isUndefined($rootScope.operationCitySelect) || $rootScope.operationCi
                  var mapUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + bookingDetails.address + '&types=geocode&language=en&key=AIzaSyAZVdypRwWG3MBmQXD12X1KPgt9lZDEKX4';
                 $http.post(mapUrl).success(function(result) {
                     $rootScope.pickAddressResults = result;
+                    if(result.results.length>0){
                      pickLat = $rootScope.pickAddressResults.results[0].geometry.location.lat;
                      pickLong = $rootScope.pickAddressResults.results[0].geometry.location.lng;
+                    }
                     var mapUrl1 = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + bookingDetails.bookingToLocation + '&types=geocode&language=en&key=AIzaSyAZVdypRwWG3MBmQXD12X1KPgt9lZDEKX4';
                     $http.post(mapUrl1).success(function(result1) {
                         if(result1.results.length>0){
@@ -3053,6 +3055,11 @@ if(angular.isUndefined($rootScope.operationCitySelect) || $rootScope.operationCi
                   var distancemap='https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + pickLat + ',' + pickLong + '&destinations=' + dropLat + ',' + dropLng + '&mode=driving&language=en&key=AIzaSyAZVdypRwWG3MBmQXD12X1KPgt9lZDEKX4';
                 $http.post(distancemap).success(function(resultresponce) {
                 console.log('result' + JSON.stringify(resultresponce));
+                if (resultresponce.rows[0].elements[0].status === 'NOT_FOUND') {
+                    distance = 0;
+                    dropLat = pickLat;
+                    dropLng = pickLong; 
+               }
                 if(dropLat!=null&&dropLng!=null){
                     if (resultresponce.rows[0].elements[0].status === 'ZERO_RESULTS') {
                          distance = 0;
