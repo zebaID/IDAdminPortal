@@ -3631,6 +3631,12 @@ ConUsers.sendSMS({
             var url = 'http://65.0.186.134:3000';
             //var url = 'http://18.220.250.238:3000';
             $rootScope.loader = 1;
+            var returnFarekm=0;
+            if (booking.dutyType == 'Outstation' && booking.journeyType == 'One Way') {
+               
+                returnFarekm = (booking.returnFarekm);
+           
+    }
             var count = 0;
             var relDate = moment(booking.bookingToDate).format('YYYY-MM-DD');
             var rptDate = moment(booking.bookingReportingDate).format('YYYY-MM-DD');
@@ -3883,7 +3889,8 @@ ConUsers.sendSMS({
                             "bookingId": booking.bookingId,
                             "requestFrom": "ADMIN_OFF",
                             "offDutyDate": relDate,
-                            "offDutyTime": relTime
+                            "offDutyTime": relTime,
+                            "distanceBetweenPickupAndDrop":returnFarekm
                         };
                         $http.post(url + '/updateInvoiceOnStartAndOffDuty', obj).
                         success(function(result) {
@@ -5862,6 +5869,12 @@ mobileNumber: $rootScope.lineupBookingDetails.driverContact,
         $scope.updateDateAndTime = function(booking) {
             $rootScope.loader = 1;
             var count = 0;
+            var returnFarekm=0;
+            if (booking.dutyType == 'Outstation' && booking.journeyType == 'One Way') {
+               
+                returnFarekm = (booking.returnFarekm);
+           
+    }
             //console.log('booking details' + JSON.stringify(booking));
             var relDate = moment(booking.bookingToDate).format('YYYY-MM-DD');
             var rptDate = moment(booking.bookingReportingDate).format('YYYY-MM-DD');
@@ -6063,7 +6076,8 @@ mobileNumber: $rootScope.lineupBookingDetails.driverContact,
                         "bookingId": booking.bookingId,
                         "requestFrom": "ADMIN_OFF",
                         "offDutyDate": relDate,
-                        "offDutyTime": booking.tohours + ':' + booking.tominutes + ':' + '00'
+                        "offDutyTime": booking.tohours + ':' + booking.tominutes + ':' + '00',
+                        "distanceBetweenPickupAndDrop":returnFarekm
                     };
                     if (success[0].isOutstation === true) {
                         OutstationBookings.find({
