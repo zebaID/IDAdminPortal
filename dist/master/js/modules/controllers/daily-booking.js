@@ -3051,7 +3051,12 @@ if(angular.isUndefined($rootScope.operationCitySelect) || $rootScope.operationCi
                     
                     
                   //  'https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + pickLat + ',' + pickLong + '&destinations=' + dropLat + ',' + dropLng + '&language=en'
-                
+                  if(dropLat==null&&dropLng==null)
+                  {
+                    
+                         dropLat = 0;
+                         dropLng = 0; 
+                  }
                   var distancemap='https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + pickLat + ',' + pickLong + '&destinations=' + dropLat + ',' + dropLng + '&mode=driving&language=en&key=AIzaSyAZVdypRwWG3MBmQXD12X1KPgt9lZDEKX4';
                 $http.post(distancemap).success(function(resultresponce) {
                 console.log('result' + JSON.stringify(resultresponce));
@@ -4701,6 +4706,12 @@ ConUsers.sendSMS({
             var url = 'http://65.0.186.134:3000';
             //var url = 'http://43.240.67.79:3000';
             $rootScope.loader = 1;
+            var returnFarekm=0;
+              if (booking.dutyType == 'Outstation' && booking.journeyType == 'One Way') {
+               
+                returnFarekm = (booking.returnFarekm);
+           
+    }
             var count = 0;
             var relDate = moment(booking.bookingToDate).format('YYYY-MM-DD');
             var rptDate = moment(booking.bookingReportingDate).format('YYYY-MM-DD');
@@ -4969,7 +4980,8 @@ ConUsers.sendSMS({
                             "bookingId": booking.bookingId,
                             "requestFrom": "ADMIN_OFF",
                             "offDutyDate": relDate,
-                            "offDutyTime": relTime
+                            "offDutyTime": relTime,
+                            "distanceBetweenPickupAndDrop":returnFarekm
                         };
                         $http.post(url + '/updateInvoiceOnStartAndOffDuty', obj).
                         success(function(result) {
@@ -7063,6 +7075,12 @@ ConUsers.sendSMS({
         $scope.updateDateAndTime = function(booking) {
             $rootScope.loader = 1;
             var count = 0;
+            var returnFarekm=0;
+            if (booking.dutyType == 'Outstation' && booking.journeyType == 'One Way') {
+               
+                returnFarekm = (booking.returnFarekm);
+           
+    }
             //console.log('booking details' + JSON.stringify(booking));
             var relDate = moment(booking.bookingToDate).format('YYYY-MM-DD');
             var rptDate = moment(booking.bookingReportingDate).format('YYYY-MM-DD');
@@ -7272,7 +7290,8 @@ ConUsers.sendSMS({
                         "bookingId": booking.bookingId,
                         "requestFrom": "ADMIN_OFF",
                         "offDutyDate": relDate,
-                        "offDutyTime": booking.tohours + ':' + booking.tominutes + ':' + '00'
+                        "offDutyTime": booking.tohours + ':' + booking.tominutes + ':' + '00',
+                        "distanceBetweenPickupAndDrop":returnFarekm
                     };
                     if (success[0].isOutstation === true) {
                         OutstationBookings.find({

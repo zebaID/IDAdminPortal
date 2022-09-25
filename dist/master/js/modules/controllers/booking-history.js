@@ -725,11 +725,11 @@ function bookingHistoryCtrl($scope, $rootScope, $filter, ngTableParams, $resourc
                     where: {
                         and: [{
                             reportingDate: {
-                                gte: startDate
+                                gte: new Date(startDate)
                             }
                         }, {
                             reportingDate: {
-                                lte: endDate
+                                lte: new Date(endDate)
                             }
                         }],
                         status: bookingStatus,
@@ -989,11 +989,11 @@ function bookingHistoryCtrl($scope, $rootScope, $filter, ngTableParams, $resourc
                     where: {
                         and: [{
                             reportingDate: {
-                                gte: startDate
+                                gte: new Date(startDate)
                             }
                         }, {
                             reportingDate: {
-                                lte: endDate
+                                lte: new Date(endDate)
                             }
                         },{
                             operationCity:$rootScope.operationCitySelect
@@ -1260,11 +1260,11 @@ function bookingHistoryCtrl($scope, $rootScope, $filter, ngTableParams, $resourc
                     where: {
                         and: [{
                             reportingDate: {
-                                gte: startDate
+                                gte: new Date(startDate)
                             }
                         }, {
                             reportingDate: {
-                                lte: endDate
+                                lte: new Date(endDate)
                             }
                         },{
                             operationCity:$rootScope.operationCity
@@ -2780,26 +2780,6 @@ $scope.dutyArray = [{
         }, {
             'desc': 'Immediate'
         }];
-        $scope.bookingHistoryDetails = function(booking) {
-
-            // $rootScope.data = $rootScope.bookingDetailsData;
- 
-            // $scope.historyDetails()
-             $rootScope.bookinghist = booking;
-             var modalInstance = $modal.open({
-                 templateUrl: '/bookingHistoryDetails.html',
-                 controller: bookingHistoryDetailsCtrl
-             });
-             //historyDetails(booking);
-         
-             var state = $('#modal-state');
-             modalInstance.result.then(function() {
-                 state.text('Modal dismissed with OK status');
-             }, function() {
-                 state.text('Modal dismissed with Cancel status');
-             });
-         };
- 
         $scope.CancelBookingPopUp = function() {
 
             $modalInstance.dismiss('cancel');
@@ -2826,8 +2806,8 @@ $scope.dutyArray = [{
                     Bookings.cancelBookingForAdmin({
                             bookingId: $rootScope.cancelDetails1.bookingId,
                             cancellationId: cancelationReason.id,
-                            cancellationReason: $rootScope.bookingHistoryCancelationReasons.comment + ' ' + cancelName,
-                            userId: $rootScope.userId
+                            cancellationReason: $rootScope.bookingHistoryCancelationReasons.comment + ' ' + cancelName
+
                         },
 
                         function(response) {
@@ -3482,8 +3462,8 @@ ConUsers.sendSMS({
                         if (bookingData.isOutstation == true && bookingData.isRoundTrip == false) {
                             if (bookingData.outstationBookings.length > 0) {
                                 if (!angular.isUndefined(bookingData.outstationBookings[0].returnTravelTime) || bookingData.outstationBookings[0].returnTravelTime != null || bookingData.outstationBookings[0].returnTravelTime != '') {
-                                    returnFare = ((bookingData.outstationBookings[0].returnTravelTime) * 35 * 1.75).toFixed(2);
-                                    returnFareText = ' (' + ((bookingData.outstationBookings[0].returnTravelTime) * 35).toFixed(2) + ' KM ' + '* 1.75) = ';
+                                    returnFare = (bookingData.outstationBookings[0].returnTravelTime).toFixed(2);
+                                    returnFareText = ' (' + ((bookingData.outstationBookings[0].returnTravelTime)-125).toFixed(2) + ' KM ' + '* 6)';
                                 }
                             }
                         } else if (bookingData.isOutstation == false && bookingData.isRoundTrip == false) {
@@ -3600,7 +3580,8 @@ ConUsers.sendSMS({
                                     status: bookingData.status,
                                     cancellationId: bookingData.cancellationId,
                                     otherReason: bookingData.otherCancellationReason,
-                                    returnFareAmt: returnFareText + returnFare,
+                                    returnFareAmt: returnFareText,
+                                    returnFarekm: returnFare,
                                     driverShare: driverShare,
                                     idShare: idShare,
                                     returnTime: returnTravelHours,
@@ -3992,25 +3973,6 @@ ConUsers.sendSMS({
             $rootScope.startDutyFlag1 = false;
             $rootScope.offDutyFlag1 = false;
         }
-        $scope.bookingHistoryDetails = function(booking) {
-
-            // $rootScope.data = $rootScope.bookingDetailsData;
- 
-            // $scope.historyDetails()
-             $rootScope.bookinghist = booking;
-             var modalInstance = $modal.open({
-                 templateUrl: '/bookingHistoryDetails.html',
-                 controller: bookingHistoryDetailsCtrl
-             });
-             //historyDetails(booking);
-         
-             var state = $('#modal-state');
-             modalInstance.result.then(function() {
-                 state.text('Modal dismissed with OK status');
-             }, function() {
-                 state.text('Modal dismissed with Cancel status');
-             });
-         };
         $scope.confirmPaymentMethod1 = function() {
             $rootScope.loader = 1;
             $scope.paidDisabledButton1 = true;
@@ -4225,8 +4187,8 @@ ConUsers.sendSMS({
                     Bookings.cancelBookingForAdmin({
                             bookingId: $rootScope.lineupBookingDetails.bookingId,
                             cancellationId: cancelationReason.id,
-                            cancellationReason: $rootScope.bookingHistoryCancelationReasons.comment + ' ' + cancelName,
-                            userId: $rootScope.userId
+                            cancellationReason: $rootScope.bookingHistoryCancelationReasons.comment + ' ' + cancelName
+
                         },
 
                         function(response) {
@@ -4362,6 +4324,12 @@ ConUsers.sendSMS({
             var url = 'http://65.0.186.134:3000';
             //var url = 'http://18.220.250.238:3000';
             $scope.isDisabledButton = true;
+            var returnFarekm=0;
+            if (booking.dutyType == 'Outstation' && booking.journeyType == 'One Way') {
+               
+                        returnFarekm = (booking.returnFarekm);
+                   
+            }
             function addZero(i) {
                 if (i < 10) {
                     i = "0" + i;
@@ -4433,7 +4401,8 @@ ConUsers.sendSMS({
                             "bookingId": $rootScope.lineupBookingDetails.bookingId,
                             "requestFrom": "ADMIN_START",
                             "offDutyDate": null,
-                            "offDutyTime": null
+                            "offDutyTime": null,
+                            "distanceBetweenPickupAndDrop":returnFarekm
                         };
                         $http.post(url + '/updateInvoiceOnStartAndOffDuty', obj).
                         success(function(result) {
@@ -4516,7 +4485,12 @@ ConUsers.sendSMS({
         $scope.bookingHistoryOffDuty = function(booking, offDutyAddress, journeyType) {
             $rootScope.loader = 1;
             $scope.isDisabled = true;
-
+            var returnFarekm=0;
+            if ($rootScope.lineupBookingDetails.dutyType == 'Outstation' && journeyType == 'One Way') {
+               
+                returnFarekm = ($rootScope.lineupBookingDetails.returnFarekm);
+           
+         }
             function addZero(i) {
                 if (i < 10) {
                     i = "0" + i;
@@ -4778,7 +4752,8 @@ ConUsers.sendSMS({
                     "bookingId": $rootScope.lineupBookingDetails.bookingId,
                     "requestFrom": "ADMIN_OFF",
                     "offDutyDate": offDutyDate,
-                    "offDutyTime": offDutyTime
+                    "offDutyTime": offDutyTime,
+                    "distanceBetweenPickupAndDrop":returnFarekm
                 };
                 if(journeyType === 'One Way'){
                      var dropLat1 =0;
@@ -5251,29 +5226,25 @@ mobileNumber: newDriverSMS.originalObject.mobileNumber,
                             bookingId: $rootScope.lineupBookingDetails.bookingId,
                              userId: $scope.uid
                         }, function(SuccessData) {
-                            if (SuccessData[0].driver_cancel_duty1 == 'Cancelled') {
-                                $.notify('Driver removed successfully ', {
-                                    status: 'success'
-                                });
-                               
-                                DriverAllocationReport.createAllocationHistory({
-                                    bookingId: parseInt($rootScope.lineupBookingDetails.bookingId),
-                                    driverId: $rootScope.lineupBookingDetails.oldDrvId,
-                                    userId: $scope.uid,
-                                    allocationStatus: 'Deallocation'
-                                }, function(success) {
-                                    console.log('created allocation successfully' + JSON.stringify(success));
-                                    driverDeallocateSMS2();
-                                    $modalInstance.dismiss('cancel');
-                                    reloadFunc();
-                                    $rootScope.getSearchHistory();
-                                    $rootScope.loader = 0;
-                                }, function(error) {
-                                    console.log('created allocation error' + JSON.stringify(error));
-                                });
-                            }
                             //console.log('driver deallocation success' + JSON.stringify(SuccessData));
-                           
+                            $.notify('Driver removed successfully ', {
+                                status: 'success'
+                            });
+                            driverDeallocateSMS2();
+                            DriverAllocationReport.createAllocationHistory({
+                                bookingId: parseInt($rootScope.lineupBookingDetails.bookingId),
+                                driverId: $rootScope.lineupBookingDetails.oldDrvId,
+                                userId: $scope.uid,
+                                allocationStatus: 'Deallocation'
+                            }, function(success) {
+                                console.log('created allocation successfully' + JSON.stringify(success));
+                                $modalInstance.dismiss('cancel');
+                                reloadFunc();
+                                $rootScope.getSearchHistory();
+                                $rootScope.loader = 0;
+                            }, function(error) {
+                                console.log('created allocation error' + JSON.stringify(error));
+                            });
                              
                         }, function(error) {
                             console.log('driver deallocation error' + JSON.stringify(error));
@@ -5694,8 +5665,8 @@ mobileNumber: $rootScope.lineupBookingDetails.driverContact,
                         if (bookingData.isOutstation == true && bookingData.isRoundTrip == false) {
                             if (bookingData.outstationBookings.length > 0) {
                                 if (!angular.isUndefined(bookingData.outstationBookings[0].returnTravelTime) || bookingData.outstationBookings[0].returnTravelTime != null || bookingData.outstationBookings[0].returnTravelTime != '') {
-                                    returnFare = ((bookingData.outstationBookings[0].returnTravelTime) * 35 * 1.75).toFixed(2);
-                                    returnFareText = ' (' + ((bookingData.outstationBookings[0].returnTravelTime) * 35).toFixed(2) + ' KM ' + '* 1.75) = ';
+                                    returnFare = (bookingData.outstationBookings[0].returnTravelTime).toFixed(2);
+                                        returnFareText = ' (' + ((bookingData.outstationBookings[0].returnTravelTime)-125).toFixed(2) + ' KM ' + '* 6)';
                                 }
                             }
                         } else if (bookingData.isOutstation == false && bookingData.isRoundTrip == false) {
@@ -5836,7 +5807,8 @@ mobileNumber: $rootScope.lineupBookingDetails.driverContact,
                                             driverShare: drvShare,
                                             idShare: idShare,
                                             carTypeValue: carTypeText,
-                                            returnFareAmt: returnFareText + returnFare,
+                                            returnFareAmt: returnFareText,
+                                            returnFarekm:returnFare,
                                             driverShare: driverShare,
                                             idShare: idShare,
                                             returnTime: returnTravelHours,
@@ -6222,39 +6194,7 @@ mobileNumber: $rootScope.lineupBookingDetails.driverContact,
     $(function() {
 
     });
-    var bookingHistoryDetailsCtrl = function($scope, $rootScope, $modalInstance, $state, BookingDetails) {
-        //booking estimation controller
-    
-        $scope.closeModal1 = function() {
-            $modalInstance.dismiss('cancel');
-             
 
-        };
-        $scope.historyDetails = function(){
-            
-            $rootScope.data = $rootScope.bookinghist;
-            console.log("history: " +JSON.stringify($rootScope.data));
-            BookingDetails.find({
-                filter:{
-                   where:{
-                    bookingId: $rootScope.data.bookingId
-                } 
-                }
-                 
-                },function(s){ 
-                    $rootScope.BookingDetails=s;
-                    console.log($rootScope.BookingDetails.description+ 'success');
-                    //$scope.bookingHistoryDetails
-                    //$rootScope.bookingDetails = s;
-                },
-                function(error){
-                    console.log(error+ 'Failure');
-                });
-        
-        }
-
-        
-    };
     $scope.SearchCriteria = function() {
 
         $rootScope.driverId1 = undefined;
