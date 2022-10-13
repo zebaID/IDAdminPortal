@@ -2806,8 +2806,8 @@ $scope.dutyArray = [{
                     Bookings.cancelBookingForAdmin({
                             bookingId: $rootScope.cancelDetails1.bookingId,
                             cancellationId: cancelationReason.id,
-                            cancellationReason: $rootScope.bookingHistoryCancelationReasons.comment + ' ' + cancelName
-
+                            cancellationReason: $rootScope.bookingHistoryCancelationReasons.comment + ' ' + cancelName,
+                            userId: $rootScope.userId
                         },
 
                         function(response) {
@@ -4194,8 +4194,8 @@ ConUsers.sendSMS({
                     Bookings.cancelBookingForAdmin({
                             bookingId: $rootScope.lineupBookingDetails.bookingId,
                             cancellationId: cancelationReason.id,
-                            cancellationReason: $rootScope.bookingHistoryCancelationReasons.comment + ' ' + cancelName
-
+                            cancellationReason: $rootScope.bookingHistoryCancelationReasons.comment + ' ' + cancelName,
+                            userId: $rootScope.userId
                         },
 
                         function(response) {
@@ -5869,7 +5869,7 @@ mobileNumber: $rootScope.lineupBookingDetails.driverContact,
         $scope.updateDateAndTime = function(booking) {
             $rootScope.loader = 1;
             var count = 0;
-            var returnFarekm=0;
+            var returnFarekm=0; 
             if (booking.dutyType == 'Outstation' && booking.journeyType == 'One Way') {
                
                 returnFarekm = (booking.returnFarekm);
