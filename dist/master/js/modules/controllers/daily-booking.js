@@ -3518,15 +3518,15 @@ if(angular.isUndefined($rootScope.operationCitySelect) || $rootScope.operationCi
                                 }else{
                                     var msg = 'Dear ' + smsData.firstName + ',%0aWe have taken utmost care while selecting driver, however we are not responsible for any type of losses including financial with respect to services. Need to make payment by cash immediately once trip is over. If not agree with this terms, please cancel the booking. For queries '+ cnumber +' or info@indian-drivers.com.';
                                 }*/
-                                var msg = 'Dear ' + smsData.firstName + '%0aWe have taken utmost care while selecting driver, however we are not responsible for any type of losses including financial with respect to services. Need to make payment by cash immediately once trip is over. If not agree with this terms, please cancel the booking. For queries '+ cnumber +' or info@indian-drivers.com.';
+                                var msg = 'Dear ' + smsData.firstName + 'We have taken utmost care while selecting driver, however we are not responsible for any type of losses including financial with respect to services. Need to make payment by cash immediately once trip is over. If not agree with this terms, please cancel the booking. For queries '+ cnumber +' or info@indian-drivers.com.&templateid=1707164576687222444';
                                 $rootScope.extraChargesforBooking= false;
  ConUsers.sendSMS({
                     mobileNumber: smsData.mobileNumber,
                     msg: msg
                 }, function(mgssuccess) {
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                    console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                    console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });
 
@@ -3554,16 +3554,16 @@ if(angular.isUndefined($rootScope.operationCitySelect) || $rootScope.operationCi
                                 console.log(s);
                                  var rptTime = bookingDetails.hours + ':' + bookingDetails.minutes + ':' + '00';
             var rptDate = moment(bookingDetails.reportingDate).format('DD-MM-YYYY');
-            var msg = 'Dear ' + bookingDetails.firstName + ',%0aYour booking Id: ' + $rootScope.newBookingId + ', dated ' + rptDate + ' @ ' + rptTime + ' for Outstation One Way Trip has been received, driver details will be shared shortly. Driver\'s return Fare @Rs.1.75/km and return time @Rs.50/hr considering avg return speed of 35km/hr. Food allowance is included in the bill amount. For queries'+ cnumber +' or info@indian-drivers.com.';
+            var msg = 'Dear ' + bookingDetails.firstName + ',%0aYour booking Id: ' + $rootScope.newBookingId + ', dated ' + rptDate + ' @ ' + rptTime + ' for Outstation One Way Trip has been received, driver details will be shared shortly. Driver\'s return Fare @Rs.1.75/km and return time @Rs.50/hr considering avg return speed of 35km/hr. Food allowance is included in the bill amount. For queries'+ cnumber +' or info@indian-drivers.com.&templateid=1707164576767455090';
             
 
 ConUsers.sendSMS({
                     mobileNumber: bookingDetails.mobileNumber,
                     msg: msg
                 }, function(mgssuccess) {
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                     console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                  console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });
 
@@ -3589,14 +3589,14 @@ ConUsers.sendSMS({
                                 console.log(s);
                                  var rptTime = bookingDetails.hours + ':' + bookingDetails.minutes + ':' + '00';
             var rptDate = moment(bookingDetails.reportingDate).format('DD-MM-YYYY');
-            var msg = 'Dear ' + bookingDetails.firstName + ',%0aYour booking Id: ' + $rootScope.newBookingId + ', reporting date ' + rptDate + ' @ ' + rptTime + ' for a Outstation Round Trip has been received, driver details will be shared two hours before the trip. Driver\'s food allowance is included in the bill. For queries kindly contact '+ cnumber +' or info@indian-drivers.com.';
+            var msg = 'Dear ' + bookingDetails.firstName + ',%0aYour booking Id: ' + $rootScope.newBookingId + ', reporting date ' + rptDate + ' @ ' + rptTime + ' for a Outstation Round Trip has been received, driver details will be shared two hours before the trip. Driver\'s food allowance is included in the bill. For queries kindly contact '+ cnumber +' or info@indian-drivers.com.&templateid=1707164576756951358';
             ConUsers.sendSMS({
                     mobileNumber: bookingDetails.mobileNumber,
                     msg: msg
                 }, function(mgssuccess) {
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                     console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                    console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });                    },function(r){
                     });
@@ -3619,14 +3619,14 @@ ConUsers.sendSMS({
                                 console.log(s);
                                 var rptTime = bookingDetails.hours + ':' + bookingDetails.minutes + ':' + '00';
             var rptDate = moment(bookingDetails.reportingDate).format('DD-MM-YYYY');
-            var msg = 'Dear ' + bookingDetails.firstName + ',%0aYour booking Id: ' + $rootScope.newBookingId + ', reporting date ' + rptDate + ' @ ' + rptTime + ' for a Local Oneway Trip has been received for which Rs.100/- return fare additional will be applicable , driver details will be shared two hours before the trip.For queries kindly contact '+ cnumber +' or info@indian-drivers.com.';
+            var msg = 'Dear ' + bookingDetails.firstName + ',%0aYour booking Id: ' + $rootScope.newBookingId + ', reporting date ' + rptDate + ' @ ' + rptTime + ' for a Local Oneway Trip has been received for which Rs.100/- return fare additional will be applicable , driver details will be shared two hours before the trip.For queries kindly contact '+ cnumber +' or info@indian-drivers.com.&templateid=1707164576762294540';
             ConUsers.sendSMS({
                     mobileNumber: bookingDetails.mobileNumber,
                     msg: msg
                 }, function(mgssuccess) {
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                     console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                    console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });
                                 },function(r){
@@ -3654,9 +3654,9 @@ ConUsers.sendSMS({
                     mobileNumber: bookingDetails.mobileNumber,
                     msg: msg
                 }, function(mgssuccess) {
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                     console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                    console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });
                                 },function(r){
@@ -3684,9 +3684,9 @@ ConUsers.sendSMS({
                     mobileNumber: customerSMSdetails.mobileNumber,
                     msg: msg
                 }, function(mgssuccess) {
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                     console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                    console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });
                                 },function(r){
@@ -3715,9 +3715,9 @@ ConUsers.sendSMS({
                     mobileNumber: customerSMSdetails.mobileNumber,
                     msg: msg
                 }, function(mgssuccess) {
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                     console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                    console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });
                                 },function(r){
@@ -3744,9 +3744,9 @@ ConUsers.sendSMS({
                     mobileNumber: customerSMSdetails.mobileNumber,
                     msg: msg
                 }, function(mgssuccess) {
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                     console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                    console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });
                                 },function(r){
@@ -3769,14 +3769,15 @@ ConUsers.sendSMS({
                                 console.log(s);
  var rptTime = customerSMSdetails.hours + ':' + customerSMSdetails.minutes + ':' + '00';
             var rptDate = moment(customerSMSdetails.reportingDate).format('DD-MM-YYYY');
-           var msg = '\'Dear ' + customerSMSdetails.firstName + ', Your booking Id: ' + $rootScope.newBookId + ', reporting date ' + rptDate + ' @ ' + rptTime + ' for a Local Round Trip has been received, driver details will be shared two hours before the trip. For queries kindly contact '+ cnumber +' or info@indian-drivers.com.';
+           var msg = 'Dear ' + customerSMSdetails.firstName + ', Your booking Id:' + $rootScope.newBookId + ', reporting date ' + rptDate + ' @ ' + rptTime + ' for a Local Round Trip has been received, driver details will be shared two hours before the trip. For queries kindly contact '+ cnumber +' or info@indian-drivers.com.&templateid=1707164576751593185';
+
             ConUsers.sendSMS({
                     mobileNumber: customerSMSdetails.mobileNumber,
                     msg: msg
                 }, function(mgssuccess) {
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                     console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                    console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });
                                 },function(r){
@@ -3937,9 +3938,9 @@ ConUsers.sendSMS({
                     mobileNumber: cancelSMS.bookingCellNumber,
                     msg: msg
                 }, function(mgssuccess) {
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                     console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                    console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });
             
@@ -4109,9 +4110,9 @@ ConUsers.sendSMS({
                     msg: msg
                 }, function(mgssuccess) {
                     driverSMSFunction(customerSMS, driverSMS);
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                     console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                    console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });
 
@@ -4153,9 +4154,9 @@ ConUsers.sendSMS({
                     msg: msg
                 }, function(mgssuccess) {
                     
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                     console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                    console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });
               
@@ -5384,9 +5385,9 @@ ConUsers.sendSMS({
                     msg: msg
                 }, function(mgssuccess) {
                     cancelDriverSMS(cancelData, opcity);
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                    console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                    console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });
               
@@ -5420,9 +5421,9 @@ ConUsers.sendSMS({
                     msg: msg
                 }, function(mgssuccess) {
                     
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                     console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                   console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });
             
@@ -6055,16 +6056,16 @@ ConUsers.sendSMS({
                     {
                         var msg = 'Dear ' + customerName + ',%0aYour Duty(ID: ' + $rootScope.lineupBookingDetails.bookingId + ') %0aStarted on: ' + rptDate + ' @ ' + rptTime + '%0aEnded on: ' + endDate + ' @ ' + relTime + '%0aTotal billed amount: Rs.' + Math.round($scope.billedAmount) + '/-. %0aFor details download app (https://goo.gl/XFPFwh). %0aThank you, %0aIndian Drivers.'+ cnumber +'.';
                     }*/
-                    var msg = '\'Dear ' + customerName + ', Your Duty(ID: ' + $rootScope.lineupBookingDetails.bookingId + ') Started on: ' + rptDate + ' @ ' + rptTime + ' Ended on: ' + endDate + ' @ ' + relTime + ' Total billed amount Rs.' + Math.round($scope.billedAmount) + ' plus Rs.100 travel allowance if reporting or relieving between 10pm to 5:45am. For details download app (https://goo.gl/XFPFwh). %0aThank you, Indian Drivers '+ cnumber +'.';
+                    var msg = 'Dear ' + customerName + ', Your Duty(ID: ' + $rootScope.lineupBookingDetails.bookingId + ') Started on: ' + rptDate + ' @ ' + rptTime + ' Ended on: ' + endDate + ' @ ' + relTime + ' Total billed amount Rs.' + Math.round($scope.billedAmount) + ' plus Rs.100 travel allowance if reporting or relieving between 10pm to 5:45am. For details download app (https://goo.gl/XFPFwh). Thank you, Indian Drivers '+ cnumber +'.&templateid=1707164576744230540';
                     $scope.num = $rootScope.lineupBookingDetails.bookingCellNumber;
            ConUsers.sendSMS({
                     mobileNumber: $rootScope.lineupBookingDetails.bookingCellNumber,
                     msg: msg
                 }, function(mgssuccess) {
                     //cancelDriverSMS(cancelData, opcity);
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                     console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                  console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });
             
@@ -6079,9 +6080,9 @@ ConUsers.sendSMS({
                     msg: msg
                 }, function(mgssuccess) {
                     //cancelDriverSMS(cancelData, opcity);
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                     console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                    console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });
            
@@ -6121,15 +6122,16 @@ ConUsers.sendSMS({
             }
 
             var driverName = $rootScope.lineupBookingDetails.driverFirstName;
-            var msg = 'Dear ' + driverName + ',%0a Your journey started on: ' + rptDate + ' ' + rptTime + ' and ended at : ' + endDate + ' ' + relTime + ' of booking Id: ' + $rootScope.lineupBookingDetails.bookingId + '. Thanks for your association with Indian-Drivers. For any query or concern, please contact us on '+ cnumber +' or info@indian-drivers.com.';
+           var msg = 'Dear' + driverName + ', Your Duty(ID:' + $rootScope.lineupBookingDetails.bookingId + ') Started on:' + rptDate + ' @ ' + rptTime + ' Ended on: '  + endDate + ' @ ' + relTime + ' For details download app (https://goo.gl/XFPFwh). For inquiries call 020-67641000. click for rate card details (shorturl.at/aoLUV) Thank you, Indian Drivers.&templateid=1707164576707565495'
+           // var msg = 'Dear ' + driverName + ',%0a Your journey started on: ' + rptDate + ' ' + rptTime + ' and ended at : ' + endDate + ' ' + relTime + ' of booking Id: ' + $rootScope.lineupBookingDetails.bookingId + '. Thanks for your association with Indian-Drivers. For any query or concern, please contact us on '+ cnumber +' or info@indian-drivers.com.';
             ConUsers.sendSMS({
                     mobileNumber: $rootScope.lineupBookingDetails.driverContact,
                     msg: msg
                 }, function(mgssuccess) {
                     //cancelDriverSMS(cancelData, opcity);
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                     console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                    console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });
            
@@ -6304,7 +6306,7 @@ ConUsers.sendSMS({
         function driverReallocateSMS() {
             var rptDate = moment($rootScope.lineupBookingDetails.bookingReportingDate).format('DD-MM-YYYY');
             var reportingTime = $rootScope.lineupBookingDetails.hours + ':' + $rootScope.lineupBookingDetails.minutes + ':' + '00';
-            var msg = 'Hi ' + $rootScope.lineupBookingDetails.driverFirstName + ',%0a Duty details assigned to you, booking Id: ' + $rootScope.lineupBookingDetails.bookingId + ', reporting date ' + rptDate + ' time ' + reportingTime + ' has been cancelled. Please contact customer desk for details.';
+            var msg = 'Hi ' + $rootScope.lineupBookingDetails.driverFirstName + ', Duty details assigned to you, booking Id: ' + $rootScope.lineupBookingDetails.bookingId + ', reporting date ' + rptDate + ' time ' + reportingTime + ' has been cancelled. Please contact customer desk for details.';
             ConUsers.sendSMS({
                     mobileNumber: $rootScope.lineupBookingDetails.driverContact,
                     msg: msg
@@ -6313,9 +6315,9 @@ ConUsers.sendSMS({
             customerSMS(newDriverSMS);
 
                     //cancelDriverSMS(cancelData, opcity);
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                     console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                    console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });
            
@@ -6339,7 +6341,7 @@ ConUsers.sendSMS({
                             var cnumber=s.contactNumber;
                                 console.log(s);
                                  var rptDate = moment($rootScope.lineupBookingDetails.bookingReportingDate).format('DD-MM-YYYY');
-            var msg = 'Hi ' + $rootScope.lineupBookingDetails.bookingFirstName + ',%0a Driver Name: ' + newDriverSMS.originalObject.driverName + ' (Contact Number: ' + newDriverSMS.originalObject.mobileNumber + ') ' + ' has been allocated to you for the booking dated ' + rptDate + ', booking Id: ' + $rootScope.lineupBookingDetails.bookingId + '. For queries, please reach us on '+ cnumber +' or info@indian-drivers.com.';
+            var msg = 'Hi ' + $rootScope.lineupBookingDetails.bookingFirstName + ',%0a Driver Name: ' + newDriverSMS.originalObject.driverName + ' (Contact Number: ' + newDriverSMS.originalObject.mobileNumber + ') ' + ' has been allocated to you for the booking dated ' + rptDate + ', booking Id: ' + $rootScope.lineupBookingDetails.bookingId + '. For queries, please reach us on '+ cnumber +' or info@indian-drivers.com.&templateid=1707164576699758907';
             
  ConUsers.sendSMS({
                     mobileNumber: $rootScope.lineupBookingDetails.bookingCellNumber,
@@ -6347,9 +6349,9 @@ ConUsers.sendSMS({
                 }, function(mgssuccess) {
                     newdriverSMSFunction(newDriverSMS);
                     //cancelDriverSMS(cancelData, opcity);
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                     console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                    console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });
            
@@ -6385,7 +6387,7 @@ ConUsers.sendSMS({
             var picadd = landmark + $rootScope.lineupBookingDetails.bookingFrmLocation;
             var rptDate = moment($rootScope.lineupBookingDetails.bookingReportingDate).format('DD-MM-YYYY');
             var reportingTime = $rootScope.lineupBookingDetails.hours + ':' + $rootScope.lineupBookingDetails.minutes + ':' + '00';
-            var msg = 'Hi ' + newDriverSMS.originalObject.driverName + ',%0a Your allotted duty details: %0a Booking ID: ' + $rootScope.lineupBookingDetails.bookingId + ' Duty Type: ' + $rootScope.lineupBookingDetails.dutyType + ' ' + $rootScope.lineupBookingDetails.journeyType + ' Car Type: ' + $rootScope.lineupBookingDetails.carType + ' Dated on: ' + rptDate + ' @ ' + rptTime + relHour + ', Pickup address: ' + picadd + dropadd + ' Client Name: ' + $rootScope.lineupBookingDetails.bookingFirstName + '-' + $rootScope.lineupBookingDetails.bookingCellNumber;
+            var msg = 'Hi ' + newDriverSMS.originalObject.driverName + ',%0a Your allotted duty details: Booking ID: ' + $rootScope.lineupBookingDetails.bookingId + ' Duty Type: ' + $rootScope.lineupBookingDetails.dutyType + ' ' + $rootScope.lineupBookingDetails.journeyType + ' Car Type: ' + $rootScope.lineupBookingDetails.carType + ' Dated on: ' + rptDate + ' @ ' + rptTime + relHour + ', Pickup address: ' + picadd + dropadd + ' Client Name: ' + $rootScope.lineupBookingDetails.bookingFirstName + '-' + $rootScope.lineupBookingDetails.bookingCellNumber;
             
 ConUsers.sendSMS({
                     mobileNumber: newDriverSMS.originalObject.mobileNumber,
@@ -6393,9 +6395,9 @@ ConUsers.sendSMS({
                 }, function(mgssuccess) {
                     //newdriverSMSFunction(newDriverSMS);
                     //cancelDriverSMS(cancelData, opcity);
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                     console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                    console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });
  
@@ -6491,9 +6493,9 @@ ConUsers.sendSMS({
                 }, function(mgssuccess) {
                     //newdriverSMSFunction(newDriverSMS);
                     //cancelDriverSMS(cancelData, opcity);
-                    // console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
+                     console.log('msg sent successfully:' + JSON.stringify(mgssuccess));
                 }, function(error) {
-                  //  console.log('error in sending msg: ' + JSON.stringify(error));
+                    console.log('error in sending msg: ' + JSON.stringify(error));
 
                 });
             
@@ -7438,6 +7440,7 @@ App.directive('googleplace', function() {
             };
 
             scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
+            autocomplete.setComponentRestrictions({'country': []});
 
             google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
                 scope.$apply(function() {
