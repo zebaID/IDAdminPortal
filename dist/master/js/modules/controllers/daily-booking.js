@@ -3518,7 +3518,7 @@ if(angular.isUndefined($rootScope.operationCitySelect) || $rootScope.operationCi
                                 }else{
                                     var msg = 'Dear ' + smsData.firstName + ',%0aWe have taken utmost care while selecting driver, however we are not responsible for any type of losses including financial with respect to services. Need to make payment by cash immediately once trip is over. If not agree with this terms, please cancel the booking. For queries '+ cnumber +' or info@indian-drivers.com.';
                                 }*/
-                                var msg = 'Dear ' + smsData.firstName + 'We have taken utmost care while selecting driver, however we are not responsible for any type of losses including financial with respect to services. Need to make payment by cash immediately once trip is over. If not agree with this terms, please cancel the booking. For queries '+ cnumber +' or info@indian-drivers.com.&templateid=1707164576687222444';
+                                var msg = 'Dear ' + smsData.firstName + '%0aWe have taken utmost care while selecting driver, however we are not responsible for any type of losses including financial with respect to services. Need to make payment by cash immediately once trip is over. If not agree with this terms, please cancel the booking. For queries '+ cnumber +' or info@indian-drivers.com.&templateid=1707164576687222444';
                                 $rootScope.extraChargesforBooking= false;
  ConUsers.sendSMS({
                     mobileNumber: smsData.mobileNumber,
@@ -3554,7 +3554,7 @@ if(angular.isUndefined($rootScope.operationCitySelect) || $rootScope.operationCi
                                 console.log(s);
                                  var rptTime = bookingDetails.hours + ':' + bookingDetails.minutes + ':' + '00';
             var rptDate = moment(bookingDetails.reportingDate).format('DD-MM-YYYY');
-            var msg = 'Dear ' + bookingDetails.firstName + ',%0aYour booking Id: ' + $rootScope.newBookingId + ', dated ' + rptDate + ' @ ' + rptTime + ' for Outstation One Way Trip has been received, driver details will be shared shortly. Driver\'s return Fare @Rs.1.75/km and return time @Rs.50/hr considering avg return speed of 35km/hr. Food allowance is included in the bill amount. For queries'+ cnumber +' or info@indian-drivers.com.&templateid=1707164576767455090';
+            var msg = 'Dear ' + bookingDetails.firstName + ', Your booking Id: ' + $rootScope.newBookingId + ', dated ' + rptDate + ' @ ' + rptTime + ' for Outstation One Way Trip has been received, driver details will be shared shortly. Driver\'s return Fare @Rs.1.75/km and return time @Rs.50/hr considering avg return speed of 35km/hr. Food allowance is included in the bill amount. For queries '+ cnumber +' or info@indian-drivers.com.&templateid=1707164576767455090';
             
 
 ConUsers.sendSMS({
@@ -3589,7 +3589,7 @@ ConUsers.sendSMS({
                                 console.log(s);
                                  var rptTime = bookingDetails.hours + ':' + bookingDetails.minutes + ':' + '00';
             var rptDate = moment(bookingDetails.reportingDate).format('DD-MM-YYYY');
-            var msg = 'Dear ' + bookingDetails.firstName + ',%0aYour booking Id: ' + $rootScope.newBookingId + ', reporting date ' + rptDate + ' @ ' + rptTime + ' for a Outstation Round Trip has been received, driver details will be shared two hours before the trip. Driver\'s food allowance is included in the bill. For queries kindly contact '+ cnumber +' or info@indian-drivers.com.&templateid=1707164576756951358';
+            var msg = 'Dear ' + bookingDetails.firstName + ', Your booking Id: ' + $rootScope.newBookingId + ', reporting date ' + rptDate + ' @ ' + rptTime + ' for a Outstation Round Trip has been received, driver details will be shared two hours before the trip. Driver\'s food allowance is included in the bill. For queries kindly contact '+ cnumber +' or info@indian-drivers.com.&templateid=1707164576756951358';
             ConUsers.sendSMS({
                     mobileNumber: bookingDetails.mobileNumber,
                     msg: msg
@@ -3619,7 +3619,7 @@ ConUsers.sendSMS({
                                 console.log(s);
                                 var rptTime = bookingDetails.hours + ':' + bookingDetails.minutes + ':' + '00';
             var rptDate = moment(bookingDetails.reportingDate).format('DD-MM-YYYY');
-            var msg = 'Dear ' + bookingDetails.firstName + ',%0aYour booking Id: ' + $rootScope.newBookingId + ', reporting date ' + rptDate + ' @ ' + rptTime + ' for a Local Oneway Trip has been received for which Rs.100/- return fare additional will be applicable , driver details will be shared two hours before the trip.For queries kindly contact '+ cnumber +' or info@indian-drivers.com.&templateid=1707164576762294540';
+            var msg = 'Dear ' + bookingDetails.firstName + ', Your booking Id: ' + $rootScope.newBookingId + ', reporting date ' + rptDate + ' @ ' + rptTime + ' for a Local Oneway Trip has been received for which Rs.100/- return fare additional will be applicable , driver details will be shared two hours before the trip.For queries kindly contact '+ cnumber +' or info@indian-drivers.com.&templateid=1707164576762294540';
             ConUsers.sendSMS({
                     mobileNumber: bookingDetails.mobileNumber,
                     msg: msg
@@ -3649,7 +3649,7 @@ ConUsers.sendSMS({
                                 console.log(s);
                                 var rptTime = bookingDetails.hours + ':' + bookingDetails.minutes + ':' + '00';
             var rptDate = moment(bookingDetails.reportingDate).format('DD-MM-YYYY');
-            var msg = 'Dear ' + bookingDetails.firstName + ',%0aYour booking Id: ' + $rootScope.newBookingId + ', reporting date ' + rptDate + ' @ ' + rptTime + ' for a Local Round Trip has been received, driver details will be shared two hours before the trip. For queries kindly contact '+ cnumber +' or info@indian-drivers.com.';
+            var msg = 'Dear ' + bookingDetails.firstName + ', Your booking Id: ' + $rootScope.newBookingId + ', reporting date ' + rptDate + ' @ ' + rptTime + ' for a Local Round Trip has been received, driver details will be shared two hours before the trip. For queries kindly contact '+ cnumber +' or info@indian-drivers.com.&templateid=1707164576751593185';
             ConUsers.sendSMS({
                     mobileNumber: bookingDetails.mobileNumber,
                     msg: msg
@@ -3678,7 +3678,7 @@ ConUsers.sendSMS({
                                 console.log(s);
                                  var rptTime = customerSMSdetails.hours + ':' + customerSMSdetails.minutes + ':' + '00';
             var rptDate = moment(customerSMSdetails.reportingDate).format('DD-MM-YYYY');
-           var msg = 'Dear ' + customerSMSdetails.firstName + ', Your booking Id: ' + $rootScope.newBookId + ', dated ' + rptDate + ' @ ' + rptTime + ' for Outstation One Way Trip has been received, driver details will be shared shortly. Driver\'s return Fare @Rs.1.75/km and return time @Rs.50/hr considering avg return speed of 35km/hr. Food allowance is included in the bill amount. For queries'+ cnumber +' or info@indian-drivers.com.';
+           var msg = 'Dear ' + customerSMSdetails.firstName + ', Your booking Id: ' + $rootScope.newBookId + ', dated ' + rptDate + ' @ ' + rptTime + ' for Outstation One Way Trip has been received, driver details will be shared shortly. Driver\'s return Fare @Rs.1.75/km and return time @Rs.50/hr considering avg return speed of 35km/hr. Food allowance is included in the bill amount. For queries '+ cnumber +' or info@indian-drivers.com.&templateid=1707164576767455090';
                     
             ConUsers.sendSMS({
                     mobileNumber: customerSMSdetails.mobileNumber,
@@ -3710,7 +3710,7 @@ ConUsers.sendSMS({
             var relTime = customerSMSdetails.tohours + ':' + customerSMSdetails.tominutes + ':' + '00';
             var rptDate = moment(customerSMSdetails.reportingDate).format('DD-MM-YYYY');
             var relDate = moment(customerSMSdetails.bookingToDate).format('DD-MM-YYYY');
-           var msg = '\'Dear ' + customerSMSdetails.firstName + ', Your booking Id: ' + $rootScope.newBookId + ', reporting date ' + rptDate + ' @ ' + rptTime + ' for a Outstation Round Trip has been received, driver details will be shared two hours before the trip. Driver\'s food allowance is included in the bill. For queries kindly contact '+ cnumber +' or info@indian-drivers.com.';
+           var msg = 'Dear ' + customerSMSdetails.firstName + ', Your booking Id: ' + $rootScope.newBookId + ', reporting date ' + rptDate + ' @ ' + rptTime + ' for a Outstation Round Trip has been received, driver details will be shared two hours before the trip. Driver\'s food allowance is included in the bill. For queries kindly contact '+ cnumber +' or info@indian-drivers.com.&templateid=1707164576756951358';
             ConUsers.sendSMS({
                     mobileNumber: customerSMSdetails.mobileNumber,
                     msg: msg
@@ -3739,7 +3739,7 @@ ConUsers.sendSMS({
                                 console.log(s);
                                  var rptTime = customerSMSdetails.hours + ':' + customerSMSdetails.minutes + ':' + '00';
             var rptDate = moment(customerSMSdetails.reportingDate).format('DD-MM-YYYY');
-            var msg = 'Dear ' + customerSMSdetails.firstName + ', Your booking Id: ' + $rootScope.newBookId + ', reporting date ' + rptDate + ' @ ' + rptTime + ' for a Local Oneway Trip has been received for which Rs.100/- return fare additional will be applicable , driver details will be shared two hours before the trip.For queries kindly contact '+ cnumber +' or info@indian-drivers.com.';
+            var msg = 'Dear ' + customerSMSdetails.firstName + ', Your booking Id: ' + $rootScope.newBookId + ', reporting date ' + rptDate + ' @ ' + rptTime + ' for a Local Oneway Trip has been received for which Rs.100/- return fare additional will be applicable , driver details will be shared two hours before the trip.For queries kindly contact '+ cnumber +' or info@indian-drivers.com.&templateid=1707164576762294540';
             ConUsers.sendSMS({
                     mobileNumber: customerSMSdetails.mobileNumber,
                     msg: msg
@@ -4103,7 +4103,7 @@ ConUsers.sendSMS({
                             var cnumber=s.contactNumber;
                                 console.log(s);
                                  var rptDate = moment(customerSMS.bookingReportingDate).format('DD-MM-YYYY');
-            var msg = 'Hi ' + customerSMS.bookingFirstName + ',%0a Driver Name: ' + driverSMS.originalObject.driverName + ' (Contact Number: ' + driverSMS.originalObject.mobileNumber + ') has been allocated to you for the booking dated ' + rptDate + ', booking Id: ' + $rootScope.allocateNewBookings.bookingId + '. For queries, please reach us on '+ cnumber +' or info@indian-drivers.com.';
+            var msg = 'Hi ' + customerSMS.bookingFirstName + ',  Driver Name: ' + driverSMS.originalObject.driverName + ' (Contact Number: ' + driverSMS.originalObject.mobileNumber + ') has been allocated to you for the booking dated ' + rptDate + ', booking Id: ' + $rootScope.allocateNewBookings.bookingId + '. For queries, please reach us on '+ cnumber +' or info@indian-drivers.com.&templateid=1707164576699758907';
             
 ConUsers.sendSMS({
                     mobileNumber: customerSMS.bookingCellNumber,
