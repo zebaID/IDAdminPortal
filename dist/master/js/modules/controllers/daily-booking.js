@@ -4103,7 +4103,7 @@ ConUsers.sendSMS({
                             var cnumber=s.contactNumber;
                                 console.log(s);
                                  var rptDate = moment(customerSMS.bookingReportingDate).format('DD-MM-YYYY');
-            var msg = 'Hi ' + customerSMS.bookingFirstName + ',  Driver Name: ' + driverSMS.originalObject.driverName + ' (Contact Number: ' + driverSMS.originalObject.mobileNumber + ') has been allocated to you for the booking dated ' + rptDate + ', booking Id: ' + $rootScope.allocateNewBookings.bookingId + '. For queries, please reach us on '+ cnumber +' or info@indian-drivers.com.&templateid=1707164576699758907';
+            var msg = 'Hi ' + customerSMS.bookingFirstName + ', Driver Name:' + driverSMS.originalObject.driverName + ' (Contact Number:' + driverSMS.originalObject.mobileNumber + ') has been allocated to you for the booking dated ' + rptDate + ', booking Id:' + $rootScope.allocateNewBookings.bookingId + '. For queries, please reach us on '+ cnumber +' or info@indian-drivers.com.&templateid=1707164576699758907';
             
 ConUsers.sendSMS({
                     mobileNumber: customerSMS.bookingCellNumber,
