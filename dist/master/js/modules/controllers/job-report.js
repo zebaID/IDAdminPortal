@@ -20,6 +20,8 @@ App.controller('driverJobCtrl', ['$scope', '$rootScope', '$filter', 'ngTablePara
 
          $scope.openedStart1 = false;
             $scope.openToDate1 = false;
+            $scope.openedOpenFromDate = false;
+            $scope.openOenedToDate = false;
 $scope.openStart1 = function($event) {
 
                 $event.preventDefault();
@@ -28,12 +30,28 @@ $scope.openStart1 = function($event) {
                 $scope.openToDate1 = false;
 
             };
+            $scope.openFromDate = function($event) {
+
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.openedOpenFromDate = true;
+                $scope.openOenedToDate = false;
+
+            };
 $scope.openedToDate1 = function($event) {
 
                 $event.preventDefault();
                 $event.stopPropagation();
                 $scope.openToDate1 = true;
                 $scope.openedStart1 = false;
+
+            };
+            $scope.openedOpenToDate = function($event) {
+
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.openedOpenFromDate = false;
+                $scope.openOenedToDate = true;
 
             };
         $rootScope.cityAt1 = [];
@@ -936,6 +954,79 @@ $scope.openedToDate1 = function($event) {
         }
         
 
+        $scope.searchJobReportByOpenedDate = function(fromDate,todate){
+            $rootScope.loader = 1;
+
+       var count = 0;
+       if ((angular.isUndefined(fromDate) || fromDate === '' || fromDate === null) && (angular.isUndefined(toDate) || toDate === '' || toDate === null)) {
+           document.getElementById("fromDateOpened").style.borderColor = "red";
+           document.getElementById("fromDateOpened1").innerHTML = '*required';
+
+           document.getElementById("toDateOpened").style.borderColor = "red";
+           document.getElementById("toDateOpened1").innerHTML = '*required';
+           count++;
+           //toDate.toDate2 = 'required';
+
+       } else {
+
+           if (angular.isUndefined(fromDate) || fromDate === '' || fromDate === null) {
+               document.getElementById("fromDateOpened").style.borderColor = "red";
+               document.getElementById("fromDateOpened1").innerHTML = '*required';
+               count++;
+               //fromDate.frmDate1 = 'required';
+
+
+           } else {
+               document.getElementById("fromDateOpened").style.borderColor = "#dde6e9";
+               document.getElementById("fromDateOpened1").innerHTML = '';
+           }
+           if (angular.isUndefined(toDate) || toDate === '' || toDate === null) {
+               document.getElementById("toDateOpened").style.borderColor = "red";
+               document.getElementById("toDateOpened1").innerHTML = '*required';
+               count++;
+               //toDate.toDate2 = 'required';
+
+           } else if (toDate < fromDate) {
+               document.getElementById("toDateOpened").style.borderColor = "red";
+               document.getElementById("toDateOpened1").innerHTML = 'To Date should be greater than From Date';
+               count++;
+               //toDate.toDate2 = 'To Date should be greater than To Date';
+
+           } else {
+               document.getElementById("toDateOpened").style.borderColor = "#dde6e9";
+               document.getElementById("toDateOpened1").innerHTML = '';
+           }
+           var datetwo = new Date(todate);
+           var dateone = new Date(fromDate)
+           var dayDif = (datetwo - dateone)  / 1000 / 60 / 60 / 24;
+           if(dayDif <= 29){
+               document.getElementById("fromDateOpened").style.borderColor = "#dde6e9";
+           document.getElementById("fromDateOpened1").innerHTML = '';
+           //searchData.frmDate1 = null;
+       }else{
+         document.getElementById("fromDateOpened").style.borderColor = "red";
+           document.getElementById("fromDateOpened1").innerHTML = '*Unable to retrive more than one month data.';
+           //searchData.frmDate1 = 'Unable to retrive more than 4 days data.';
+           count++;  
+       }
+
+
+       }
+
+       if (count > 0) {
+           $scope.count = count;
+           $rootScope.loader = 0;
+           return false;
+       } else {
+           $scope.count = 0;
+           $localStorage.put('searchReportFromDateOpen', fromDate);
+           $localStorage.put('searchReportToDateOpen', todate);
+           $state.go('app.searchedJobReport');
+           $rootScope.loader = 0;
+       }
+
+   }
+   
 
                 $scope.sendDataHere = function(customerId){
                     $rootScope.loader = 1;
@@ -3794,7 +3885,7 @@ $localStorage.put('Area', undefined);
                         function(DriverJobDetails) {
                            // console.log('update status to open: '+JSON.stringify(DriverJobDetails));
                             DriverJobDetails.status = 'Open';
-
+                            DriverJobDetails.openedDate =new Date();
                             DriverJobDetails.updatedBy = $localStorage.get('userId');
                             DriverJobDetails.updatedDate = new Date();
                             DriverJobDetails.$save();
@@ -4011,6 +4102,10 @@ $localStorage.put('Area', undefined);
                     return false;
                 } else {
                     $scope.count = 0;
+                    if(jobDetails.status==='Open'){
+                       var openedDate =new Date();
+                    }          
+                    
                     DriverJobDetails.findById({
                             id: jobDetails.id
                         },
@@ -4019,6 +4114,7 @@ $localStorage.put('Area', undefined);
                             DriverJobDetails.carType = jobDetails.carType;
                             DriverJobDetails.dutyHours = jobDetails.dutyHours;
                             DriverJobDetails.status = jobDetails.status;
+                            DriverJobDetails.openedDate=openedDate;
                             DriverJobDetails.dutyType = jobDetails.dutyDetail;
                             DriverJobDetails.clientId = jobDetails.clientId;
                             DriverJobDetails.weeklyOff = '{' + jobDetails.weeklyOff + '}';

@@ -135,6 +135,40 @@ table th {
         </div>
     </div>
 </div>
+
+<h3>Search Job Report By Job Opened Date</h3>
+<div class="panel panel-default" style="height: 350px;">
+    <div class="panel-heading">
+        <div class="col-xs-12">
+            <br>
+            <br>
+        </div>
+        <div class="col-xs-12 margin-top-10">
+            <div class="col-xs-4">
+                <label>
+                    From Date</label>
+                <input type="text" ng-model="fromDateOpened" id="fromDateOpened" style="height: 24px;" datepicker-popup="dd-MM-yyyy" is-open="openedOpenFromDate" min-date="minDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openFromDate($event)" ng-blur="changeMin(fromDate)" />
+                <br>
+                <span id="fromDateOpened1" style="color:red"></span>
+            </div>
+            <div class="col-xs-4">
+                <label>
+                    To Date</label>
+                <input type="text" ng-model="toDateOpened" id="toDateOpened" style="height: 24px;" datepicker-popup="dd-MM-yyyy" is-open="openOenedToDate" min-date="minDate" datepicker-options="dateOptions" close-text="Close" class="input-hover" ng-click="openedOpenToDate($event)" />
+                <br>
+                <span id="toDateOpened1" style="color:red"></span>
+            </div>
+            <div class="col-xs-4">
+                <button class="pull-right btn btn-labeled btn-primary" style="" ng-click="searchJobReportByOpenedDate(fromDateOpened, toDateOpened)"> <span class="btn-label"><i class="fa fa-search"></i>
+                           </span>Search</button>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <br>
+            <br>
+        </div>
+    </div>
+</div>
 <script type="text/ng-template" id="/addJob.html">
     <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
         <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Search Customer

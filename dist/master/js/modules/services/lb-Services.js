@@ -5500,6 +5500,46 @@ isArray:true
               method: "GET",
               isArray: true
             },
+             /**
+             * @ngdoc method
+             * @name lbServices.PermanentDriverRequest#searchMonthlyDriversNFD
+             * @methodOf lbServices.PermanentDriverRequest
+             *
+             * @description
+             *
+             * <em>
+             * (The remote method definition does not provide any description.)
+             * </em>
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *  - `from_date` – `{string=}` -
+             *
+             *  - `to_date` – `{string=}` -
+             *
+             *  - `operationCity` – `{string=}` -
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * <em>
+             * (The remote method definition does not provide any description.
+             * This usually means the response is a `PermanentDriverRequest` object.)
+             * </em>
+             */
+              "searchMonthlyDriversNFD": {
+                url: urlBase + "/PermanentDriverRequests/searchMonthlyDriversNFD",
+                method: "GET",
+                isArray: true
+              },
+  
 
             /**
              * @ngdoc method
@@ -52542,6 +52582,46 @@ module.factory(
               method: "GET",
               isArray: true
             },
+             /**
+             * @ngdoc method
+             * @name lbServices.DriverJobDetails#getDriverJobReportByOepenedDate
+             * @methodOf lbServices.DriverJobDetails
+             *
+             * @description
+             *
+             * <em>
+             * (The remote method definition does not provide any description.)
+             * </em>
+             *
+             * @param {Object=} parameters Request parameters.
+             *
+             *  - `from_date` – `{string}` -
+             *
+             *  - `to_date` – `{string}` -
+             * 
+             *  - `operationCity` – `{string}` -
+             *
+             * @param {function(Object,Object)=} successCb
+             *   Success callback with two arguments: `value`, `responseHeaders`.
+             *
+             * @param {function(Object)=} errorCb Error callback with one argument:
+             *   `httpResponse`.
+             *
+             * @returns {Object} An empty reference that will be
+             *   populated with the actual data once the response is returned
+             *   from the server.
+             *
+             * <em>
+             * (The remote method definition does not provide any description.
+             * This usually means the response is a `DriverJobDetails` object.)
+             * </em>
+             */
+              "getDriverJobReportByOepenedDate": {
+                url: urlBase + "/DriverJobDetails/getDriverJobReportByOepenedDate",
+                method: "GET",
+                isArray: true
+              },
+  
 
 
 
