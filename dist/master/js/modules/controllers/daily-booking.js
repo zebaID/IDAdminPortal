@@ -5650,11 +5650,419 @@ ConUsers.sendSMS({
             $rootScope.loader = 1;
             $scope.isDisabled = true;
             var returnFarekm=0;
+            var dropLat =0;
+            var dropLng =0;
             if ($rootScope.lineupBookingDetails.dutyType == 'Outstation' && journeyType == 'One Way') {
                
-                returnFarekm = ($rootScope.lineupBookingDetails.returnFarekm);
-           
-         }
+               // returnFarekm = ($rootScope.lineupBookingDetails.returnFarekm);
+                var mapUrl1 = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + offDutyAddress + '&types=geocode&language=en&key=AIzaSyAZVdypRwWG3MBmQXD12X1KPgt9lZDEKX4';
+                $http.post(mapUrl1).success(function(result1) {
+                    if(result1.results.length>0){
+                        dropLat = result1.results[0].geometry.location.lat;
+                         dropLng = result1.results[0].geometry.location.lng;
+                       
+                    }
+                 
+                var distancemap='https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + $rootScope.lineupBookingDetails.fromLat + ',' + $rootScope.lineupBookingDetails.fromLong + '&destinations=' + dropLat + ',' + dropLng + '&mode=driving&language=en&key=AIzaSyAZVdypRwWG3MBmQXD12X1KPgt9lZDEKX4';
+$http.post(distancemap).success(function(resultresponce) {
+console.log('result' + JSON.stringify(resultresponce));
+if (resultresponce.rows[0].elements[0].status === 'NOT_FOUND') {
+  
+     dropLat = $rootScope.lineupBookingDetails.fromLat;
+     dropLng = $rootScope.lineupBookingDetails.fromLong; 
+}
+if(dropLat!=null&&dropLng!=null){
+if (resultresponce.rows[0].elements[0].status === 'ZERO_RESULTS') {
+    
+      dropLat = $rootScope.lineupBookingDetails.fromLat;
+      dropLng = $rootScope.lineupBookingDetails.fromLong; 
+} else {
+    if(resultresponce['rows'][0]['elements'][0]['status']==='NOT_FOUND'){
+     returnFarekm=0;
+    }else{
+        returnFarekm=Math.round((resultresponce['rows'][0]['elements'][0]['distance']['value'])/1000);
+     }   
+    }
+    }
+    function addZero(i) {
+        if (i < 10) {
+            i = "0" + i;
+        }
+        return i;
+    }
+    var count = 0;
+    var currentDate = new Date();
+
+    var h = addZero(currentDate.getHours());
+    var m = addZero(currentDate.getMinutes());
+    var s = addZero(currentDate.getSeconds());
+    var currentTime = h + ':' + m + ':' + s;
+    var currentDate1 = moment(currentDate).format('YYYY-MM-DD');
+    var rptDate = moment($rootScope.lineupBookingDetails.bookingReportingDate).format('YYYY-MM-DD');
+    var rptTime = $rootScope.lineupBookingDetails.hours + ':' + $rootScope.lineupBookingDetails.minutes + ':' + '00';
+    var date1 = new Date(rptDate);
+    date1.setHours($rootScope.lineupBookingDetails.hours);
+    date1.setMinutes($rootScope.lineupBookingDetails.minutes);
+   //var url = 'http://192.168.1.104:3000';
+    var url = 'http://65.0.186.134:3000';
+    //var url = 'http://43.240.67.79:3000';
+
+    if (angular.isUndefined(booking) || booking === '' || booking === null) {
+        if (angular.isUndefined($rootScope.lineupBookingDetails.dutyType) || $rootScope.lineupBookingDetails.dutyType === '' || $rootScope.lineupBookingDetails.dutyType === null) {} else {
+            if ($rootScope.lineupBookingDetails.dutyType === 'Outstation') {
+                document.getElementById("bookingToDate").style.borderColor = "red";
+                document.getElementById("bookingToDate1").innerHTML = 'Releiving Date should not be blank';
+                document.getElementById("bookingReleivingTime").style.borderColor = "red";
+                document.getElementById("bookingReleivingTime1").innerHTML = 'Releiving Time should not be blank ';
+                count++;
+                $scope.isDisabled = false;
+            } else {
+                document.getElementById("bookingToDatelocal").style.borderColor = "red";
+                document.getElementById("bookingToDate1local").innerHTML = 'Releiving Date should not be blank';
+                document.getElementById("bookingReleivingTimelocal").style.borderColor = "red";
+                document.getElementById("bookingReleivingTime1local").innerHTML = 'Releiving Time should not be blank ';
+                $scope.isDisabled = false;
+                count++;
+
+            }
+        }
+    } else {
+        if (angular.isUndefined($rootScope.lineupBookingDetails.dutyType) || $rootScope.lineupBookingDetails.dutyType === '' || $rootScope.lineupBookingDetails.dutyType === null) {} else {
+            if ($rootScope.lineupBookingDetails.dutyType === 'Outstation') {
+                if (angular.isUndefined(booking.bookingToDate) || booking.bookingToDate === '' || booking.bookingToDate === null) {
+                    document.getElementById("bookingToDate").style.borderColor = "red";
+                    document.getElementById("bookingToDate1").innerHTML = 'Releiving Date should not be blank';
+                    document.getElementById("bookingReleivingTime").style.borderColor = "#dde6e9";
+                    document.getElementById("bookingReleivingTime1").innerHTML = '';
+                    count++;
+                    $scope.isDisabled = false;
+                } else if (angular.isUndefined(booking.tohours) || booking.tohours === '' || booking.tohours === null || angular.isUndefined(booking.tominutes) || booking.tominutes === '' || booking.tominutes === null) {
+                    document.getElementById("bookingReleivingTime").style.borderColor = "red";
+                    document.getElementById("bookingReleivingTime1").innerHTML = 'Releiving Time should not be blank ';
+                    document.getElementById("bookingToDate").style.borderColor = "#dde6e9";
+                    document.getElementById("bookingToDate1").innerHTML = '';
+                    count++;
+                    $scope.isDisabled = false;
+                } else {
+                    document.getElementById("bookingToDate").style.borderColor = "#dde6e9";
+                    document.getElementById("bookingToDate1").innerHTML = '';
+                    document.getElementById("bookingReleivingTime").style.borderColor = "#dde6e9";
+                    document.getElementById("bookingReleivingTime1").innerHTML = '';
+                    $scope.isDisabled = true;
+                    var relDate = moment(booking.bookingToDate).format('YYYY-MM-DD');
+                    var relTime1 = booking.tohours + ':' + booking.tominutes + ':' + '00';
+                    var date2 = new Date(relDate);
+                    date2.setHours(booking.tohours);
+                    date2.setMinutes(booking.tominutes);
+                    if (date2 < date1) {
+                        document.getElementById("bookingToDate").style.borderColor = "red";
+                        document.getElementById("bookingReleivingTime").style.borderColor = "red";
+                        document.getElementById("bookingToDate1").innerHTML = 'Releiving Date and Time should be greater than Reporting Date and Time';
+                        booking.bookingToDate1 = 'Releiving Date and Time should be greater than Reporting Date and Time';
+                        count++;
+                    } else if (date2.getTime() === date1.getTime()) {
+                        var hour, minute, hours, minutes;
+
+                        hour = parseInt(relTime1.split(":")[0]);
+                        hours = parseInt(rptTime.split(":")[0]);
+
+                        minute = parseInt(relTime1.split(":")[1]);
+                        minutes = parseInt(rptTime.split(":")[1]);
+
+                        var rptDay = new Date(rptDate);
+                        var givenDate = new Date(relDate);
+                        givenDate.setHours(hour);
+                        givenDate.setMinutes(minute);
+                        rptDay.setHours(hours);
+                        rptDay.setMinutes(minutes);
+
+                        if (givenDate < rptDay) {
+                            document.getElementById("bookingToDate").style.borderColor = "red";
+                            document.getElementById("bookingReleivingTime").style.borderColor = "red";
+                            document.getElementById("bookingToDate1").innerHTML = 'Releiving Date and Time should be greater than Reporting Date and Time';
+                            booking.bookingToDate1 = 'Releiving Date and Time should be greater than Reporting Date and Time';
+                            count++;
+
+                        }  else {
+                            document.getElementById("bookingReleivingTime").style.borderColor = "#dde6e9";
+                            document.getElementById("bookingReleivingTime1").innerHTML = '';
+                            // booking.bookingToDate1local = null;
+                        }
+                            if(journeyType !== 'One Way'){
+                              if (givenDate > currentDate) {
+                            document.getElementById("bookingReleivingTime").style.borderColor = "red";
+                            document.getElementById("bookingReleivingTime1").innerHTML = 'Not able to Off future duty';
+                            booking.bookingReleivingTime1local = 'Not able to Off future duty';
+                            count++;
+                        }else {
+                            document.getElementById("bookingReleivingTime").style.borderColor = "#dde6e9";
+                            document.getElementById("bookingReleivingTime1").innerHTML = '';
+                            // booking.bookingToDate1local = null;
+                        }  
+                            }
+                         
+
+
+                    } else {
+                        document.getElementById("bookingToDate").style.borderColor = "#dde6e9";
+                        document.getElementById("bookingToDate1").innerHTML = '';
+                        booking.bookingToDate1 = null;
+
+                    }
+
+                     if(journeyType !== 'One Way'){
+                       if (date2 > currentDate) {
+                        document.getElementById("bookingToDate").style.borderBottom = "1px solid red";
+                        document.getElementById("bookingToDate1").innerHTML = 'Not able to Off future date duty';
+
+                        count++;
+                    } else {
+                        document.getElementById("bookingToDate").style.borderColor = "#dde6e9";
+                        document.getElementById("bookingToDate1").innerHTML = '';
+                        booking.bookingToDate1 = null;
+
+                    } 
+                     }
+                }
+
+            } else {
+
+                if (angular.isUndefined(booking.toDate) || booking.toDate === '' || booking.toDate === null) {
+                    document.getElementById("bookingReleivingTimelocal").style.borderColor = "#dde6e9";
+                    document.getElementById("bookingReleivingTime1local").innerHTML = '';
+                    document.getElementById("bookingToDatelocal").style.borderColor = "red";
+                    document.getElementById("bookingToDate1local").innerHTML = 'Releiving Date should not be blank';
+                    count++;
+                    $scope.isDisabled = false;
+                } else if (angular.isUndefined(booking.tohour1) || booking.tohour1 === '' || booking.tohour1 === null || angular.isUndefined(booking.tomin1) || booking.tomin1 === '' || booking.tomin1 === null) {
+                    document.getElementById("bookingToDatelocal").style.borderColor = "#dde6e9";
+                    document.getElementById("bookingToDate1local").innerHTML = '';
+                    document.getElementById("bookingReleivingTimelocal").style.borderColor = "red";
+                    document.getElementById("bookingReleivingTime1local").innerHTML = 'Releiving Time should not be blank ';
+                    count++;
+                    $scope.isDisabled = false;
+                } else {
+                    document.getElementById("bookingToDatelocal").style.borderColor = "#dde6e9";
+                    document.getElementById("bookingToDate1local").innerHTML = '';
+                    document.getElementById("bookingReleivingTimelocal").style.borderColor = "#dde6e9";
+                    document.getElementById("bookingReleivingTime1local").innerHTML = '';
+                    $scope.isDisabled = true;
+                    var relDate1 = moment(booking.toDate).format('YYYY-MM-DD');
+                    var relTime = booking.tohour1 + ':' + booking.tomin1 + ':' + '00';
+                    var date3 = new Date(relDate1);
+                    date3.setHours(booking.tohour1);
+                    date3.setMinutes(booking.tomin1);
+                    if (date3 < date1) {
+                        document.getElementById("bookingToDatelocal").style.borderColor = "red";
+                        document.getElementById("bookingReleivingTimelocal").style.borderColor = "red";
+                        document.getElementById("bookingToDate1local").innerHTML = 'Releiving Date and Time should be greater than Reporting Date and Time';
+                        booking.bookingToDate1local = 'Releiving Date and Time should be greater than Reporting Date and Time';
+                        count++;
+                    } else if (date3.getTime() == date1.getTime()) {
+                        var hour, minute, hours, minutes;
+
+                        hour = parseInt(relTime.split(":")[0]);
+                        hours = parseInt(rptTime.split(":")[0]);
+
+                        minute = parseInt(relTime.split(":")[1]);
+                        minutes = parseInt(rptTime.split(":")[1]);
+
+                        var rptDay = new Date(rptDate);
+                        var givenDate = new Date(relDate1);
+                        givenDate.setHours(hour);
+                        givenDate.setMinutes(minute);
+                        rptDay.setHours(hours);
+                        rptDay.setMinutes(minutes);
+
+                        if (givenDate < rptDay) {
+                            document.getElementById("bookingReleivingTimelocal").style.borderColor = "red";
+                            document.getElementById("bookingToDatelocal").style.borderColor = "red";
+                            document.getElementById("bookingToDate1local").innerHTML = 'Releiving Date and Time should be greater than Reporting Date and Time';
+                            booking.bookingToDate1local = 'Releiving Date and Time should be greater than Reporting Date and Time';
+                            count++;
+
+                        }else if (givenDate > currentDate) {
+                            document.getElementById("bookingReleivingTimelocal").style.borderColor = "red";
+                            document.getElementById("bookingReleivingTime1local").innerHTML = 'Not able to Off future duty';
+                            booking.bookingReleivingTime1local = 'Not able to Off future duty';
+                            count++;
+                        }   else {
+                            document.getElementById("bookingReleivingTimelocal").style.borderColor = "#dde6e9";
+                            document.getElementById("bookingReleivingTimelocal").innerHTML = '';
+                        }
+
+                    } else if (date3 > currentDate) {
+                        document.getElementById("bookingToDatelocal").style.borderBottom = "1px solid red";
+                        document.getElementById("bookingToDate1local").innerHTML = 'Not able to Off future date duty';
+                        count++;
+                    } else {
+                        document.getElementById("bookingToDatelocal").style.borderColor = "#dde6e9";
+                        document.getElementById("bookingToDate1local").innerHTML = '';
+                    }
+                }
+            }
+        }
+
+    }
+    if (angular.isUndefined(offDutyAddress) || offDutyAddress === '' || offDutyAddress === null) {
+        document.getElementById("bookingToLocation").style.borderColor = "red";
+        document.getElementById("bookingToLocation1").innerHTML = '*required';
+        $scope.isDisabled = false;
+        count++;
+    } else {
+        document.getElementById("bookingToLocation").style.borderColor = "#dde6e9";
+        document.getElementById("bookingToLocation1").innerHTML = '';
+    }
+    if (count > 0) {
+        $scope.count = count;
+        $scope.isDisabled = false;
+        $rootScope.loader = 0;
+        return false;
+    } else {
+
+        $scope.count = 0;
+        $rootScope.currentBookingoff1 = booking;
+        if (angular.isUndefined($rootScope.lineupBookingDetails.dutyType) || $rootScope.lineupBookingDetails.dutyType === '' || $rootScope.lineupBookingDetails.dutyType === null) {} else {
+            if ($rootScope.lineupBookingDetails.dutyType !== 'Outstation') {
+
+                var offDutyDate = moment(booking.toDate).format('YYYY-MM-DD');
+                var offDutyTime = booking.tohour1 + ':' + booking.tomin1 + ':' + '00';
+                $scope.travelTime = null;
+            } else {
+                var travelTimeRelMin = ((parseInt(booking.tohours) * 60) + parseInt(booking.tominutes));
+                var travelTimeRepMin = ((parseInt($rootScope.lineupBookingDetails.hours) * 60) + parseInt($rootScope.lineupBookingDetails.minutes));
+                $scope.travelTime = (travelTimeRelMin - travelTimeRepMin);
+                var offDutyTime = booking.tohours + ':' + booking.tominutes + ':' + '00';
+                var offDutyDate = moment(booking.bookingToDate).format('YYYY-MM-DD');
+            }
+        }
+        var obj = {
+            "bookingId": $rootScope.lineupBookingDetails.bookingId,
+            "requestFrom": "ADMIN_OFF",
+            "offDutyDate": offDutyDate,
+            "offDutyTime": offDutyTime,
+            "distanceBetweenPickupAndDrop":returnFarekm
+        };
+        if(journeyType === 'One Way'){
+           // console.log(dropLat1);
+           // console.log(dropLong1); 
+            Bookings.offDutyForAdmin({
+                bookingId: $rootScope.lineupBookingDetails.bookingId,
+                totalTravelTime: $scope.travelTime,
+                releivingDate: offDutyDate,
+                releivingTime: offDutyTime,
+                dropLocation: offDutyAddress,
+                dropLat: dropLat,
+                dropLong: dropLng,
+                updatedBy: $rootScope.userId
+            }, function(offDutySuccess) {
+                //console.log('offDutySuccess' + JSON.stringify(offDutySuccess));
+                $http.post(url + '/updateInvoiceOnStartAndOffDuty', obj).
+                success(function(result) {
+                    //console.log('Updated Geolocation successfully' + JSON.stringify(result));
+                    if (result.length > 0) {
+                        $rootScope.offDutyFlag = false;
+                        $rootScope.startDutyFlag = true;
+                        $scope.billedAmount = result[0].amount;
+                        sendSmsToCustomerAtOff(booking);
+                        sendSmsToDriverAtOff(booking);
+                        $modalInstance.dismiss('cancel');
+                        reloadFunc();
+                        $rootScope.getBookings();
+                        $rootScope.loader = 0;
+                    }
+
+                }).
+                error(function(error) {
+                    console.log('Error in updating driver geolocation:' + JSON.stringify(error));
+                    $scope.isDisabled = false;
+                    $modalInstance.dismiss('cancel');
+                    $rootScope.loader = 0;
+                });
+
+            }, function(offDutyError) {
+                console.log('offDutyError' + JSON.stringify(offDutyError));
+                $scope.isDisabled = false;
+                $modalInstance.dismiss('cancel');
+                $rootScope.loader = 0;
+            });
+             $scope.isDisabled = false;
+             
+            
+              
+        }else{
+            var dropLat1 = 0;
+            var dropLong1 = 0; 
+            Bookings.offDutyForAdmin({
+                bookingId: $rootScope.lineupBookingDetails.bookingId,
+                totalTravelTime: $scope.travelTime,
+                releivingDate: offDutyDate,
+                releivingTime: offDutyTime,
+                dropLocation: offDutyAddress,
+                dropLat: dropLat1,
+                dropLong: dropLong1,
+                updatedBy: $rootScope.userId
+            }, function(offDutySuccess) {
+                //console.log('offDutySuccess' + JSON.stringify(offDutySuccess));
+                $http.post(url + '/updateInvoiceOnStartAndOffDuty', obj).
+                success(function(result) {
+                    //console.log('Updated Geolocation successfully' + JSON.stringify(result));
+                    if (result.length > 0) {
+                        $rootScope.offDutyFlag = false;
+                        $rootScope.startDutyFlag = true;
+                        $scope.billedAmount = result[0].amount;
+                        sendSmsToCustomerAtOff(booking);
+                        sendSmsToDriverAtOff(booking);
+                        $modalInstance.dismiss('cancel');
+                        reloadFunc();
+                        $rootScope.getBookings();
+                        $rootScope.loader = 0;
+                    }
+
+                }).
+                error(function(error) {
+                    console.log('Error in updating driver geolocation:' + JSON.stringify(error));
+                    $scope.isDisabled = false;
+                    $modalInstance.dismiss('cancel');
+                    $rootScope.loader = 0;
+                });
+
+            }, function(offDutyError) {
+                console.log('offDutyError' + JSON.stringify(offDutyError));
+                $scope.isDisabled = false;
+                $modalInstance.dismiss('cancel');
+                $rootScope.loader = 0;
+            });
+        }
+        
+
+            
+
+       
+    }
+
+    
+}).error(function(error) {
+    console.log('error' + JSON.stringify(error));
+    $scope.isDisabledButton = false;
+    $modalInstance.dismiss('cancel');
+    $rootScope.loader = 0;
+   });
+
+}).error(function(error) {
+     console.log('error' + JSON.stringify(error));
+     $scope.isDisabledButton = false;
+     if (error == null) {
+         window.alert('Oops! You are disconnected from server.');
+         $state.go('page.login');
+     }
+     $modalInstance.dismiss('cancel');
+     $rootScope.loader = 0;
+ });
+              
+         }else{
+
+         
             function addZero(i) {
                 if (i < 10) {
                     i = "0" + i;
@@ -6014,6 +6422,7 @@ ConUsers.sendSMS({
 
                
             }
+        }
 
         };
 
@@ -7034,7 +7443,9 @@ ConUsers.sendSMS({
                                                 list: list,
                                                 history:history,
                                                 operationCity: bookingData.operationCity,
-                                                tripType:bookingData.tripType
+                                                tripType:bookingData.tripType,
+                                                fromLat:bookingData.fromLat,
+                                                fromLong:bookingData.fromLong
 
 
                                             };
