@@ -634,7 +634,7 @@ App.controller('manageSettlementReport', ['$scope', '$rootScope', '$filter', 'ng
                     var actualAmount = '-';
                     var amount = '-';
                     if (!angular.isUndefined(bookingData[i].invoices) && (bookingData[i].invoices.length >= 1)) {
-                        if (!angular.isUndefined(bookingData[i].invoices[0].netAmount)) {
+                        if (!angular.isUndefined(bookingData[i].invoices[0].netAmount) && bookingData[i].invoices[0].netAmount!==null) {
                             actualAmount = bookingData[i].invoices[0].netAmount;
                             amount = actualAmount.toFixed(2);
 
