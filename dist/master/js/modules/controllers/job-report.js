@@ -3885,7 +3885,7 @@ $localStorage.put('Area', undefined);
                         function(DriverJobDetails) {
                            // console.log('update status to open: '+JSON.stringify(DriverJobDetails));
                             DriverJobDetails.status = 'Open';
-                            DriverJobDetails.openedDate =new Date();
+                            DriverJobDetails.OpenedDate =new Date();
                             DriverJobDetails.updatedBy = $localStorage.get('userId');
                             DriverJobDetails.updatedDate = new Date();
                             DriverJobDetails.$save();
@@ -4114,7 +4114,7 @@ $localStorage.put('Area', undefined);
                             DriverJobDetails.carType = jobDetails.carType;
                             DriverJobDetails.dutyHours = jobDetails.dutyHours;
                             DriverJobDetails.status = jobDetails.status;
-                            DriverJobDetails.openedDate=openedDate;
+                            DriverJobDetails.OpenedDate=openedDate;
                             DriverJobDetails.dutyType = jobDetails.dutyDetail;
                             DriverJobDetails.clientId = jobDetails.clientId;
                             DriverJobDetails.weeklyOff = '{' + jobDetails.weeklyOff + '}';

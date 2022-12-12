@@ -1728,14 +1728,14 @@ function bookingHistoryCtrl($scope, $rootScope, $filter, ngTableParams, $resourc
                     }
                     var amount = '0.00';
                     if (!angular.isUndefined(bookingData[i].invoices) && (bookingData[i].invoices.length >= 1)) {
-                        if (!angular.isUndefined(bookingData[i].invoices[0].netAmount)) {
+                        if (!angular.isUndefined(bookingData[i].invoices[0].netAmount) && bookingData[i].invoices[0].netAmount!==null) {
                             actualAmount = bookingData[i].invoices[0].netAmount;
                             amount = actualAmount.toFixed(2);
 
                         }
                     }
                     if (!angular.isUndefined(bookingData[i].invoices) && (bookingData[i].invoices.length == 1)) {
-                        if (!angular.isUndefined(bookingData[i].invoices[0].grossAmount)) {
+                        if (!angular.isUndefined(bookingData[i].invoices[0].grossAmount) && bookingData[i].invoices[0].grossAmount!== null) {
 
                             estimatedAmount = bookingData[i].invoices[0].grossAmount;
                         }
