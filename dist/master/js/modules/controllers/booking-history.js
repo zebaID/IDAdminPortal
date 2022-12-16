@@ -3993,6 +3993,25 @@ ConUsers.sendSMS({
                 $scope.paidDisabledButton1 = false;
             }
         }
+        $scope.bookingHistoryDetails = function(booking) {
+
+            // $rootScope.data = $rootScope.bookingDetailsData;
+ 
+            // $scope.historyDetails()
+             $rootScope.bookinghist = booking;
+             var modalInstance = $modal.open({
+                 templateUrl: '/bookingHistoryDetails.html',
+                 controller: bookingHistoryDetailsCtrl
+             });
+             //historyDetails(booking);
+         
+             var state = $('#modal-state');
+             modalInstance.result.then(function() {
+                 state.text('Modal dismissed with OK status');
+             }, function() {
+                 state.text('Modal dismissed with Cancel status');
+             });
+         };
 
         $scope.confirmPaymentMethod2 = function() {
             $rootScope.loader = 1;
@@ -6611,6 +6630,39 @@ mobileNumber: $rootScope.lineupBookingDetails.driverContact,
             $rootScope.getSearchHistory();
         };
 
+    };
+    var bookingHistoryDetailsCtrl = function($scope, $rootScope, $modalInstance, $state, BookingDetails) {
+        //booking estimation controller
+    
+        $scope.closeModal1 = function() {
+            $modalInstance.dismiss('cancel');
+             
+
+        };
+        $scope.historyDetails = function(){
+            
+            $rootScope.data = $rootScope.bookinghist;
+            console.log("history: " +JSON.stringify($rootScope.data));
+            BookingDetails.find({
+                filter:{
+                   where:{
+                    bookingId: $rootScope.data.bookingId
+                } 
+                }
+                 
+                },function(s){ 
+                    $rootScope.BookingDetails=s;
+                    console.log($rootScope.BookingDetails.description+ 'success');
+                    //$scope.bookingHistoryDetails
+                    //$rootScope.bookingDetails = s;
+                },
+                function(error){
+                    console.log(error+ 'Failure');
+                });
+        
+        }
+
+        
     };
 
     $(function() {
