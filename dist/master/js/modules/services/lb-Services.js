@@ -44538,6 +44538,8 @@ module.factory(
              *  - `remark` – `{string=}` -
              *
              *  - `driverId` – `{string}` -
+             * 
+             *  - `company2driverId` – `{string}` -
              *
              * @param {function(Object,Object)=} successCb
              *   Success callback with two arguments: `value`, `responseHeaders`.

@@ -170,7 +170,7 @@ App.controller('multipleBillCtrl', ['$scope', '$rootScope', '$http', '$state', '
 
                         }
 
-                    }
+                    } 
                     //console.log('desc: ' + JSON.stringify($rootScope.Description));
 
                 }, function(er) {
@@ -237,7 +237,7 @@ App.controller('multipleBillCtrl', ['$scope', '$rootScope', '$http', '$state', '
             $modalInstance.dismiss('cancel');
 
         };
-        $scope.addNextDriver = function(date, driverName){
+        $scope.addNextDriver = function(date, driverName, company2driverId){
             if(angular.isUndefined(driverName)){
                document.getElementById("drilist").style.borderColor = "red";
                 document.getElementById("drilist1").innerHTML = '*required';  
@@ -246,7 +246,7 @@ App.controller('multipleBillCtrl', ['$scope', '$rootScope', '$http', '$state', '
             }
             
             //$rootScope.idForGenerateBill
-        $scope.generateBillSubmit(date,driverId);
+        $scope.generateBillSubmit(date,driverId,company2driverId);
                
          
         }
@@ -841,7 +841,7 @@ App.controller('multipleBillCtrl', ['$scope', '$rootScope', '$http', '$state', '
             $rootScope.sgst = sgst;
             return sgst;
         }
-        $scope.generateBillSubmit = function(date,driverId) {//generate bill submit
+        $scope.generateBillSubmit = function(date,driverId,company2driverId) {//generate bill submit
 
             $rootScope.loader = 1;
 
@@ -1062,7 +1062,8 @@ App.controller('multipleBillCtrl', ['$scope', '$rootScope', '$http', '$state', '
                     advanceAmount: $scope.Advance,
                     netAmount: grandTotal,
                     remark:date.remark,
-                    driverId:driverId
+                    driverId:driverId,
+                    company2driverId:company2driverId
                 }, function(generatesunccess) {
                     for (var i = 0; i<$rootScope.driverArray.length; i++) {
         if(date.driverName === $rootScope.driverArray[i].driverName){
