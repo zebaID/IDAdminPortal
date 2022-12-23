@@ -841,10 +841,14 @@ App.controller('multipleBillCtrl', ['$scope', '$rootScope', '$http', '$state', '
             $rootScope.sgst = sgst;
             return sgst;
         }
-        $scope.generateBillSubmit = function(date,driverId,company2driverId) {//generate bill submit
+        $scope.generateBillSubmit = function(date,driverId,company2driverId) {//generate bill submit zebaSSSSS
 
             $rootScope.loader = 1;
-
+            for (var i = 0; i<$rootScope.driverArray.length; i++) {
+                if(date.driverName === $rootScope.driverArray[i].driverName){
+                 company2driverId = $rootScope.driverArray[i].company2driverId;
+                }
+            }
 
             var count = 0;
             if (angular.isUndefined($scope.Advance) || $scope.Advance === null || $scope.Advance === '') {
@@ -1062,7 +1066,7 @@ App.controller('multipleBillCtrl', ['$scope', '$rootScope', '$http', '$state', '
                     advanceAmount: $scope.Advance,
                     netAmount: grandTotal,
                     remark:date.remark,
-                    driverId:driverId,
+                    driverId:Number(driverId),
                     company2driverId:company2driverId
                 }, function(generatesunccess) {
                     for (var i = 0; i<$rootScope.driverArray.length; i++) {
