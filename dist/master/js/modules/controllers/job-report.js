@@ -63,7 +63,10 @@ $scope.openedToDate1 = function($event) {
                 $rootScope.cityAt1.push($rootScope.cities[i]);
             }else if($rootScope.cities[i] === 'Aurangabad'){
                 $rootScope.cityAt1.push($rootScope.cities[i]);
-            }else{
+            }else if($rootScope.cities[i] === 'Bengaluru'){
+                $rootScope.cityAt1.push($rootScope.cities[i]);
+            }
+            else{
 
             }
         }
