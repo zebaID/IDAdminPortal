@@ -39,9 +39,6 @@ $rootScope.roleId = $localStorage.get('roleId');
         else if($rootScope.cities[i] === 'Mumbai'){
             $rootScope.cityMo.push($rootScope.cities[i]);
         }
-        else if($rootScope.cities[i] === 'Bengaluru'){
-            $rootScope.cityMo.push($rootScope.cities[i]);
-        }
     }
 
       $scope.toggleMin = function() {
