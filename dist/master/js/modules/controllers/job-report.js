@@ -1996,7 +1996,10 @@ $localStorage.put('Area', undefined);
                 });
         };
 
-        /*$scope.closeJob = function(jobId) {
+        /*
+        ---This is old function for open/close job---
+
+        $scope.closeJob = function(jobId) {
             if ($window.confirm("Are you sure, you wan\'t to close this Job?")) {
                 $scope.result = "Yes";
                 if (angular.isDefined(jobId) && jobId !== null) {
@@ -2790,6 +2793,8 @@ $localStorage.put('Area', undefined);
             }, function() {
                 state.text('Modal dismissed with Cancel status');
             });
+
+            $scope.isNewJob = false;
         };
 
         var addJobCtrl = function($scope, $rootScope, $modalInstance, $state, Bookings) {
@@ -2801,9 +2806,9 @@ $localStorage.put('Area', undefined);
             }];
 
             $scope.roleArray = [{
-                'desc': 'I'
+                'desc': 'Corporate'
             }, {
-                'desc': 'H'
+                'desc': 'Hirer'
             }];
 
             $scope.weeklyOffArray = [{
@@ -3679,7 +3684,7 @@ $localStorage.put('Area', undefined);
                             }, function(success) {
                                 //console.log('New job success :' + JSON.stringify(success));
                                 if (success[0].create_new_job === 'Success') {
-                                    $.notify('New Job is added successfully.', {
+                                    $.notify('New Job is added .', {
                                         status: 'success'
                                     });
                                     $rootScope.customerDetails = undefined;
@@ -3759,7 +3764,7 @@ $localStorage.put('Area', undefined);
             }];
 
             $scope.roleArray = [{
-                'desc': 'I'
+                'desc': 'C'
             }, {
                 'desc': 'H'
             }];
@@ -3768,6 +3773,8 @@ $localStorage.put('Area', undefined);
                 'desc': 'Open'
             }, {
                 'desc': 'Closed'
+            },{
+                'desc': 'Hold'
             }];
             
             $scope.weeklyOffArray = [{
@@ -3916,11 +3923,6 @@ $localStorage.put('Area', undefined);
                 //console.log('verify clientId' + JSON.stringify(jobDetails));
                  
                     $scope.updateJobDetails(jobDetails);
-                 
-                          
-                
-
-
             };
             $scope.updateJobDetails = function(jobDetails) {
 
@@ -4483,6 +4485,89 @@ $localStorage.put('Area', undefined);
         $scope.submitUserBtn = false;
         $scope.count = 0;
 
+        //4484-4554 : Action Button (Open-Closed-Hold)
+        $scope.updateJobStatus = function(job, status, prevStatus) {
+            var confirmationMessage = '';
+            switch(status) {
+                case 'Open':
+                    confirmationMessage = "Are you sure, you want to open this Job?";
+                    break;
+                case 'Closed':
+                    confirmationMessage = "Are you sure, you want to close this Job?";
+                    break;
+                case 'Hold':
+                    confirmationMessage = "Are you sure, you want to put this Job on hold?";
+                    break;
+            }
+            if ($window.confirm(confirmationMessage)) {
+                $scope.result = "Yes";
+                if (angular.isDefined(job.jobId) && job.jobId !== null) {
+                    DriverJobDetails.findById({id: job.jobId},
+                        function (DriverJobDetails) {
+                            DriverJobDetails.status = status;
+        
+                            if(status === 'Open'&& status==='Hold') {
+                                DriverJobDetails.OpenedDate = new Date();
+                            }
+                            DriverJobDetails.updatedBy = $localStorage.get('userId');
+                            DriverJobDetails.updatedDate = new Date();
+                            DriverJobDetails.$save();
+        
+                            $modalInstance.dismiss('cancel');
+                            $rootScope.getDriverJob();
+                            $rootScope.loader = 0;
+                            reloadFunc();
+        
+                            if(status=='Closed')
+                            {
+                                DriverJobDetails.$delete({id:job.jobId},function(){
+                                    //Reload the data after deleting a job
+                                    $rootScope.getDriverJob();
+                                });
+                            }
+        
+                        },
+                        function (error) {
+                            console.log('Error updating User : ' + JSON.stringify(error));
+                            if (error.status == 0) {
+                                window.alert('Oops! You are disconnected from server.');
+                                $state.go('page.login');
+                            }
+                            $rootScope.loader = 0;
+                        });
+                }
+            } else {
+                $scope.result = "No";
+            }
+        
+            // Reset the button styles
+            switch(prevStatus) {
+                case 'Open':
+                    job.status = 'Open';
+                    break;
+                case 'Closed':
+                    job.status = 'Closed';
+                    break;
+                case 'Hold':
+                    job.status = 'Hold';
+                    break;
+            }
+        
+            // Set the current button style
+            job.status = status;
+        };
+
+        //New-Job display -test on JOBS column
+        $scope.markNewJob = function() {
+            $scope.isNewJob = true;
+        };
+        
+        
+
+
+        //----------------------------------------NO TEST BEYOND THIS LINE---------------
+        
+        
         function reloadFunc() {
             $scope.count = 0;
             $scope.timers = setInterval(reloadData, 5);
