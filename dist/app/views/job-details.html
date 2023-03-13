@@ -46,11 +46,11 @@ table th {
             <td title="'Roll'" filter="{ role: 'text'}" sortable="'role'" style="text-transform: capitalize;text-align: left;">{{job.role}}
             </td>
             
-            <td title="'Jobs'" filter="{ role: 'text' }" ng-class="{ 'new-job': isNewJob }">
+            <!-- <td title="'Jobs'" filter="{ role: 'text' }" ng-class="{ 'new-job': isNewJob }">
                 <div class="btn-group">
                     <span ng-bind="isNewJob ? 'New Job' : ''"></span>
                 </div>
-            </td>
+            </td> -->
                 
             <td title="'Created By & Date'" filter="{ createdByName: 'text'}" sortable="'createdByName'" style="text-transform: capitalize;text-align: left;">{{job.createdByName}} ({{job.date}})
             </td>
