@@ -636,6 +636,7 @@ function bookingHistoryCtrl($scope, $rootScope, $filter, ngTableParams, $resourc
             }
         }
 
+        //To retreive data upto 31 days of booking
         if (!angular.isUndefined(searchData)) {
             if (angular.isUndefined(searchData.frmDate) || searchData.frmDate === '' || searchData.frmDate === null) {
                 document.getElementById("frmDate").style.borderColor = "red";
@@ -644,13 +645,13 @@ function bookingHistoryCtrl($scope, $rootScope, $filter, ngTableParams, $resourc
                 count++;
             } else if(angular.isUndefined($scope.mobileId) && angular.isUndefined($rootScope.driverId1)){
             var dayDif = (datetwo - dateone)  / 1000 / 60 / 60 / 24;
-            if(dayDif <= 3){
+            if(dayDif <= 31){
                     document.getElementById("frmDate").style.borderColor = "#dde6e9";
                 document.getElementById("frmDate1").innerHTML = '';
                 //searchData.frmDate1 = null;
             }else{
               document.getElementById("frmDate").style.borderColor = "red";
-                document.getElementById("frmDate1").innerHTML = '*Unable to retrive more than 4 days data.';
+                document.getElementById("frmDate1").innerHTML = '*Unable to retrive more than 31 days data.';
                 //searchData.frmDate1 = 'Unable to retrive more than 4 days data.';
                 count++;  
             }

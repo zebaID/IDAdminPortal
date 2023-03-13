@@ -7,26 +7,28 @@ table th {
 </style>
 <div class="panel panel-default" style="overflow-x: auto" ng-init="getDriverJob()">
     <div class="panel-heading">
+
         <div class="row">
             <div class="col-xs-12">
-                <div class="col-xs-4">
-                    <button class="pull-left btn btn-labeled btn-primary" style="padding-top: -2px;
-                    padding-bottom: -2px;" ng-click="backToSearchReport()">
-                        <span class="btn-label"><i class="fa fa-chevron-left"></i>
-                     </span> Back
+                <div class="col-xs-6">
+                    <button class="pull-left btn btn-labeled btn-primary" style="padding-top: -2px; padding-bottom: -2px;" ng-click="backToSearchReport()">
+                        <span class="btn-label"><i class="fa fa-chevron-left"></i></span> Back
                     </button>
                 </div>
-                <div class="col-xs-4"></div>
-                <div class="col-xs-4">
-                    <button class="pull-right btn btn-labeled btn-primary" style="" ng-click="addJob()">
-                        <span class="btn-label"><i class="fa fa-plus"></i>
-                           </span>New Job</button>
+                
+                <div class="col-xs-6">
+                    <button class="pull-right btn btn-labeled btn-primary" style="" ng-click="addJob(); markNewJob()">
+                        <span class="btn-label"><i class="fa fa-plus"></i></span>New Job
+                    </button>
                 </div>
             </div>
         </div>
+        
     </div>
+
+
     <table ng-table="tableParams3" class="table table-striped table-bordered ng-table-rowselected" show-filter="true">
-        <tr ng-repeat="job in $data | orderBy:['jobStatusOrder','-createdDate']" ng-show="$data.length > 0">
+        <tr ng-repeat="job in $data | orderBy:['jobStatusOrder','-createdDate']" ng-show="$data.length  0">
             <td title="'Job Id'" filter="{ clientId: 'text'}" sortable="'clientId'" style="text-transform: capitalize;text-align: left;">{{job.id}}</td>
             <td title="'Client Name'" filter="{ custName: 'text'}" sortable="'custName'" style="text-transform: capitalize;text-align: left;">{{job.custName}}</td>
              
@@ -43,9 +45,16 @@ table th {
             </td>
             <td title="'Roll'" filter="{ role: 'text'}" sortable="'role'" style="text-transform: capitalize;text-align: left;">{{job.role}}
             </td>
+            
+            <td title="'Jobs'" filter="{ role: 'text' }" ng-class="{ 'new-job': isNewJob }">
+                <div class="btn-group">
+                    <span ng-bind="isNewJob ? 'New Job' : ''"></span>
+                </div>
+            </td>
+                
             <td title="'Created By & Date'" filter="{ createdByName: 'text'}" sortable="'createdByName'" style="text-transform: capitalize;text-align: left;">{{job.createdByName}} ({{job.date}})
             </td>
-            <td title="'Status'" filter="{ status: 'text'}" sortable="'status'" style="text-align:left;width: 10%">
+            <!-- <td title="'Status'" filter="{ status: 'text'}" sortable="'status'" style="text-align:left;width: 10%">
                 <div ng-if="job.status === 'Open'">
                     <button class="pull-right btn btn-labeled btn-primary" style="width: 95%;">
                         Open</button>
@@ -54,31 +63,88 @@ table th {
                     <button class="pull-right btn btn-labeled btn-danger" style="width: 95%;">
                         Closed</button>
                 </div>
-            </td>
-            <td title="'View Request'" style="text-align: center;"><a href="" ng-click="jobRequestPopup(job.id, job.custName, job.area)" style="color: #131e26"><i class="fa fa-eye fa-fw"></a></td>
-            <td title="'Apply Job'" style="text-align: center;"><a href="" ng-click="searchDriverPopup(job.id, job.custName, job.status)" style="color: #131e26">Apply Job</a></td>
-            <td title="'Edit'" style="text-align:left">
-                <button class="btn btn-sm btn-info" ng-click="updateJob(job.id)"><em class="fa fa-pencil-square-o"></em></button>
-            </td>
-        </tr>
-        <tr ng-show="$data.length == 0">
-            <td>No record found</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
-        </tr>
-    </table>
+            </td> -->
+            <!-- <td title="'Action'" style="text-align:left">
+                <div class="btn-group">
+                    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> 
+                        <i class="fa fa-ellipsis-v" style="font-size:27px;"></i>   
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <button class="pull-right btn btn-labeled" style="width: 96%;" ng-class="{'btn-danger': job.status === 'Open'}" ng-click="updateJobStatus(job, 'Open', job.status); filter='Open'">
+   
+                                Open
+                            </button>
+                        </li>
+                        <br>
+                        <li>
+                            <button class="pull-right btn btn-labeled" style="width: 96%;" ng-class="{'btn-danger': job.status === 'Hold'}" ng-click="updateJobStatus(job, 'Hold', job.status); filter='Hold'">
+                                Hold
+                            </button>
+                        </li>
+                        <br>
+                        <li>
+                            <button class="pull-right btn btn-labeled" style="width: 96%;" ng-class="{'btn-danger': job.status === 'Closed'}" ng-click="updateJobStatus(job, 'Closed', job.status)">
+                                Closed
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </td> -->
+
+            <!-- testing -->
+            <td title="'Action'" style="text-align:left">
+                <div class="btn-group">
+                    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> 
+                        <i class="fa fa-ellipsis-v" style="font-size:27px;"></i>   
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <button class="pull-right btn btn-labeled" style="width: 96%;" ng-class="{'btn-danger': job.status === 'Open'}" ng-click="updateJobStatus(job, 'Open', job.status); filter='Open'">
+                                Open
+                            </button>
+                        </li>
+                        <br>
+                        <li>
+                            <button class="pull-right btn btn-labeled" style="width: 96%;" ng-class="{'btn-danger': job.status === 'Hold'}" ng-click="updateJobStatus(job, 'Hold', job.status); filter='Hold'">
+                                Hold
+                            </button>
+                        </li>
+                        <br>
+                        <li>
+                            <button class="pull-right btn btn-labeled" style="width: 96%;" ng-class="{'btn-danger': job.status === 'Closed'}" ng-click="updateJobStatus(job, 'Closed', job.status)">
+                                Closed
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </td>            
+
+
+                        <td title="'View Request'" style="text-align: center;"><a href="" ng-click="jobRequestPopup(job.id, job.custName, job.area)" style="color: #131e26"><i class="fa fa-eye fa-fw"></a></td>
+                        <td title="'Apply Job'" style="text-align: center;"><a href="" ng-click="searchDriverPopup(job.id, job.custName, job.status)" style="color: #131e26">Apply Job</a></td>
+                        <td title="'Edit'" style="text-align:left">
+                            <button class="btn btn-sm btn-info" ng-click="updateJob(job.id)"><em class="fa fa-pencil-square-o"></em></button>
+                        </td>
+                    </tr>
+                    <tr ng-show="$data.length == 0">
+                        <td>No record found</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </table>
 </div>
 <script type="text/ng-template" id="/addJob.html">
     <div class="modal-header" style="border:-1px;background-color:gainsboro;" ng-cloak>
-        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Search Customer
+        <div class="col-xs-12 text-center" style="margin-top: -15px; font-size: 20px;"> Search Customers
             <div style="float:right; width: 20px;">
                 <a style="cursor:pointer;"><span class="fa fa-times" ng-click="closeModal()"></span></a>
             </div>
@@ -489,6 +555,7 @@ table th {
                                 <div class="col-xs-4">
                                     <label class="margin-bottom-0">Roll</label>
                                     <br/>
+                                    
                                     <select class="form-control input-hover" id="role" ng-model="jobDetails.role" ng-options="ra.desc as ra.desc for ra in roleArray" style="padding: 0px 16px;height:25px; width: 150px">
                                         <option value="">--Select--</option>
                                     </select>
@@ -505,7 +572,7 @@ table th {
                                 <div class="col-xs-4">
                                     <label class="margin-bottom-0">Status</label>
                                     <br/>
-                                    <select class="form-control input-hover" id="status" ng-model="jobDetails.status" ng-options="sa.desc as sa.desc for sa in statusArray" style="padding: 0px 16px;height:25px; width: 150px">
+                                    <select class="form-control input-hover" id="status" ng-model="jobDetails.status" ng-options="sa.desc as sa.desc for sa in statusArray" style="padding: 0px 16px;height:25px; width: 150px"readonly>
                                         <option value="">--Select--</option>
                                     </select>
                                     <span id="status1" style="color:red"></span>
@@ -529,7 +596,7 @@ table th {
                                 <div class="col-xs-4">
                                 </div>
                                 <div class="col-xs-4" style="text-align:center">
-                                    <button class="mb-sm btn btn-success" ng-disabled="isDisabledButton" ng-click="verifyClientId1(jobDetails)">Update Job</button>
+                                    <button class="mb-sm btn btn-success" ng-disabled="isDisabledButton" ng-click="verifyClientId1(jobDetails)">Update Jobs</button>
                                 </div>
                                 <div class="col-xs-4">
                                 </div>

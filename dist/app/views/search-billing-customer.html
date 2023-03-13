@@ -26,9 +26,10 @@ table th {
                     <label> <span>Customer Mobile Number</span></label>
                 </div>
                 <div class="col-xs-5">
-                    <h4><angucomplete-alt id="billingMobileNo" style="width: 135px;" placeholder="Search customer by name or mobile" pause="500" initial-value="" ng-click="billingCustMobileSelected()" selected-object="search.custMobile" local-data="billingCustomerList" search-fields="mobileNumber,customerName" title-field="custDetails" minlength=1 input-class=" input-hover" match-class="highlight"/></h4>
+                    <h4><angucomplete-alt id="billingMobileNo" style="width: 135px;" placeholder="Search customer by name or mobile" pause="500" initial-value="" ng-click="billingCustMobileSelected()" selected-object="search.custMobile" local-data="billingCustomerList" search-fields="mobileNumber,customerName" title-field="custDetails" minlength=1 input-class=" input-hover" match-class="highlight" autofocus/></h4>
                     <span id="billingMobileNo1" style="color:red"></span>
                 </div>
+                
                 <div class="col-xs-3">
                     <button class="pull-right btn btn-labeled btn-primary" style="" ng-disabled="isDisabledButton" ng-click="verifyMobile()"> <span class="btn-label"><i class="fa fa-search"></i>
                            </span>Search/Create</button>
